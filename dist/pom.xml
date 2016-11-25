@@ -58,6 +58,9 @@
 
     <properties>
         <product.release.name>WildFly Full</product.release.name>
+        <version.org.hibernate4.x>4.3.10.Final</version.org.hibernate4.x>
+        <version.org.hibernate4.x.commons.annotations>4.0.5.Final</version.org.hibernate4.x.commons.annotations>
+        <wildfly.modules.basedir>modules/system/layers/base</wildfly.modules.basedir>
     </properties>
     <build>
         <finalName>${server.output.dir.prefix}-${project.version}</finalName>
@@ -90,7 +93,8 @@
                         <phase>process-classes</phase>
                         <configuration>
                             <overwrite>true</overwrite>
-                            <outputDirectory>${basedir}/target/${server.output.dir.prefix}-${project.version}</outputDirectory>
+                            <outputDirectory>${basedir}/target/${server.output.dir.prefix}-${project.version}
+                            </outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/distribution/resources</directory>
@@ -115,6 +119,54 @@
             </activation>
             <build>
                 <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>
+                                        ${project.build.directory}/${server.output.dir.prefix}-${project.version}/${wildfly.modules.basedir}/org/hibernate/4.3
+                                    </outputDirectory>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.hibernate</groupId>
+                                            <artifactId>hibernate-core</artifactId>
+                                            <version>${version.org.hibernate4.x}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.hibernate</groupId>
+                                            <artifactId>hibernate-envers</artifactId>
+                                            <version>${version.org.hibernate4.x}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.hibernate</groupId>
+                                            <artifactId>hibernate-entitymanager</artifactId>
+                                            <version>${version.org.hibernate4.x}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.hibernate</groupId>
+                                            <artifactId>hibernate-infinispan</artifactId>
+                                            <version>${version.org.hibernate4.x}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.hibernate.common</groupId>
+                                            <artifactId>hibernate-commons-annotations</artifactId>
+                                            <version>${version.org.hibernate4.x.commons.annotations}</version>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
