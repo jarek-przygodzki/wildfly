@@ -21,19 +21,6 @@
  */
 package org.jboss.as.test.smoke.datasource;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.connector.subsystems.datasources.WildFlyDataSource;
@@ -41,14 +28,22 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision: 1.1 $
  */
 @RunWith(Arquillian.class)
+@Ignore
 public class DsTestCase {
     private static final String JNDI_NAME = "java:jboss/datasources/ExampleDS";
 

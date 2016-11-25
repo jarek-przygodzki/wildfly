@@ -22,20 +22,21 @@
 
 package org.jboss.as.test.smoke.mgmt.datasource;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.management.jca.DsMgmtTestBase;
 import org.jboss.dmr.ModelNode;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 
 /**
  * Datasource resources unit test.
@@ -49,6 +50,7 @@ import org.junit.runner.RunWith;
 public class DataSourceResourcesUnitTestCase extends DsMgmtTestBase {
 
     @Test
+    @Ignore
     public void testReadChildrenResources() throws Exception {
 
         final ModelNode address = new ModelNode();
