@@ -22,29 +22,6 @@
 
 package org.jboss.as.jpa.processor;
 
-import static org.jboss.as.jpa.messages.JpaLogger.ROOT_LOGGER;
-import static org.jboss.as.server.Services.addServerExecutorDependency;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.persistence.SynchronizationType;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.PersistenceProvider;
-import javax.persistence.spi.PersistenceProviderResolverHolder;
-import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
-import javax.validation.ValidatorFactory;
-
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
@@ -110,6 +87,28 @@ import org.jipijapa.plugin.spi.PersistenceProviderAdaptor;
 import org.jipijapa.plugin.spi.PersistenceUnitMetadata;
 import org.jipijapa.plugin.spi.Platform;
 import org.jipijapa.plugin.spi.TwoPhaseBootstrapCapable;
+
+import javax.enterprise.inject.spi.BeanManager;
+import javax.persistence.SynchronizationType;
+import javax.persistence.ValidationMode;
+import javax.persistence.spi.PersistenceProvider;
+import javax.persistence.spi.PersistenceProviderResolverHolder;
+import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
+import javax.validation.ValidatorFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static org.jboss.as.jpa.messages.JpaLogger.ROOT_LOGGER;
+import static org.jboss.as.server.Services.addServerExecutorDependency;
 
 /**
  * Handle the installation of the Persistence Unit service
@@ -347,7 +346,8 @@ public class PersistenceUnitServiceHandler {
 
             final PersistenceUnitServiceImpl service = new PersistenceUnitServiceImpl(classLoader, pu, adaptor, provider, PersistenceUnitRegistryImpl.INSTANCE, deploymentUnit.getServiceName(), validatorFactory);
 
-            deploymentUnit.addToAttachmentList(REMOVAL_KEY, new PersistenceAdaptorRemoval(pu, adaptor));
+            PersistenceAdaptorRemoval persistenceAdaptorRemoval = new PersistenceAdaptorRemoval(pu, adaptor);
+            deploymentUnit.addToAttachmentList(REMOVAL_KEY, persistenceAdaptorRemoval);
 
             // add persistence provider specific properties
             adaptor.addProviderProperties(properties, pu);
@@ -431,7 +431,7 @@ public class PersistenceUnitServiceHandler {
             builder.install();
 
             ROOT_LOGGER.tracef("added PersistenceUnitService for '%s'.  PU is ready for injector action.", puServiceName);
-            addManagementConsole(deploymentUnit, pu, adaptor);
+            addManagementConsole(deploymentUnit, pu, adaptor, persistenceAdaptorRemoval);
 
         } catch (ServiceRegistryException e) {
             throw JpaLogger.ROOT_LOGGER.failedToAddPersistenceUnit(e, pu.getPersistenceUnitName());
@@ -585,7 +585,8 @@ public class PersistenceUnitServiceHandler {
 
             final PersistenceUnitServiceImpl service = new PersistenceUnitServiceImpl(classLoader, pu, adaptor, provider, PersistenceUnitRegistryImpl.INSTANCE, deploymentUnit.getServiceName(), validatorFactory);
 
-            deploymentUnit.addToAttachmentList(REMOVAL_KEY, new PersistenceAdaptorRemoval(pu, adaptor));
+            final PersistenceAdaptorRemoval persistenceAdaptorRemoval = new PersistenceAdaptorRemoval(pu, adaptor);
+            deploymentUnit.addToAttachmentList(REMOVAL_KEY, persistenceAdaptorRemoval );
 
             // add persistence provider specific properties
             adaptor.addProviderProperties(properties, pu);
@@ -677,7 +678,7 @@ public class PersistenceUnitServiceHandler {
             builder.install();
 
             ROOT_LOGGER.tracef("added PersistenceUnitService (phase 2 of 2) for '%s'.  PU is ready for injector action.", puServiceName);
-            addManagementConsole(deploymentUnit, pu, adaptor);
+            addManagementConsole(deploymentUnit, pu, adaptor, persistenceAdaptorRemoval);
 
         } catch (ServiceRegistryException e) {
             throw JpaLogger.ROOT_LOGGER.failedToAddPersistenceUnit(e, pu.getPersistenceUnitName());
@@ -1109,7 +1110,7 @@ public class PersistenceUnitServiceHandler {
      * @param adaptor
      */
     private static void addManagementConsole(final DeploymentUnit deploymentUnit, final PersistenceUnitMetadata pu,
-                                      final PersistenceProviderAdaptor adaptor) {
+                                      final PersistenceProviderAdaptor adaptor, final PersistenceAdaptorRemoval persistenceAdaptorRemoval) {
         ManagementAdaptor managementAdaptor = adaptor.getManagementAdaptor();
         // workaround for AS7-4441, if a custom hibernate.cache.region_prefix is specified, don't show the persistence
         // unit in management console.
@@ -1130,6 +1131,7 @@ public class PersistenceUnitServiceHandler {
             }
             synchronized (subsystemResource) {
                 subsystemResource.registerChild(PathElement.pathElement(providerLabel, scopedPersistenceUnitName), providerResource);
+                persistenceAdaptorRemoval.registerManagementConsoleChild(subsystemResource, PathElement.pathElement(providerLabel, scopedPersistenceUnitName) );
             }
         }
     }
@@ -1157,6 +1159,8 @@ public class PersistenceUnitServiceHandler {
     private static class PersistenceAdaptorRemoval {
         final PersistenceUnitMetadata pu;
         final PersistenceProviderAdaptor adaptor;
+        volatile Resource subsystemResource;
+        volatile PathElement pathToScopedPu;
 
         public PersistenceAdaptorRemoval(PersistenceUnitMetadata pu, PersistenceProviderAdaptor adaptor) {
             this.pu = pu;
@@ -1165,6 +1169,14 @@ public class PersistenceUnitServiceHandler {
 
         private void cleanup() {
             adaptor.cleanup(pu);
+            if(subsystemResource != null && pathToScopedPu != null) {
+                subsystemResource.removeChild(pathToScopedPu);
+            }
+        }
+
+        public void registerManagementConsoleChild(Resource subsystemResource, PathElement pathElement) {
+            this.subsystemResource = subsystemResource;
+            this.pathToScopedPu = pathElement;
         }
     }
 
