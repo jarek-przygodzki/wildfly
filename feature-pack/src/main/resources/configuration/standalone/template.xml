@@ -29,8 +29,7 @@
             <security-realm name="WCC_SSL_Realm">
                 <server-identities>
                     <ssl>
-                        <keystore path="wcc.keystore" relative-to="jboss.server.config.dir"
-                                  keystore-password="wildfly"/>
+                        <keystore path="wcc.keystore" relative-to="jboss.server.config.dir" keystore-password="wildfly"/>
                     </ssl>
                 </server-identities>
             </security-realm>
