@@ -101,7 +101,7 @@
        <replacement placeholder="BROADCAST-GROUPS">
            <broadcast-groups>
                <broadcast-group name="bg-group1">
-                   <jgroups-stack>udp</jgroups-stack>
+                   <jgroups-stack>udphq</jgroups-stack>
                    <jgroups-channel>hq-cluster</jgroups-channel>
                    <connector-ref>http-connector</connector-ref>
                </broadcast-group>
@@ -110,7 +110,7 @@
        <replacement placeholder="DISCOVERY-GROUPS">
            <discovery-groups>
                <discovery-group name="dg-group1">
-                   <jgroups-stack>udp</jgroups-stack>
+                   <jgroups-stack>udphq</jgroups-stack>
                    <jgroups-channel>hq-cluster</jgroups-channel>
                </discovery-group>
            </discovery-groups>

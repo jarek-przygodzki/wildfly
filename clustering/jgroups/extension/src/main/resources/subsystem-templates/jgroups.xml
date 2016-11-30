@@ -27,6 +27,26 @@
                 <protocol type="FRAG2"/>
                 <protocol type="RSVP"/>
             </stack>
+            <stack name="udphq">
+                <transport type="UDP" socket-binding="jgroups-udp-hq">
+                    <?UDP-PROPERTIES?>
+                </transport>
+                <?UDP-DISCOVERY?>
+                <protocol type="MERGE3"/>
+                <protocol type="FD_SOCK" socket-binding="jgroups-udp-hq-fd"/>
+                <?UDP-FD?>
+                <protocol type="VERIFY_SUSPECT"/>
+                <protocol type="pbcast.NAKACK2">
+                    <?NAKACK-PROPERTIES?>
+                </protocol>
+                <protocol type="UNICAST3"/>
+                <protocol type="pbcast.STABLE"/>
+                <protocol type="pbcast.GMS"/>
+                <protocol type="UFC"/>
+                <?UDP-MULTICAST-FLOW-CONTROL?>
+                <protocol type="FRAG2"/>
+                <protocol type="RSVP"/>
+            </stack>
             <stack name="tcp">
                 <transport type="TCP" socket-binding="jgroups-tcp"/>
                 <?TCP-DISCOVERY?>
@@ -112,4 +132,6 @@
     <socket-binding name="jgroups-tcp-fd" port="57600"/>
     <socket-binding name="jgroups-udp" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
     <socket-binding name="jgroups-udp-fd" port="54200"/>
+    <socket-binding name="jgroups-udp-hq" port="55210" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45698"/>
+    <socket-binding name="jgroups-udp-hq-fd" port="54210"/>
 </config>
