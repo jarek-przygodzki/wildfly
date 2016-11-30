@@ -33,6 +33,9 @@
     <fileSets>
         <fileSet>
             <directory>target/${server.output.dir.prefix}-servlet-${project.version}</directory>
+            <excludes>
+            	 <exclude>content/welcome-content/**</exclude>
+            </excludes>
             <outputDirectory/>
         </fileSet>
     </fileSets>

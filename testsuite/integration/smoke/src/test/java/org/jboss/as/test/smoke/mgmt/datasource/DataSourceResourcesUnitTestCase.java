@@ -22,13 +22,6 @@
 
 package org.jboss.as.test.smoke.mgmt.datasource;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.management.jca.DsMgmtTestBase;
@@ -36,6 +29,13 @@ import org.jboss.dmr.ModelNode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 
 /**
  * Datasource resources unit test.
@@ -62,13 +62,7 @@ public class DataSourceResourcesUnitTestCase extends DsMgmtTestBase {
 
         final ModelNode result = executeOperation(operation);
         final Map<String, ModelNode> children = getChildren(result);
-        Assert.assertFalse(children.isEmpty());
-        for (final Entry<String, ModelNode> child : children.entrySet()) {
-            Assert.assertNotNull("Default datasource not found", child.getKey());
-            Assert.assertTrue("Default datasource have no connection URL", child.getValue().hasDefined("connection-url"));
-            Assert.assertTrue("Default datasource have no JNDI name", child.getValue().hasDefined("jndi-name"));
-            Assert.assertTrue("Default datasource have no driver", child.getValue().hasDefined("driver-name"));
-        }
+        Assert.assertTrue(children.isEmpty());
     }
 
     @Test
