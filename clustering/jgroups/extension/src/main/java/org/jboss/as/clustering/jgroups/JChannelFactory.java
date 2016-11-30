@@ -21,30 +21,11 @@
  */
 package org.jboss.as.clustering.jgroups;
 
-import static org.jboss.as.clustering.jgroups.logging.JGroupsLogger.ROOT_LOGGER;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.jboss.as.clustering.jgroups.logging.JGroupsLogger;
 import org.jboss.as.network.SocketBinding;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoadException;
-import org.jgroups.Channel;
-import org.jgroups.Event;
-import org.jgroups.Global;
-import org.jgroups.JChannel;
-import org.jgroups.Message;
+import org.jgroups.*;
 import org.jgroups.annotations.Property;
 import org.jgroups.blocks.RequestCorrelator;
 import org.jgroups.blocks.RequestCorrelator.Header;
@@ -59,13 +40,19 @@ import org.jgroups.stack.Configurator;
 import org.jgroups.stack.Protocol;
 import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.SocketFactory;
-import org.wildfly.clustering.jgroups.spi.ChannelFactory;
-import org.wildfly.clustering.jgroups.spi.ProtocolConfiguration;
-import org.wildfly.clustering.jgroups.spi.ProtocolStackConfiguration;
-import org.wildfly.clustering.jgroups.spi.RelayConfiguration;
-import org.wildfly.clustering.jgroups.spi.RemoteSiteConfiguration;
-import org.wildfly.clustering.jgroups.spi.TransportConfiguration;
+import org.wildfly.clustering.jgroups.spi.*;
 import org.wildfly.security.manager.WildFlySecurityManager;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.*;
+
+import static org.jboss.as.clustering.jgroups.logging.JGroupsLogger.ROOT_LOGGER;
 
 /**
  * Factory for creating fork-able channels.
@@ -166,11 +153,11 @@ public class JChannelFactory implements ChannelFactory, ProtocolStackConfigurato
             private Object handle(Message message) {
                 Header header = (Header) message.getHeader(this.id);
                 // If this is a request expecting a response, don't leave the requester hanging - send an identifiable response on which it can filter
-                if ((header != null) && (header.type == Header.REQ) && header.rsp_expected) {
+                if ((header != null) && (header.type == Header.REQ) && header.rspExpected()) {
                     Message response = message.makeReply().setFlag(message.getFlags()).clearFlag(Message.Flag.RSVP, Message.Flag.SCOPED);
 
                     response.putHeader(FORK.ID, message.getHeader(FORK.ID));
-                    response.putHeader(this.id, new Header(Header.RSP, header.id, false, this.id));
+                    response.putHeader(this.id, new Header(Header.RSP, header.req_id, this.id));
                     response.setBuffer(UNKNOWN_FORK_RESPONSE.array());
 
                     channel.down(new Event(Event.MSG, response));
