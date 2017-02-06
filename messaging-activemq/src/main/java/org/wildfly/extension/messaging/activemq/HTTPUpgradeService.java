@@ -131,17 +131,24 @@ public class HTTPUpgradeService implements Service<HTTPUpgradeService> {
 
                         if (super.handleUpgrade(exchange)) {
                             ActiveMQServer server = selectServer(exchange, activeMQServer);
+                            if (server == null) {
+                                return false;
+                            }
                             // If ActiveMQ remoting service is stopped (eg during shutdown), refuse
                             // the handshake so that the ActiveMQ client will detect the connection has failed
                             RemotingService remotingService = server.getRemotingService();
-                            if (!remotingService.isStarted() || remotingService.isPaused()) {
+                            final String endpoint = exchange.getRequestHeaders().getFirst(getHttpUpgradeEndpointKey());
+                            if (!server.isActive() || !remotingService.isStarted()) {
                                 return false;
                             }
-                            final String endpoint = exchange.getRequestHeaders().getFirst(getHttpUpgradeEndpointKey());
                             if (endpoint == null) {
                                 return true;
                             } else {
-                                return acceptorName.equals(endpoint);
+                                if (acceptorName.equals(endpoint)) {
+                                    return !remotingService.isPaused();
+                                } else {
+                                    return false;
+                                }
                             }
                         } else {
                             return false;
@@ -152,7 +159,7 @@ public class HTTPUpgradeService implements Service<HTTPUpgradeService> {
 
     private static ActiveMQServer selectServer(HttpServerExchange exchange, ActiveMQServer rootServer) {
         String activemqServerName = exchange.getRequestHeaders().getFirst(TransportConstants.ACTIVEMQ_SERVER_NAME);
-        if (activemqServerName == null || activemqServerName.equals(rootServer.getConfiguration().getName())) {
+        if (activemqServerName == null) {
             return rootServer;
         }
         ClusterManager clusterManager = rootServer.getClusterManager();
@@ -167,7 +174,11 @@ public class HTTPUpgradeService implements Service<HTTPUpgradeService> {
             }
         }
 
-        return rootServer;
+        if (activemqServerName.equals(rootServer.getConfiguration().getName())) {
+            return rootServer;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -193,8 +204,8 @@ public class HTTPUpgradeService implements Service<HTTPUpgradeService> {
                         MessagingLogger.ROOT_LOGGER.debugf("Switching to %s protocol for %s http-acceptor", protocolName, acceptorName);
                         ActiveMQServer server = selectServer(exchange, activemqServer);
                         RemotingService remotingService = server.getRemotingService();
-                        if (!remotingService.isStarted() || remotingService.isPaused()) {
-                            // ActiveMQ no longer accepts connection
+                        if (!server.isActive() || !remotingService.isStarted()) {
+                            // ActiveMQ does not accept connection
                             IoUtils.safeClose(connection);
                             return;
                         }
