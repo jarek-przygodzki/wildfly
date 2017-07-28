@@ -32,17 +32,13 @@
             <?AJP?>
             <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" />
             <https-listener name="httpsListener" socket-binding="https" security-realm="WCC_SSL_Realm" enable-http2="true"/>
-            <host name="default-host" alias="localhost">
-                <location name="/" handler="welcome-content" />
-            </host>
+            <host name="default-host" alias="localhost"/>
         </server>
         <servlet-container name="default" stack-trace-on-error="none">
             <jsp-config/>
             <websockets/>
         </servlet-container>
-        <handlers>
-            <file name="welcome-content" path="${jboss.home.dir}/welcome-content" />
-        </handlers>
+        <handlers/>
         <filters>
             <response-header name="server-header" header-name="Server" header-value="WildFly/10"/>
             <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Undertow/1"/>
