@@ -23,6 +23,7 @@ package org.jboss.as.ee.beanvalidation;
 
 import org.wildfly.security.manager.WildFlySecurityManager;
 
+import javax.validation.ClockProvider;
 import javax.validation.ConstraintValidatorFactory;
 import javax.validation.MessageInterpolator;
 import javax.validation.ParameterNameProvider;
@@ -114,6 +115,11 @@ public class LazyValidatorFactory implements ValidatorFactory {
     @Override
     public ParameterNameProvider getParameterNameProvider() {
         return getDelegate().getParameterNameProvider();
+    }
+
+    @Override
+    public ClockProvider getClockProvider() {
+        return getDelegate().getClockProvider();
     }
 
     @Override

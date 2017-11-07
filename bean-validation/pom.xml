@@ -42,7 +42,7 @@
             <artifactId>validation-api</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.hibernate</groupId>
+          <groupId>org.hibernate.validator</groupId>
           <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
@@ -100,6 +100,11 @@
             <!-- Needed for Hibernate Validator since it asserts the existance of javax.el during bootstrap-->
             <groupId>org.jboss.spec.javax.el</groupId>
             <artifactId>jboss-el-api_3.0_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el-impl</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
