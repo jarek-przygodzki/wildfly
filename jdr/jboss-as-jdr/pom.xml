@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.wildfly</groupId>
         <artifactId>jdr</artifactId>
-        <version>10.1.0-3-PSI-SNAPSHOT</version>
+        <version>10.1.0-3-PSI</version>
     </parent>
 
     <artifactId>wildfly-jdr</artifactId>
