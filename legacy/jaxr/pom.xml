@@ -27,7 +27,7 @@
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-parent</artifactId>
         <relativePath>../../pom.xml</relativePath>
-        <version>10.1.0-3-PSI-SNAPSHOT</version>
+        <version>10.1.0-3-PSI</version>
     </parent>
 
     <artifactId>wildfly-jaxr</artifactId>
