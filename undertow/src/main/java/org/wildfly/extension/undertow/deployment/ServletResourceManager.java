@@ -32,6 +32,7 @@ import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceChangeListener;
 import io.undertow.server.handlers.resource.ResourceManager;
 import org.jboss.vfs.VirtualFile;
+import io.undertow.util.CanonicalPathUtils;
 
 /**
  * Resource manager that deals with overlays
@@ -62,10 +63,19 @@ public class ServletResourceManager implements ResourceManager {
             p = p.substring(1);
         }
         if (overlays != null) {
+            String canonical = CanonicalPathUtils.canonicalize(p); //we don't need to do this for other resources, as the underlying RM will handle it
             for (VirtualFile overlay : overlays) {
-                VirtualFile child = overlay.getChild(p);
+                VirtualFile child = overlay.getChild(canonical);
                 if (child.exists()) {
-                    return new ServletResource(this, new VirtualFileResource(overlay.getPhysicalFile(), child, path));
+                    try {
+                        //we make sure the child is actually a child of the parent
+                        //CanonicalPathUtils should make sure this cannot happen
+                        //but just to be safe we do it anyway
+                        child.getPathNameRelativeTo(overlay);
+                        return new ServletResource(this, new VirtualFileResource(overlay.getPhysicalFile(), child, canonical));
+                    } catch (IllegalArgumentException ignore) {
+
+                    }
                 }
             }
         }
