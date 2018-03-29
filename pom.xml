@@ -129,7 +129,7 @@
         <version.jsoup>1.8.3</version.jsoup>
         <version.net.jcip>1.0</version.net.jcip>
         <version.net.shibboleth.utilities.java-support>7.1.1</version.net.shibboleth.utilities.java-support>
-        <version.org.apache.activemq.artemis>1.1.0.wildfly-024-1-PSI-SNAPSHOT</version.org.apache.activemq.artemis>
+        <version.org.apache.activemq.artemis>1.1.0.wildfly-024-1-PSI</version.org.apache.activemq.artemis>
         <version.org.apache.avro>1.7.6</version.org.apache.avro>
         <version.org.apache.cxf>3.1.6</version.org.apache.cxf>
         <version.org.apache.cxf.xjcplugins>3.0.5</version.org.apache.cxf.xjcplugins>
@@ -182,7 +182,7 @@
         <version.org.jboss.openjdk-orb>8.0.6.Final</version.org.jboss.openjdk-orb>
         <version.org.jboss.xnio.netty.netty-xnio-transport>0.1.1.Final</version.org.jboss.xnio.netty.netty-xnio-transport>
         <version.org.jboss.remote-naming>2.0.4-PSI</version.org.jboss.remote-naming>
-        <version.org.jboss.resteasy>3.0.19.Final</version.org.jboss.resteasy>
+        <version.org.jboss.resteasy>3.0.25-1-PSI</version.org.jboss.resteasy>
         <version.org.jboss.seam.int>7.0.0.GA</version.org.jboss.seam.int>
         <version.org.jboss.security.jboss-negotiation>3.0.2.Final</version.org.jboss.security.jboss-negotiation>
         <version.org.jboss.security.jbossxacml>2.0.8.Final</version.org.jboss.security.jbossxacml>
@@ -4752,18 +4752,6 @@
                     <exclusion>
                         <groupId>javax.annotation</groupId>
                         <artifactId>jsr250-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>async-http-servlet-3.0</artifactId>
-                <version>${version.org.jboss.resteasy}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.jboss.logging</groupId>
-                        <artifactId>jboss-logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
