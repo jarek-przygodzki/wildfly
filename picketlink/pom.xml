@@ -7,7 +7,7 @@
     <parent>
         <artifactId>wildfly-parent</artifactId>
         <groupId>org.wildfly</groupId>
-        <version>10.1.0-6-PSI-SNAPSHOT</version>
+        <version>10.1.0-6-PSI</version>
     </parent>
 
     <artifactId>wildfly-picketlink</artifactId>
