@@ -124,6 +124,11 @@
             <artifactId>jcip-annotations</artifactId>
         </dependency>
         <dependency>
+            <!-- This is only required for the InfinispanExtension to initialize Netty's InternalLoggerFactory -->
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-clustering-common</artifactId>
             <version>${project.version}</version><!--$NO-MVN-MAN-VER$-->

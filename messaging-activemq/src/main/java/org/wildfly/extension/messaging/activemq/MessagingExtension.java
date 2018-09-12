@@ -54,6 +54,8 @@ import static org.wildfly.extension.messaging.activemq.CommonAttributes.SHARED_S
 import static org.wildfly.extension.messaging.activemq.CommonAttributes.SHARED_STORE_SLAVE;
 import static org.wildfly.extension.messaging.activemq.CommonAttributes.SLAVE;
 
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.JdkLoggerFactory;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
@@ -155,6 +157,8 @@ public class MessagingExtension implements Extension {
     }
 
     public void initialize(ExtensionContext context) {
+        // Initialize the Netty logger factory
+        InternalLoggerFactory.setDefaultFactory(JdkLoggerFactory.INSTANCE);
         final SubsystemRegistration subsystemRegistration = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         subsystemRegistration.registerXMLElementWriter(MessagingSubsystemParser_1_0.INSTANCE);
 
