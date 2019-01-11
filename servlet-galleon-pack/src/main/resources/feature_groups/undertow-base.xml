@@ -23,6 +23,7 @@
         </feature>
         <feature spec="subsystem.undertow.servlet-container">
             <param name="servlet-container" value="default" />
+            <param name="stack-trace-on-error" value="none" />
         </feature>
     </feature>
 </feature-group-spec>

@@ -7,8 +7,6 @@
         </feature-group>
     </origin>
 
-    <feature-group name="deployment-scanner"/>
-
     <feature-group name="basic-profile"/>
 
 </feature-group-spec>
