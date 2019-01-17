@@ -46,6 +46,7 @@
         <test-group>org/jboss/as/test/clustering/cluster</test-group>
         <!-- Needs to kept inline with what the infinispan-server-feature-pack requires -->
         <version.org.jboss.infinispan-wildfly>14.0.1.Final</version.org.jboss.infinispan-wildfly>
+        <ts.restore.default.configuration.cli>restore-default-configuration.cli</ts.restore.default.configuration.cli>
     </properties>
 
     <dependencies>

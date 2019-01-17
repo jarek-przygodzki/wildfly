@@ -38,6 +38,7 @@
         <jboss.home>${jboss.dist}</jboss.home>
 
         <ts.elytron.cli>web-enable-elytron.cli</ts.elytron.cli>
+        <ts.restore.default.configuration.cli>restore-default-configuration.cli</ts.restore.default.configuration.cli>
     </properties>
 
     <dependencies>

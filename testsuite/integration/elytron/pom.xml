@@ -51,6 +51,9 @@
         <wildfly.dir>${jboss.dist}</wildfly.dir>
 
         <enforcer.skip>true</enforcer.skip>
+        
+        <jbossas.ts.integ.dir>${basedir}/..</jbossas.ts.integ.dir>
+        <jbossas.ts.dir>${jbossas.ts.integ.dir}/..</jbossas.ts.dir>
     </properties>
 
     <dependencies>
@@ -202,6 +205,23 @@
                         <phase>none</phase>
                     </execution>
                     <execution>
+                        <id>ts.copy-welcome-content</id>
+                        <phase>generate-test-resources</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/wildfly</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>../../../servlet-feature-pack/src/main/resources/content</directory>
+                                    <includes>
+                                        <include>**/welcome-content/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>ts.copy-elytron.config</id>
                         <phase>process-test-resources</phase>
                         <inherited>false</inherited>
@@ -302,6 +322,7 @@
                         <configuration>
                             <offline>true</offline>
                             <scripts>
+                                <script>${ts.restore.default.configuration.cli}</script>
                                 <script>modify-elytron-config.cli</script>
                             </scripts>
                             <jboss-home>${wildfly.dir}</jboss-home>

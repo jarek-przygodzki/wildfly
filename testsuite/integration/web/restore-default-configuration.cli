@@ -1,0 +1,9 @@
+embed-server --server-config=standalone.xml
+
+/extension=org.jboss.as.deployment-scanner:add
+/subsystem=deployment-scanner:add
+/subsystem=deployment-scanner/scanner=default:add(path="deployments",relative-to="jboss.server.base.dir",scan-interval=5000,runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}")
+
+/subsystem=undertow/server=default-server/https-listener=https:write-attribute(name="security-realm",value="ApplicationRealm")
+
+stop-embedded-server
