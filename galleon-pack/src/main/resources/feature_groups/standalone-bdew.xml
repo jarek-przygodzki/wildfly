@@ -21,11 +21,7 @@
     </feature>
     
     <feature spec="core-service.management.management-interface.http-interface">
-        <!-- <param name="socket-binding" value="management-http"/> -->
         <param name="security-realm" value="LDAPRealm"/>
-        <!-- <feature spec="core-service.management.management-interface.http-interface.http-upgrade">
-            <param name="enabled" value="true"/>
-        </feature> -->
     </feature>
 
 </feature-group-spec>
