@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+    <!-- Fixed in: 2.7.9.2, 2.8.10, 2.9.2 (https://github.com/FasterXML/jackson-databind/issues/1847, https://github.com/aws/aws-sdk-java/issues/1597, https://www.sourceclear.com/vulnerability-database/security/remote-code-execution-rce-through-deserialization/java/sid-5364/summary) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2017-15095</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.2, 2.8.11, 2.9.4 (https://github.com/FasterXML/jackson-databind/issues/1855) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2017-17485</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2097) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14719</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2097) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14720</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2097) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14721</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2186) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19360</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2186) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19361</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.5, 2.8.11.3, 2.9.8 (https://github.com/FasterXML/jackson-databind/issues/2186) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19362</cve>
+    </suppress>
+
+    <!-- CVE-2018-5968 (http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2018-5968) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-5968</cve>
+    </suppress>
+
+    <!-- Fixed in: 2.7.9.3, 2.8.11.1, 2.9.5 (https://github.com/FasterXML/jackson-databind/issues/1931) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.7.9.5.jar
+   ]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-7489</cve>
+    </suppress>
+</suppressions>

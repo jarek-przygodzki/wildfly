@@ -245,6 +245,7 @@
         <version.help.plugin>2.2</version.help.plugin>
         <version.jacoco.plugin>0.6.3.201306030806</version.jacoco.plugin> <!-- Needs to be set explicitely to match with org.jacoco:org.jacoco.ant - see testsuite. -->
         <version.properties.plugin>2.0.1</version.properties.plugin>
+        <version.org.owasp.dependency-check-maven>4.0.2</version.org.owasp.dependency-check-maven>
         <version.xml.plugin>1.0</version.xml.plugin>
 
         <!-- Modularized JDK support (various workarounds) - activated via profile -->
@@ -350,6 +351,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${version.org.owasp.dependency-check-maven}</version>
+                <configuration>
+                    <suppressionFiles>
+                        <suppressionFile>owasp-suppression.xml</suppressionFile>
+                    </suppressionFiles>
+                    <format>ALL</format>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <skipSystemScope>true</skipSystemScope>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
