@@ -107,4 +107,13 @@
         <gav regex="true">^xalan:serializer:.*$</gav>
         <cve>CVE-2014-0107</cve>
     </suppress>
+
+    <!-- Fixed in 1.8.3 (https://bugzilla.redhat.com/show_bug.cgi?id=1258310) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jsoup-1.8.3.jar
+   ]]></notes>
+        <gav regex="true">^org\.jsoup:jsoup:.*$</gav>
+        <cve>CVE-2015-6748</cve>
+    </suppress>
 </suppressions>
