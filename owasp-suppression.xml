@@ -89,4 +89,22 @@
         <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
         <cve>CVE-2018-7489</cve>
     </suppress>
+
+    <!-- Fixed in 2.7.1.jbossorg-4 (https://github.com/jboss/xalan-j/commit/8cd0c151456475f57961b0987d9f985202f81eec) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: xalan-2.7.1.jbossorg-4.jar
+   ]]></notes>
+        <gav regex="true">^xalan:xalan:.*$</gav>
+        <cve>CVE-2014-0107</cve>
+    </suppress>
+
+    <!-- Fixed in 2.7.1.jbossorg-4 (https://github.com/jboss/xalan-j/commit/8cd0c151456475f57961b0987d9f985202f81eec) -->
+    <suppress>
+        <notes><![CDATA[
+   file name: serializer-2.7.1.jbossorg-4.jar
+   ]]></notes>
+        <gav regex="true">^xalan:serializer:.*$</gav>
+        <cve>CVE-2014-0107</cve>
+    </suppress>
 </suppressions>
