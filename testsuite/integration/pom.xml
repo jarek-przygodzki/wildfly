@@ -367,13 +367,6 @@
 
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <configuration>
-                    <skip>${skip.antrun}</skip>
-                </configuration>
-            </plugin>
             
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
@@ -399,6 +392,14 @@
                         <maven.repo.local>${settings.localRepository}</maven.repo.local>
                         <module.path>${jboss.dist}/modules</module.path>
                     </system-properties>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <skip>${skip.antrun}</skip>
                 </configuration>
             </plugin>
             

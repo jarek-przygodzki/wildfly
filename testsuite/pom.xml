@@ -241,6 +241,23 @@
                                </resources>
                            </configuration>
                        </execution>
+                       <execution>
+                        <id>ts.copy-welcome-content</id>
+                        <phase>generate-test-resources</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/wildfly</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${jbossas.project.dir}/servlet-feature-pack/src/main/resources/content</directory>
+                                    <includes>
+                                        <include>**/welcome-content/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                    </executions>
                </plugin>
 

@@ -121,6 +121,7 @@
                         <configuration>
                             <offline>true</offline>
                             <scripts>
+                                <script>${ts.restore.default.configuration.cli}</script>
                                 <script>clustering-all.cli</script>
                             </scripts>
                             <jboss-home>${wildfly.dir}</jboss-home>

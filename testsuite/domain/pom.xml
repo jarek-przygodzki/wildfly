@@ -52,6 +52,7 @@
         <jbossas.ts.dir>${basedir}/..</jbossas.ts.dir>
 
         <ts.elytron.cli>../shared/enable-elytron-domain.cli</ts.elytron.cli>
+        <ts.restore.default.configuration.cli>../shared/restore-default-configuration-domain.cli</ts.restore.default.configuration.cli>
     </properties>
 
     <!--
@@ -223,6 +224,35 @@
                         <include>org/jboss/as/test/integration/domain/*TestCase.java</include>
                         <include>org/jboss/as/test/integration/domain/suites/*TestSuite.java</include>
                     </includes>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.org.wildfly.plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute-commands</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <offline>true</offline>
+                    <scripts>
+                        <script>${ts.restore.default.configuration.cli}</script>
+                    </scripts>
+                    <jboss-home>${project.build.directory}/wildfly</jboss-home>
+                    <stdout>none</stdout>
+                    <java-opts>${modular.jdk.args}</java-opts>
+                    <system-properties>
+                        <public.ip>${node0}</public.ip>
+                        <management.ip>${node0}</management.ip>
+                        <maven.repo.local>${settings.localRepository}</maven.repo.local>
+                        <module.path>${jboss.dist}/modules</module.path>
+                    </system-properties>
                 </configuration>
             </plugin>
 

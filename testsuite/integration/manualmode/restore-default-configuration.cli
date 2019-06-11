@@ -1,3 +1,59 @@
+embed-server --server-config=standalone.xml
+
+/extension=org.jboss.as.deployment-scanner:add
+/subsystem=deployment-scanner:add
+/subsystem=deployment-scanner/scanner=default:add(path="deployments",relative-to="jboss.server.base.dir",scan-interval=5000,runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}")
+
+/subsystem=datasources/data-source="ExampleDS":add(\
+        jndi-name="java:jboss/datasources/ExampleDS",\
+        enabled="true",\
+        use-java-context="true",\
+        connection-url="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",\
+        driver-name="h2",\
+        user-name="sa",\
+        password="sa")
+        
+/subsystem=ee/service=default-bindings:write-attribute(name="datasource",value="java:jboss/datasources/ExampleDS")
+
+/subsystem=undertow/server=default-server/https-listener=https:write-attribute(name="security-realm",value="ApplicationRealm")
+/subsystem=undertow/configuration=handler/file=welcome-content:add(path="${jboss.home.dir}/welcome-content")
+/subsystem=undertow/server=default-server/host=default-host/location="/":add(handler="welcome-content")
+/subsystem=undertow/servlet-container=default:undefine-attribute(name="stack-trace-on-error")
+
+stop-embedded-server
+
+
+embed-server --server-config=standalone-full.xml
+
+/extension=org.jboss.as.deployment-scanner:add
+/subsystem=deployment-scanner:add
+/subsystem=deployment-scanner/scanner=default:add(path="deployments",relative-to="jboss.server.base.dir",scan-interval=5000,runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}")
+
+/subsystem=datasources/data-source="ExampleDS":add(\
+        jndi-name="java:jboss/datasources/ExampleDS",\
+        enabled="true",\
+        use-java-context="true",\
+        connection-url="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",\
+        driver-name="h2",\
+        user-name="sa",\
+        password="sa")
+        
+/subsystem=ee/service=default-bindings:write-attribute(name="datasource",value="java:jboss/datasources/ExampleDS")
+
+/subsystem=undertow/server=default-server/https-listener=https:write-attribute(name="security-realm",value="ApplicationRealm")
+/subsystem=undertow/configuration=handler/file=welcome-content:add(path="${jboss.home.dir}/welcome-content")
+/subsystem=undertow/server=default-server/host=default-host/location="/":add(handler="welcome-content")
+/subsystem=undertow/servlet-container=default:undefine-attribute(name="stack-trace-on-error")
+
+/socket-binding-group=standard-sockets/socket-binding=iiop/:add(interface="unsecure",port="3528")
+/socket-binding-group=standard-sockets/socket-binding=iiop-ssl/:add(interface="unsecure",port="3529")
+/extension=org.wildfly.iiop-openjdk:add()
+/subsystem=iiop-openjdk:add(socket-binding="iiop",security="identity",transactions="spec",server-requires-ssl="false",client-requires-ssl="false")
+/subsystem=ejb3/service=iiop:add(enable-by-default="false",use-qualified-name="false")
+
+stop-embedded-server
+
+
 embed-server --server-config=standalone-ha.xml
 
 /extension=org.jboss.as.deployment-scanner:add
