@@ -241,12 +241,12 @@ public class InMemoryDirectoryServiceFactory implements DirectoryServiceFactory 
         }
 
         @Override
-        public void addPartition(Partition partition) throws LdapException {
+        public void addPartition(Partition partition) throws Exception {
             wrapped.addPartition(partition);
         }
 
         @Override
-        public void removePartition(Partition partition) throws LdapException {
+        public void removePartition(Partition partition) throws Exception {
             wrapped.removePartition(partition);
         }
 
@@ -291,18 +291,18 @@ public class InMemoryDirectoryServiceFactory implements DirectoryServiceFactory 
         }
 
         @Override
-        public void startup() throws LdapException {
+        public void startup() throws Exception {
             wrapped.startup();
         }
 
         @Override
-        public void shutdown() throws LdapException {
+        public void shutdown() throws Exception {
             wrapped.shutdown();
             cacheManager.shutdown();
         }
 
         @Override
-        public void sync() throws LdapException {
+        public void sync() throws Exception {
             wrapped.sync();
         }
 
@@ -327,12 +327,12 @@ public class InMemoryDirectoryServiceFactory implements DirectoryServiceFactory 
         }
 
         @Override
-        public CoreSession getSession() throws LdapException {
+        public CoreSession getSession() throws Exception {
             return wrapped.getSession();
         }
 
         @Override
-        public CoreSession getSession(LdapPrincipal principal) throws LdapException {
+        public CoreSession getSession(LdapPrincipal principal) throws Exception {
             return wrapped.getSession(principal);
         }
 
@@ -342,7 +342,7 @@ public class InMemoryDirectoryServiceFactory implements DirectoryServiceFactory 
         }
 
         @Override
-        public CoreSession getSession(Dn principalDn, byte[] credentials, String saslMechanism, String saslAuthId) throws LdapException {
+        public CoreSession getSession(Dn principalDn, byte[] credentials, String saslMechanism, String saslAuthId) throws Exception {
             return wrapped.getSession(principalDn, credentials, saslMechanism, saslAuthId);
         }
 

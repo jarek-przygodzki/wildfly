@@ -281,7 +281,7 @@
         <version.org.apache.avro>1.7.6</version.org.apache.avro>
         <version.org.apache.cxf>3.2.5-jbossorg-1</version.org.apache.cxf>
         <version.org.apache.cxf.xjcplugins>3.2.2</version.org.apache.cxf.xjcplugins>
-        <version.org.apache.ds>2.0.0.AM25</version.org.apache.ds>
+        <version.org.apache.ds>2.0.0-M24</version.org.apache.ds>
         <version.org.apache.httpcomponents.httpasyncclient>4.1.3</version.org.apache.httpcomponents.httpasyncclient>
         <version.org.apache.james.apache-mime4j>0.6</version.org.apache.james.apache-mime4j>
         <version.org.apache.jstl>1.2.6-RC1</version.org.apache.jstl>
@@ -7629,6 +7629,27 @@
                 </pluginRepository>
             </pluginRepositories>
         </profile>
+        <profile>
+            <id>deploy-to-ppl-nexus</id>
+            <activation>
+                <property>
+                    <name>deployToPplNexus</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>ppl-release</id>
+                    <name>PPL Release</name>
+                    <url>http://ppl-poz-svmvn3.psi.de:8081/nexus/content/repositories/ppl-release</url>
+                </repository>
+                <snapshotRepository>
+                    <id>ppl-snapshots</id>
+                    <name>PPL Snapshots</name>
+                    <url>http://ppl-poz-svmvn3.psi.de:8081/nexus/content/repositories/ppl-snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>				
     </profiles>
 </project>
 
