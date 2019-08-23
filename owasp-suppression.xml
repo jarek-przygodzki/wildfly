@@ -87,8 +87,18 @@
        ]]></notes>
        <packageUrl regex="true">^pkg:maven/com\.sun\.faces/jsf\-impl@.*$</packageUrl>
        <vulnerabilityName>CVE-2018-14371</vulnerabilityName>
-    </suppress>    
-            
+    </suppress>
+
+    <!-- [wildfly] Used only in tests, not deployed  -->    
+	<suppress>
+	   <notes><![CDATA[
+	   file name: apacheds-all-2.0.0-M24.jar (shaded: org.apache.directory.api:api-ldap-net-mina:1.0.0)
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.directory\.api/api\-.*@.*$</packageUrl>
+	   <cve>CVE-2015-3250</cve>
+	   <cve>CVE-2018-1337</cve>
+	</suppress>    
+
     <!-- [wildfly-core] The vulnerability applies to io.undertow package, undertow-server from org.wildfly.security.elytron-web package is a different module -->
     <suppress>
        <notes><![CDATA[
