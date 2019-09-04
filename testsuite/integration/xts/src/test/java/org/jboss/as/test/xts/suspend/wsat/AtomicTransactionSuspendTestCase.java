@@ -52,8 +52,7 @@ public class AtomicTransactionSuspendTestCase extends AbstractTestCase {
         return getExecutorServiceArchiveBase().addClasses(AtomicTransactionExecutionService.class,
                 AtomicTransactionRemoteService.class, TransactionParticipant.class)
                 .addAsManifestResource(PermissionUtils.createPermissionsXmlAsset(
-                        new SocketPermission(serverHostPort, "connect, resolve"),
-                        new RuntimePermission("getClassLoader")
+                        new SocketPermission(serverHostPort, "connect, resolve")
                 ), "permissions.xml");
     }
 
@@ -62,8 +61,7 @@ public class AtomicTransactionSuspendTestCase extends AbstractTestCase {
     public static WebArchive getRemoteServiceArchive() {
         return getRemoteServiceArchiveBase().addClasses(AtomicTransactionRemoteService.class, TransactionParticipant.class)
                 .addAsManifestResource(PermissionUtils.createPermissionsXmlAsset(
-                        new SocketPermission(serverHostPort, "connect, resolve"),
-                        new RuntimePermission("getClassLoader")
+                        new SocketPermission(serverHostPort, "connect, resolve")
                 ), "permissions.xml");
     }
 
