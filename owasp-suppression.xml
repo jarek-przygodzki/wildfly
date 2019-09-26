@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <!-- Fixed in: 2.7.9.2, 2.8.10, 2.9.2 (https://github.com/FasterXML/jackson-databind/issues/1847, https://github.com/aws/aws-sdk-java/issues/1597, https://www.sourceclear.com/vulnerability-database/security/remote-code-execution-rce-through-deserialization/java/sid-5364/summary) -->
     <suppress>
         <notes><![CDATA[
