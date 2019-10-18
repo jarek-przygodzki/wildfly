@@ -134,4 +134,12 @@
         <packageUrl regex="true">^pkg:maven/io\.undertow/undertow\-core@.*$</packageUrl>
         <cve>CVE-2019-10184</cve>
     </suppress>
+    <!-- This CVE applies to cxf but it does not to xjc-dv -->
+    <suppress>
+        <notes><![CDATA[
+   file name: cxf-xjc-dv-3.0.5.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-dv@.*$</packageUrl>
+        <cve>CVE-2016-8739</cve>
+    </suppress>
 </suppressions>
