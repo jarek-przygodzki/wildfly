@@ -142,4 +142,12 @@
         <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-dv@.*$</packageUrl>
         <cve>CVE-2016-8739</cve>
     </suppress>
+    <!-- Vulnerability applies to netty before 4.1.0.Beta5. Fixed in commit: https://github.com/netty/netty/commit/97d871a7553a01384b43df855dccdda5205ae77a. Vulnerability doesn't apply to netty-xnio.transport -->
+    <suppress>
+        <notes><![CDATA[
+   file name: netty-xnio-transport-0.1.2.Final.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.jboss\.xnio\.netty/netty\-xnio\-transport@.*$</packageUrl>
+        <cve>CVE-2015-2156</cve>
+    </suppress>
 </suppressions>
