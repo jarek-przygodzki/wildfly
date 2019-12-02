@@ -51,6 +51,8 @@
         <!-- This value is overridden in submodules with the correct relative path. -->
         <xslt.scripts.dir>${basedir}/../integration/src/test/xslt</xslt.scripts.dir>
         <surefire.excludeTests />
+
+        <ts.restore.default.configuration.cli>${jbossas.ts.dir}/shared/restore-default-configuration</ts.restore.default.configuration.cli>
     </properties>
 
     <!--
@@ -220,6 +222,33 @@
                         <server.jvm.args>${surefire.system.args} ${jvm.args.ip.server} ${jvm.args.timeouts} -Dnode0=${node0} -Dnode1=${node1} -Dmcast=${mcast} -Declipselink.archive.factory=org.jipijapa.eclipselink.JBossArchiveFactoryImpl</server.jvm.args>
                     </systemPropertyVariables>
 
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.org.wildfly.plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute-commands</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <offline>true</offline>
+                    <scripts>
+                        <script>${ts.restore.default.configuration.cli}</script>
+                    </scripts>
+                    <jboss-home>${project.build.directory}\wildfly</jboss-home>
+                    <stdout>none</stdout>
+                    <java-opts>${modular.jdk.args}</java-opts>
+                    <system-properties>
+                        <maven.repo.local>${settings.localRepository}</maven.repo.local>
+                        <module.path>${jboss.dist}\modules</module.path>
+                    </system-properties>
                 </configuration>
             </plugin>
         </plugins>

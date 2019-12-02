@@ -33,6 +33,9 @@
         <!-- use the web build for tests -->
         <jboss.dist>${jbossas.project.dir}/${wildfly.web.build.output.dir}</jboss.dist>
         <jboss.home>${jboss.dist}</jboss.home>
+
+        <ts.restore.default.configuration.cli>restore-default-configuration.cli</ts.restore.default.configuration.cli>
+
     </properties>
 
     <dependencies>

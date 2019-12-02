@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore
 public class JspTagTestCase {
 
     private static final String RESULT = "This is a header\n" +

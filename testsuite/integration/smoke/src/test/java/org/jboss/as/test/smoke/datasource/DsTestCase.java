@@ -43,7 +43,6 @@ import java.sql.ResultSet;
  * @version $Revision: 1.1 $
  */
 @RunWith(Arquillian.class)
-@Ignore
 public class DsTestCase {
     private static final String JNDI_NAME = "java:jboss/datasources/ExampleDS";
 

@@ -21,6 +21,9 @@
         <jbossas.ts.integ.dir>${basedir}/..</jbossas.ts.integ.dir>
         <jbossas.ts.dir>${jbossas.ts.integ.dir}/..</jbossas.ts.dir>
         <jbossas.project.dir>${jbossas.ts.dir}/..</jbossas.project.dir>
+
+        <ts.restore.default.configuration.cli>restore-default-configuration.cli</ts.restore.default.configuration.cli>
+
     </properties>
 
     <profiles>

@@ -22,10 +22,14 @@
 
 package org.jboss.as.test.smoke.mgmt.datasource;
 
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.management.jca.DsMgmtTestBase;
 import org.jboss.dmr.ModelNode;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,7 +54,6 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 public class DataSourceResourcesUnitTestCase extends DsMgmtTestBase {
 
     @Test
-    @Ignore
     public void testReadChildrenResources() throws Exception {
 
         final ModelNode address = new ModelNode();
