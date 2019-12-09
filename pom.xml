@@ -193,13 +193,13 @@
         <version.checkstyle>8.5</version.checkstyle>
         <version.help.plugin>2.2</version.help.plugin>
         <version.jacoco.plugin>0.7.9</version.jacoco.plugin>
-        <version.org.jboss.galleon>3.0.0.Final</version.org.jboss.galleon>
+        <version.org.jboss.galleon>4.1.1.Final</version.org.jboss.galleon>
 
         <version.org.wildfly.build-tools>1.2.10.Final</version.org.wildfly.build-tools>
         <version.org.wildfly.checkstyle-config>1.0.7.Final</version.org.wildfly.checkstyle-config>
 
         <version.org.wildfly.component-matrix-plugin>1.0.2.Final</version.org.wildfly.component-matrix-plugin>
-        <version.org.wildfly.galleon-plugins>3.0.0.Final</version.org.wildfly.galleon-plugins>
+        <version.org.wildfly.galleon-plugins>4.0.4.Final</version.org.wildfly.galleon-plugins>
         <version.org.wildfly.maven.plugins>1.0.1</version.org.wildfly.maven.plugins>
         <version.org.wildfly.plugin>1.2.1.Final</version.org.wildfly.plugin>
         <!-- Non-default maven plugin versions and configuration -->
@@ -375,6 +375,7 @@
         <version.org.jboss.ws.jaxws-undertow-httpspi>1.0.1.Final</version.org.jboss.ws.jaxws-undertow-httpspi>
         <version.org.jboss.ws.spi>3.2.3.Final</version.org.jboss.ws.spi>
         <version.org.jboss.xnio.netty.netty-xnio-transport>0.1.6.Final</version.org.jboss.xnio.netty.netty-xnio-transport>
+        <version.org.jdom>1.1.3</version.org.jdom>
         <version.org.jgroups>4.0.15.Final</version.org.jgroups>
         <version.org.jgroups.azure>1.2.0.Final</version.org.jgroups.azure>
         <version.org.jgroups.kubernetes>1.0.6.Final</version.org.jgroups.kubernetes>
@@ -1638,6 +1639,10 @@
                     <exclusion>
                         <groupId>jaxen</groupId>
                         <artifactId>jaxen</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>jdom</groupId>
+                        <artifactId>jdom</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>maven-plugins</groupId>
@@ -6113,6 +6118,12 @@
                         <artifactId>netty-transport</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom</artifactId>
+                <version>${version.org.jdom}</version>
             </dependency>
 
             <dependency>
