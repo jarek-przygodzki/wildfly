@@ -3,31 +3,31 @@
 
     <!-- [wildfly] The vulnerability applies to Kubernetes system for containerized applications, not to JGroups discovery protocol for Kubernetes  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: jgroups-kubernetes-1.0.6.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.jgroups\.kubernetes/jgroups\-kubernetes@.*$</packageUrl>
-       <cve>CVE-2015-7528</cve>
-       <cve>CVE-2018-1002105</cve>
-       <cve>CVE-2019-1002100</cve>
+        <packageUrl regex="true">^pkg:maven/org\.jgroups\.kubernetes/jgroups\-kubernetes@.*$</packageUrl>
+        <cve>CVE-2015-7528</cve>
+        <cve>CVE-2018-1002105</cve>
+        <cve>CVE-2019-1002100</cve>
     </suppress>
     <!-- [wildfly] The vulnerability applies to container networking interface used in Kubernetes system, not to JGroups discovery protocol for Kubernetes  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: jgroups-kubernetes-1.0.6.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.jgroups\.kubernetes/jgroups\-kubernetes@.*$</packageUrl>
-       <cve>CVE-2019-9946</cve>
+        <packageUrl regex="true">^pkg:maven/org\.jgroups\.kubernetes/jgroups\-kubernetes@.*$</packageUrl>
+        <cve>CVE-2019-9946</cve>
     </suppress>
     <!-- [wildfly] The vulnerability applies to apache/cxf project, not to apache/cxf-xjc-utils  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: cxf-xjc-dv-3.2.2.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:.*cxf.*@.*$</packageUrl>
-       <cve>CVE-2018-8039</cve>
-    </suppress>    
-    
+        <packageUrl regex="true">^pkg:.*cxf.*@.*$</packageUrl>
+        <cve>CVE-2018-8039</cve>
+    </suppress>
+
     <!-- [wildfly] False-positive: it was fixed in 2.7.1.jbossorg-4 (https://github.com/jboss/xalan-j/commit/8cd0c151456475f57961b0987d9f985202f81eec) -->
     <suppress>
         <notes><![CDATA[
@@ -55,90 +55,90 @@
 
     <!-- [wildfly] Applies to JBEAP 5.2.0 and 6.2.4 (picketlink 2.1.9.SP3-redhat-1), our version is from JBEAP 7.2.2 without this vulnerability -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: picketlink-common-2.5.5.SP12-redhat-00005.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
-       <vulnerabilityName>CVE-2014-3530</vulnerabilityName>
-    </suppress>    
+        <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
+        <vulnerabilityName>CVE-2014-3530</vulnerabilityName>
+    </suppress>
     <!-- [wildfly] False-positive: Fixed in JBEAP 6.4.0, our version is from JBEAP 7.2.2 (https://access.redhat.com/security/cve/cve-2015-0277)-->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: picketlink-common-2.5.5.SP12-redhat-00005.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
-       <cve>CVE-2015-0277</cve>
-       <cve>CVE-2015-6254</cve>
-    </suppress>    
+        <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
+        <cve>CVE-2015-0277</cve>
+        <cve>CVE-2015-6254</cve>
+    </suppress>
 
     <!-- [wildfly] False-positive: Fixed in JBEAP 6.4.3, our version is from JBEAP 7.2.2 (https://access.redhat.com/errata/RHSA-2015:1669)-->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: picketlink-common-2.5.5.SP12-redhat-00005.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
-       <cve>CVE-2015-3158</cve>
-    </suppress>    
-
-    <!-- [wildfly] Reported in eclipse/mojarra ResourceManager, not jboss/mojarra where there is no ResourceManager at all -->    
-    <suppress>
-       <notes><![CDATA[
-       file name: jsf-impl-2.3.5.SP2.jar
-       ]]></notes>
-       <packageUrl regex="true">^pkg:maven/com\.sun\.faces/jsf\-impl@.*$</packageUrl>
-       <vulnerabilityName>CVE-2018-14371</vulnerabilityName>
+        <packageUrl regex="true">^pkg:maven/org\.picketlink.*@.*$</packageUrl>
+        <cve>CVE-2015-3158</cve>
     </suppress>
 
-    <!-- [wildfly] Used only in tests, not deployed  -->    
-	<suppress>
-	   <notes><![CDATA[
+    <!-- [wildfly] Reported in eclipse/mojarra ResourceManager, not jboss/mojarra where there is no ResourceManager at all -->
+    <suppress>
+        <notes><![CDATA[
+       file name: jsf-impl-2.3.5.SP2.jar
+       ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.sun\.faces/jsf\-impl@.*$</packageUrl>
+        <vulnerabilityName>CVE-2018-14371</vulnerabilityName>
+    </suppress>
+
+    <!-- [wildfly] Used only in tests, not deployed  -->
+    <suppress>
+        <notes><![CDATA[
 	   file name: apacheds-all-2.0.0-M24.jar (shaded: org.apache.directory.api:api-ldap-net-mina:1.0.0)
 	   ]]></notes>
-	   <packageUrl regex="true">^pkg:maven/org\.apache\.directory\.api/api\-.*@.*$</packageUrl>
-	   <cve>CVE-2015-3250</cve>
-	   <cve>CVE-2018-1337</cve>
-	</suppress>    
+        <packageUrl regex="true">^pkg:maven/org\.apache\.directory\.api/api\-.*@.*$</packageUrl>
+        <cve>CVE-2015-3250</cve>
+        <cve>CVE-2018-1337</cve>
+    </suppress>
 
     <!-- [wildfly-core] The vulnerability applies to io.undertow package, undertow-server from org.wildfly.security.elytron-web package is a different module -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: undertow-server-1.3.0.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.wildfly\.security\.elytron\-web/undertow\-server.*@.*$</packageUrl>
-       <cve>CVE-2017-12165</cve>
-       <cve>CVE-2017-12196</cve>
-       <cve>CVE-2017-2670</cve>
-       <cve>CVE-2017-7559</cve>
-       <cve>CVE-2018-1067</cve>
-       <cve>CVE-2019-10184</cve>
-       <cve>CVE-2019-3888</cve>
+        <packageUrl regex="true">^pkg:maven/org\.wildfly\.security\.elytron\-web/undertow\-server.*@.*$</packageUrl>
+        <cve>CVE-2017-12165</cve>
+        <cve>CVE-2017-12196</cve>
+        <cve>CVE-2017-2670</cve>
+        <cve>CVE-2017-7559</cve>
+        <cve>CVE-2018-1067</cve>
+        <cve>CVE-2019-10184</cve>
+        <cve>CVE-2019-3888</cve>
     </suppress>
-    
+
     <!-- [wildfly-core] Not applicable, this is EAP vulnerability regarding system image, not Wildfly server itself (more: http://jira-bld-com.psi.de:8080/browse/COM_WILDFLY-152)  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: wildfly-elytron-1.7.0.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.wildfly.*@.*$</packageUrl>
-       <cve>CVE-2019-3805</cve>
-    </suppress>    
-    
+        <packageUrl regex="true">^pkg:maven/org\.wildfly.*@.*$</packageUrl>
+        <cve>CVE-2019-3805</cve>
+    </suppress>
+
     <!-- [wildfly-core] reported for wildfly version before 14.0.0 (our is 15.x)  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: wildfly-elytron-1.7.0.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.wildfly.*@.*$</packageUrl>
-       <cve>CVE-2018-14627</cve>
-    </suppress>    
+        <packageUrl regex="true">^pkg:maven/org\.wildfly.*@.*$</packageUrl>
+        <cve>CVE-2018-14627</cve>
+    </suppress>
 
     <!-- [wildfly-core] Vulnerability applies to WildFly Core before version 6.0.0.Alpha3, our version is forked from 7.0.0  -->
     <suppress>
-       <notes><![CDATA[
+        <notes><![CDATA[
        file name: wildfly-plugin-core-1.2.0.Final.jar
        ]]></notes>
-       <packageUrl regex="true">^pkg:maven/org\.wildfly\.plugins/wildfly\-plugin\-core@.*$</packageUrl>
-       <cve>CVE-2018-10862</cve>
+        <packageUrl regex="true">^pkg:maven/org\.wildfly\.plugins/wildfly\-plugin\-core@.*$</packageUrl>
+        <cve>CVE-2018-10862</cve>
     </suppress>
 
     <!-- Vulnerability applies to netty before 4.1.0.Beta5. Fixed in commit: https://github.com/netty/netty/commit/97d871a7553a01384b43df855dccdda5205ae77a. Vulnerability doesn't apply to netty-xnio.transport -->
@@ -148,6 +148,25 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.jboss\.xnio\.netty/netty\-xnio\-transport@.*$</packageUrl>
         <cve>CVE-2015-2156</cve>
+    </suppress>
+
+    <!-- Vulnerabilities do not apply to jackson-mapper-asl 1.x while using jackson-databind 2.x -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-mapper-asl-1.9.13.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.codehaus\.jackson/jackson\-mapper\-asl@.*$</packageUrl>
+        <vulnerabilityName>CVE-2017-15095</vulnerabilityName>
+        <vulnerabilityName>CVE-2017-17485</vulnerabilityName>
+        <vulnerabilityName>CVE-2017-7525</vulnerabilityName>
+        <vulnerabilityName>CVE-2018-1000873</vulnerabilityName>
+        <vulnerabilityName>CVE-2018-14718</vulnerabilityName>
+        <vulnerabilityName>CVE-2018-5968</vulnerabilityName>
+        <vulnerabilityName>CVE-2018-7489</vulnerabilityName>
+        <vulnerabilityName>CVE-2019-10172</vulnerabilityName>
+        <vulnerabilityName>CVE-2019-14540</vulnerabilityName>
+        <vulnerabilityName>CVE-2019-16335</vulnerabilityName>
+        <vulnerabilityName>CVE-2019-17267</vulnerabilityName>
     </suppress>
 
 </suppressions>
