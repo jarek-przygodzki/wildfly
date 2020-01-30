@@ -22,9 +22,6 @@
 
 package org.jboss.as.ee.metadata.property;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -32,6 +29,10 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.metadata.property.CompositePropertyResolver;
 import org.jboss.metadata.property.PropertiesPropertyResolver;
 import org.jboss.metadata.property.PropertyResolver;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author John Bailey

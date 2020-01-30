@@ -21,16 +21,15 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor.Interception;
+
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
-
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
-
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor.Interception;
 
 public class TestReadListener implements ReadListener {
 

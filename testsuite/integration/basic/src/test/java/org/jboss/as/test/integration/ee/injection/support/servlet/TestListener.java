@@ -21,17 +21,17 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
-import javax.inject.Inject;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpServletRequest;
-
 import org.jboss.as.test.integration.ee.injection.support.Alpha;
 import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
 import org.jboss.as.test.integration.ee.injection.support.Bravo;
 import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
 import org.jboss.as.test.integration.ee.injection.support.ProducedString;
+
+import javax.inject.Inject;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpServletRequest;
 
 @AroundConstructBinding
 @ComponentInterceptorBinding

@@ -77,7 +77,7 @@ public final class BindingConfiguration {
         if (!(other instanceof BindingConfiguration))
             return false;
 
-        BindingConfiguration config = (BindingConfiguration)other;
+        BindingConfiguration config = (BindingConfiguration) other;
         return name.equals(config.name) && source.equals(config.source);
     }
 

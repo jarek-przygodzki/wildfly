@@ -39,13 +39,15 @@ public final class ViewBindingInjectionSource extends InjectionSource {
         this.serviceName = serviceName;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void getResourceValue(final ResolutionContext resolutionContext, final ServiceBuilder<?> serviceBuilder, final DeploymentPhaseContext phaseContext, final Injector<ManagedReferenceFactory> injector) {
         serviceBuilder.addDependency(serviceName, ComponentView.class, new ViewManagedReferenceFactory.Injector(injector));
     }
 
     public boolean equals(final Object injectionSource) {
-         return injectionSource instanceof ViewBindingInjectionSource && equalTo((ViewBindingInjectionSource) injectionSource);
+        return injectionSource instanceof ViewBindingInjectionSource && equalTo((ViewBindingInjectionSource) injectionSource);
     }
 
     private boolean equalTo(final ViewBindingInjectionSource configuration) {

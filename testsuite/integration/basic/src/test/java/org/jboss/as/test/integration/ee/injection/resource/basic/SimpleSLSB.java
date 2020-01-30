@@ -41,22 +41,16 @@ import java.net.URL;
 @Stateless
 public class SimpleSLSB extends Parent {
 
+    public static final int DEFAULT_UNINJECTED_INT_VAL = 4;
+    public static final String DEFAULT_UNINJECTED_STRING_VAL = "This is the default value!!!! ###";
     // injected via the setter
     private Parent otherBean;
-
     @Resource
     private TimerService timerService;
-
     @Resource
     private SessionContext sessionContext;
-
     @Resource(name = "simpleString")
     private String simpleStringFromDeploymentDescriptor;
-
-    public static final int DEFAULT_UNINJECTED_INT_VAL = 4;
-
-    public static final String DEFAULT_UNINJECTED_STRING_VAL = "This is the default value!!!! ###";
-
     @Resource(name = "missingEnvEntryValIntResource")
     private int wontBeInjected = DEFAULT_UNINJECTED_INT_VAL;
 
@@ -109,13 +103,13 @@ public class SimpleSLSB extends Parent {
         return this.wontBeInjected;
     }
 
+    public String getUnInjectedString() {
+        return this.wontBeInjectedString;
+    }
+
     @Resource(name = "missingEnvEntryValStringResource")
     public void setUnInjectedString(String val) {
         this.wontBeInjectedString = val;
-    }
-
-    public String getUnInjectedString() {
-        return this.wontBeInjectedString;
     }
 
     public boolean isUnInjectedIntEnvEntryPresentInEnc() {

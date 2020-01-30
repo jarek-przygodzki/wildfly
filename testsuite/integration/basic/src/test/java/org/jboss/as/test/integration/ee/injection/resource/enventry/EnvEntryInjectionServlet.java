@@ -31,7 +31,7 @@ import java.io.IOException;
 /**
  * @author Stuart Douglas
  */
-@WebServlet(name="envEntry",urlPatterns = {"/envEntry"})
+@WebServlet(name = "envEntry", urlPatterns = {"/envEntry"})
 public class EnvEntryInjectionServlet extends HttpServlet {
 
     private String field;

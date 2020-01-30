@@ -21,7 +21,6 @@
  */
 package org.jboss.as.test.integration.ee.suspend;
 
-import org.junit.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -34,6 +33,7 @@ import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -50,7 +50,7 @@ import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.
 
 /**
  * Tests for suspend/resume functionality with EE concurrency
- *
+ * <p>
  * TODO: this test needs to be able to read the suspend state in order to really test anything,
  * at the moment it just tests that it does not blow up
  */

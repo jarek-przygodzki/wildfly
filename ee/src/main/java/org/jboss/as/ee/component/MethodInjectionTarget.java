@@ -22,11 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.utils.ClassLoadingUtils;
 import org.jboss.as.naming.ManagedReferenceFactory;
@@ -38,6 +33,11 @@ import org.jboss.as.server.deployment.reflect.ClassReflectionIndexUtil;
 import org.jboss.as.server.deployment.reflect.DeploymentReflectionIndex;
 import org.jboss.invocation.InterceptorFactory;
 import org.jboss.msc.value.Value;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
@@ -65,7 +65,7 @@ public final class MethodInjectionTarget extends InjectionTarget {
         final DeploymentReflectionIndex reflectionIndex = deploymentUnit.getAttachment(Attachments.REFLECTION_INDEX);
         final Class<?> clazz;
         try {
-             clazz = ClassLoadingUtils.loadClass(className, deploymentUnit);
+            clazz = ClassLoadingUtils.loadClass(className, deploymentUnit);
         } catch (ClassNotFoundException e) {
             throw new DeploymentUnitProcessingException(e);
         }

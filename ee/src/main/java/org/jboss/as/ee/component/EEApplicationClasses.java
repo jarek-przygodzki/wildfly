@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * Allows a deployment to get old of class descriptions from all sub deployments it has access to.
- *
+ * <p>
  * This maintains a list of all {@link EEModuleDescription}s that this sub deployment has access to,
  * in the same order they appear in the dependencies list.
  *
@@ -44,13 +44,14 @@ public final class EEApplicationClasses {
 
     /**
      * Look for a class description in all available modules.
+     *
      * @param name The class to lookup
      * @return
      */
     public EEModuleClassDescription getClassByName(String name) {
-        for(EEModuleDescription module : availableModules) {
+        for (EEModuleDescription module : availableModules) {
             final EEModuleClassDescription desc = module.getClassDescription(name);
-            if(desc != null) {
+            if (desc != null) {
                 return desc;
             }
         }

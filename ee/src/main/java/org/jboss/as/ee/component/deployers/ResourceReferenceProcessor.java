@@ -21,7 +21,6 @@
  */
 package org.jboss.as.ee.component.deployers;
 
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.BindingConfiguration;
 import org.jboss.as.ee.component.ComponentDescription;
@@ -32,6 +31,7 @@ import org.jboss.as.ee.component.FixedInjectionSource;
 import org.jboss.as.ee.component.InjectionSource;
 import org.jboss.as.ee.component.LookupInjectionSource;
 import org.jboss.as.ee.component.ResourceInjectionTarget;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.naming.ImmediateManagedReference;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.as.naming.ManagedReferenceFactory;

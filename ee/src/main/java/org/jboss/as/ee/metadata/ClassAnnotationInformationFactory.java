@@ -53,7 +53,7 @@ public abstract class ClassAnnotationInformationFactory<A extends Annotation, T>
     private final Class<A> annotationType;
     private final Class<?> multiAnnotationType;
     private final DotName annotationDotName;
-    private final DotName  multiAnnotationDotName;
+    private final DotName multiAnnotationDotName;
 
 
     protected ClassAnnotationInformationFactory(final Class<A> annotationType, final Class<?> multiAnnotationType) {
@@ -78,7 +78,7 @@ public abstract class ClassAnnotationInformationFactory<A extends Annotation, T>
 
         final List<AnnotationInstance> simpleAnnotations = index.getAnnotations(annotationDotName);
         if (simpleAnnotations != null) {
-            for(AnnotationInstance annotation : simpleAnnotations) {
+            for (AnnotationInstance annotation : simpleAnnotations) {
                 annotations.add(new TargetAnnotation(annotation, annotation.target()));
             }
         }
@@ -188,7 +188,7 @@ public abstract class ClassAnnotationInformationFactory<A extends Annotation, T>
     protected List<TargetAnnotation> fromMultiAnnotation(AnnotationInstance multiAnnotationInstance) {
         List<TargetAnnotation> instances = new ArrayList<TargetAnnotation>();
         final AnnotationInstance[] values = multiAnnotationInstance.value().asNestedArray();
-        for(AnnotationInstance value : values) {
+        for (AnnotationInstance value : values) {
             instances.add(new TargetAnnotation(value, multiAnnotationInstance.target()));
         }
         return instances;

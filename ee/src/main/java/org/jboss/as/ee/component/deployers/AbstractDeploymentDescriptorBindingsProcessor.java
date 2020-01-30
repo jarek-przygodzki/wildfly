@@ -21,15 +21,6 @@
  */
 package org.jboss.as.ee.component.deployers;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.BindingConfiguration;
 import org.jboss.as.ee.component.ComponentDescription;
@@ -43,6 +34,7 @@ import org.jboss.as.ee.component.InterceptorEnvironment;
 import org.jboss.as.ee.component.MethodInjectionTarget;
 import org.jboss.as.ee.component.ResourceInjectionConfiguration;
 import org.jboss.as.ee.component.ResourceInjectionTarget;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -51,6 +43,14 @@ import org.jboss.as.server.deployment.reflect.DeploymentReflectionIndex;
 import org.jboss.metadata.javaee.spec.ResourceInjectionMetaData;
 import org.jboss.metadata.javaee.spec.ResourceInjectionTargetMetaData;
 import org.jboss.modules.Module;
+
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.jboss.as.ee.utils.InjectionUtils.getInjectionTarget;
 
@@ -102,7 +102,7 @@ public abstract class AbstractDeploymentDescriptorBindingsProcessor implements D
             }
         }
 
-        for(final InterceptorEnvironment interceptorEnv : description.getInterceptorEnvironment().values()) {
+        for (final InterceptorEnvironment interceptorEnv : description.getInterceptorEnvironment().values()) {
             final List<BindingConfiguration> bindings = processDescriptorEntries(deploymentUnit, interceptorEnv.getDeploymentDescriptorEnvironment(), interceptorEnv, null, module.getClassLoader(), deploymentReflectionIndex, applicationClasses);
             interceptorEnv.getBindingConfigurations().addAll(bindings);
         }
@@ -117,15 +117,13 @@ public abstract class AbstractDeploymentDescriptorBindingsProcessor implements D
     /**
      * Processes the injection targets of a resource binding
      *
-     *
      * @param injectionSource           The injection source for the injection target
      * @param classLoader               The module class loader
      * @param deploymentReflectionIndex The deployment reflection index
      * @param entry                     The resource with injection targets
      * @param classType                 The expected type of the injection point, may be null if this is to be inferred from the injection target
      * @return The actual class type of the injection point
-     * @throws DeploymentUnitProcessingException
-     *          If the injection points could not be resolved
+     * @throws DeploymentUnitProcessingException If the injection points could not be resolved
      */
     protected Class<?> processInjectionTargets(final ResourceInjectionTarget resourceInjectionTarget, InjectionSource injectionSource, ClassLoader classLoader, DeploymentReflectionIndex deploymentReflectionIndex, ResourceInjectionMetaData entry, Class<?> classType) throws DeploymentUnitProcessingException {
         if (entry.getInjectionTargets() != null) {

@@ -22,11 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.deployment;
 
-import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.QUEUE_LOOKUP;
-import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.TOPIC_LOOKUP;
-
-import java.io.IOException;
-
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.jms.Destination;
@@ -39,6 +34,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.QUEUE_LOOKUP;
+import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.TOPIC_LOOKUP;
 
 
 /**
@@ -68,14 +67,14 @@ public class MessagingServlet extends HttpServlet {
     }
 
     private String sendAndReceiveMessage(Destination destination, String text) {
-            Destination replyTo = context.createTemporaryQueue();
+        Destination replyTo = context.createTemporaryQueue();
 
-            JMSConsumer consumer = context.createConsumer(replyTo);
+        JMSConsumer consumer = context.createConsumer(replyTo);
 
-            context.createProducer()
-                    .setJMSReplyTo(replyTo)
-                    .send(destination, text);
+        context.createProducer()
+                .setJMSReplyTo(replyTo)
+                .send(destination, text);
 
-            return consumer.receiveBody(String.class, 5000);
+        return consumer.receiveBody(String.class, 5000);
     }
 }

@@ -21,7 +21,6 @@
  */
 package org.jboss.as.ee.component.deployers;
 
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.BindingConfiguration;
 import org.jboss.as.ee.component.ClassDescriptionTraversal;
@@ -33,6 +32,7 @@ import org.jboss.as.ee.component.EEModuleConfiguration;
 import org.jboss.as.ee.component.EEModuleDescription;
 import org.jboss.as.ee.component.InjectionSource;
 import org.jboss.as.ee.component.InterceptorDescription;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.metadata.MetadataCompleteMarker;
 import org.jboss.as.ee.naming.ContextInjectionSource;
 import org.jboss.as.ee.structure.DeploymentType;
@@ -75,6 +75,10 @@ import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
  * @author Eduardo Martins
  */
 public class ModuleJndiBindingProcessor implements DeploymentUnitProcessor {
+
+    public static boolean equals(Object one, Object two) {
+        return one == two || (one != null && one.equals(two));
+    }
 
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
@@ -187,7 +191,6 @@ public class ModuleJndiBindingProcessor implements DeploymentUnitProcessor {
         }
     }
 
-
     protected void addJndiBinding(final EEModuleConfiguration module, final BindingConfiguration bindingConfiguration, final DeploymentPhaseContext phaseContext, final List<ServiceName> dependencies) throws DeploymentUnitProcessingException {
         // Gather information about the dependency
         final String bindingName = bindingConfiguration.getName().startsWith("java:") ? bindingConfiguration.getName() : "java:module/env/" + bindingConfiguration.getName();
@@ -247,10 +250,6 @@ public class ModuleJndiBindingProcessor implements DeploymentUnitProcessor {
         } else {
             throw EeLogger.ROOT_LOGGER.nullBindingName(bindingConfiguration);
         }
-    }
-
-    public static boolean equals(Object one, Object two) {
-        return one == two || (one != null && one.equals(two));
     }
 
     public void undeploy(DeploymentUnit context) {

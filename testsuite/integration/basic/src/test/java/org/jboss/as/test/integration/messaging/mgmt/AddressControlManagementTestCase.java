@@ -22,12 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.mgmt;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
-import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
-
-import java.io.IOException;
-
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ContainerResource;
@@ -42,6 +36,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.IOException;
+
+import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
 
 /**
  * Tests the management API for HornetQ core addresss.
@@ -58,6 +56,18 @@ public class AddressControlManagementTestCase {
     private static ManagementClient managementClient;
 
     private JMSOperations jmsOperations;
+
+    private static String getAddress() {
+        return AddressControlManagementTestCase.class.getSimpleName() + count;
+    }
+
+    private static String getQueueName() {
+        return getAddress();
+    }
+
+    private static String getOtherQueueName() {
+        return getAddress() + "other";
+    }
 
     @Before
     public void setup() throws Exception {
@@ -161,8 +171,7 @@ public class AddressControlManagementTestCase {
             if (getQueueName().equals(node.asString())) {
                 Assert.assertFalse(foundMain);
                 foundMain = true;
-            }
-            else if (getOtherQueueName().equals(node.asString())) {
+            } else if (getOtherQueueName().equals(node.asString())) {
                 Assert.assertFalse(foundOther);
                 foundOther = true;
             }
@@ -181,7 +190,6 @@ public class AddressControlManagementTestCase {
         return getEmptyOperation(operationName, address);
     }
 
-
     private ModelNode execute(final ModelNode op, final boolean expectSuccess) throws IOException {
         ModelNode response = managementClient.getControllerClient().execute(op);
         final String outcome = response.get("outcome").asString();
@@ -198,17 +206,5 @@ public class AddressControlManagementTestCase {
             Assert.assertEquals("failed", outcome);
             return response.get("failure-description");
         }
-    }
-
-    private static String getAddress() {
-        return AddressControlManagementTestCase.class.getSimpleName() + count;
-    }
-
-    private static String getQueueName() {
-        return getAddress();
-    }
-
-    private static String getOtherQueueName() {
-        return getAddress() + "other";
     }
 }

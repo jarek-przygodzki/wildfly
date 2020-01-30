@@ -22,9 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.auxiliary;
 
-import static javax.ejb.TransactionManagementType.BEAN;
-import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_REQUEST_SCOPE;
-
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionManagement;
@@ -37,30 +34,31 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import static javax.ejb.TransactionManagementType.BEAN;
+import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_REQUEST_SCOPE;
+
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
 @MessageDriven(
         name = "RequestScopedMDB",
         activationConfig = {
-            @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-            @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = QUEUE_NAME_FOR_REQUEST_SCOPE)
+                @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+                @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = QUEUE_NAME_FOR_REQUEST_SCOPE)
         }
 )
 @TransactionManagement(BEAN)
 public class RequestScopedMDB implements MessageListener {
 
+    public static JMSConsumer consumer;
     @Inject
     private JMSContext context;
 
-    public static JMSConsumer consumer;
-
-    public void onMessage(final Message m)
-    {
+    public void onMessage(final Message m) {
         Destination tempQueue = context.createTemporaryQueue();
         consumer = context.createConsumer(tempQueue);
 
-        TextMessage textMessage = (TextMessage)m;
+        TextMessage textMessage = (TextMessage) m;
         try {
             context.createProducer()
                     .setDeliveryDelay(500)

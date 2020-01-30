@@ -22,8 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import java.util.Set;
-
 import org.jboss.as.ee.component.deployers.EEResourceReferenceProcessorRegistry;
 import org.jboss.as.ee.component.deployers.MessageDestinationInjectionSource;
 import org.jboss.as.ee.component.deployers.StartupCountdown;
@@ -31,6 +29,8 @@ import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.as.server.deployment.AttachmentList;
 import org.jboss.as.server.deployment.SetupAction;
 import org.jboss.msc.service.ServiceName;
+
+import java.util.Set;
 
 /**
  * @author John Bailey

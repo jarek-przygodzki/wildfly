@@ -41,7 +41,6 @@ public interface Component {
 
     /**
      * Stop operation called when the Component is no longer available.
-     *
      */
     void stop();
 

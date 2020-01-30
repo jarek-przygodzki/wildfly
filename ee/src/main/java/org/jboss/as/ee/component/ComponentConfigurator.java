@@ -35,8 +35,8 @@ public interface ComponentConfigurator {
     /**
      * Apply this configurator to the given component configuration.
      *
-     * @param context the deployment phase context
-     * @param description the completed component description
+     * @param context       the deployment phase context
+     * @param description   the completed component description
      * @param configuration the component configuration to build on to
      * @throws DeploymentUnitProcessingException if configuration fails
      */

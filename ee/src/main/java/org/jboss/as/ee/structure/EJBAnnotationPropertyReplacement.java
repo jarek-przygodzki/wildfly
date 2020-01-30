@@ -28,9 +28,12 @@ import org.jboss.metadata.property.PropertyReplacers;
 
 /**
  * @author wangchao
- *
  */
 public class EJBAnnotationPropertyReplacement {
+    private EJBAnnotationPropertyReplacement() {
+
+    }
+
     public static PropertyReplacer propertyReplacer(final DeploymentUnit deploymentUnit) {
         Boolean replacement = deploymentUnit.getAttachment(Attachments.ANNOTATION_PROPERTY_REPLACEMENT);
         if (replacement == null || replacement) {
@@ -40,10 +43,6 @@ public class EJBAnnotationPropertyReplacement {
         } else {
             return PropertyReplacers.noop();
         }
-    }
-
-    private EJBAnnotationPropertyReplacement() {
-
     }
 
 }

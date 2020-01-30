@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * Class that is responsible for resolving name conflicts.
- *
+ * <p>
  * //TODO: this must be able to deal with the case of module names being changed via deployment descriptor
  *
  * @author Stuart Douglas
@@ -49,19 +49,19 @@ public final class EEModuleNameProcessor implements DeploymentUnitProcessor {
         final Set<String> moduleConflicts = new HashSet<String>();
         //look for modules with the same name
         //
-        for(DeploymentUnit deployment : subDeployments) {
+        for (DeploymentUnit deployment : subDeployments) {
             final EEModuleDescription module = deployment.getAttachment(org.jboss.as.ee.component.Attachments.EE_MODULE_DESCRIPTION);
-            if(module != null) {
-                if(moduleNames.contains(module.getModuleName())) {
+            if (module != null) {
+                if (moduleNames.contains(module.getModuleName())) {
                     moduleConflicts.add(module.getModuleName());
                 }
                 moduleNames.add(module.getModuleName());
             }
         }
-        for(DeploymentUnit deployment : subDeployments) {
+        for (DeploymentUnit deployment : subDeployments) {
             final EEModuleDescription module = deployment.getAttachment(org.jboss.as.ee.component.Attachments.EE_MODULE_DESCRIPTION);
-            if(module != null) {
-                if(moduleConflicts.contains(module.getModuleName())) {
+            if (module != null) {
+                if (moduleConflicts.contains(module.getModuleName())) {
                     module.setModuleName(deployment.getName());
                 }
             }

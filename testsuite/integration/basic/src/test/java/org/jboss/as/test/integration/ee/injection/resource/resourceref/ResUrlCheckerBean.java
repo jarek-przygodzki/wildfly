@@ -21,15 +21,14 @@
  */
 package org.jboss.as.test.integration.ee.injection.resource.resourceref;
 
-import java.net.URL;
-
 import javax.annotation.Resource;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import java.net.URL;
 
 /**
  * Let's see what we can do with resources of the URL breed.
- * 
+ *
  * @author <a href="mailto:carlo.dewolf@jboss.com">Carlo de Wolf</a>
  */
 @Stateless

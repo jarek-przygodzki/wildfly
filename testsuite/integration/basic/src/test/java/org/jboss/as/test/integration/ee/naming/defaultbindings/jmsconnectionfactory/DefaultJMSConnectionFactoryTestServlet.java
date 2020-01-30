@@ -34,7 +34,7 @@ import java.io.IOException;
 /**
  * @author Eduardo Martins
  */
-@WebServlet(name = "SimpleServlet", urlPatterns = { "/simple" })
+@WebServlet(name = "SimpleServlet", urlPatterns = {"/simple"})
 public class DefaultJMSConnectionFactoryTestServlet extends HttpServlet {
 
     @Resource
@@ -44,7 +44,7 @@ public class DefaultJMSConnectionFactoryTestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             // check injected resource
-            if(injectedResource == null) {
+            if (injectedResource == null) {
                 throw new NullPointerException("injected resource");
             }
             // checked jndi lookup

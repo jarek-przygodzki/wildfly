@@ -22,12 +22,12 @@
 
 package org.jboss.as.ee.structure;
 
-import java.util.Locale;
-
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+
+import java.util.Locale;
 
 /**
  * Processor responsible for detecting and marking EAR file deployments.

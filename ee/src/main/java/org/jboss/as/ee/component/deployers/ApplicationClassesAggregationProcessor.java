@@ -21,9 +21,6 @@
  */
 package org.jboss.as.ee.component.deployers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.EEApplicationClasses;
 import org.jboss.as.ee.component.EEModuleDescription;
@@ -31,6 +28,9 @@ import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Processor that aggregates all module descriptions visible to the deployment in an EEApplicationClasses structure.

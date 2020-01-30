@@ -50,20 +50,23 @@ public abstract class ResourceDefinitionAnnotationProcessor implements Deploymen
 
     /**
      * Retrieves the annotation's dot name.
+     *
      * @return
      */
     protected abstract DotName getAnnotationDotName();
 
     /**
      * Retrieves the annotation collection's dot name.
+     *
      * @return
      */
     protected abstract DotName getAnnotationCollectionDotName();
 
     /**
      * Processes an annotation instance.
+     *
      * @param annotationInstance the annotation instance
-     * @param propertyReplacer the property replacer which the processor may use to resolve annotation element values
+     * @param propertyReplacer   the property replacer which the processor may use to resolve annotation element values
      * @return a resource definition injection source
      * @throws DeploymentUnitProcessingException
      */
@@ -85,7 +88,7 @@ public abstract class ResourceDefinitionAnnotationProcessor implements Deploymen
         for (AnnotationInstance annotationInstance : index.getAnnotations(annotationName)) {
             final List<BindingConfiguration> bindingConfigurations = getAnnotatedClassBindingConfigurations(moduleDescription, annotationInstance);
             final ResourceDefinitionInjectionSource injectionSource = processAnnotation(annotationInstance, propertyReplacer);
-            bindingConfigurations.add(new BindingConfiguration(injectionSource.getJndiName(),injectionSource));
+            bindingConfigurations.add(new BindingConfiguration(injectionSource.getJndiName(), injectionSource));
         }
         final DotName collectionAnnotationName = getAnnotationCollectionDotName();
         if (collectionAnnotationName != null) {
@@ -95,7 +98,7 @@ public abstract class ResourceDefinitionAnnotationProcessor implements Deploymen
                     final List<BindingConfiguration> bindingConfigurations = getAnnotatedClassBindingConfigurations(moduleDescription, annotationInstance);
                     for (AnnotationInstance nestedAnnotationInstance : nestedAnnotationInstances) {
                         final ResourceDefinitionInjectionSource injectionSource = processAnnotation(nestedAnnotationInstance, propertyReplacer);
-                        bindingConfigurations.add(new BindingConfiguration(injectionSource.getJndiName(),injectionSource));
+                        bindingConfigurations.add(new BindingConfiguration(injectionSource.getJndiName(), injectionSource));
                     }
                 }
             }

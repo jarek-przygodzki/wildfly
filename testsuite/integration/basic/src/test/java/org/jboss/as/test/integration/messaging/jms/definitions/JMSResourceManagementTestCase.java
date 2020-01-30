@@ -22,14 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.definitions;
 
-import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
-import static org.jboss.shrinkwrap.api.ArchivePaths.create;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.io.IOException;
-import java.util.List;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -46,9 +38,16 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
+import static org.jboss.shrinkwrap.api.ArchivePaths.create;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
@@ -62,11 +61,6 @@ public class JMSResourceManagementTestCase {
 
     private JMSOperations jmsOperations;
 
-    @Before
-    public void setUp() {
-        jmsOperations = JMSOperationsProvider.getInstance(managementClient);
-    }
-
     @Deployment
     public static JavaArchive createArchive() {
         JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "JMSResourceDefinitionsTestCase.jar")
@@ -78,6 +72,11 @@ public class JMSResourceManagementTestCase {
                         create("beans.xml"));
 
         return archive;
+    }
+
+    @Before
+    public void setUp() {
+        jmsOperations = JMSOperationsProvider.getInstance(managementClient);
     }
 
     @Test
@@ -198,7 +197,7 @@ public class JMSResourceManagementTestCase {
     private ModelNode getOperation(String resourceType, String resourceName, String operationName) {
         final ModelNode address = new ModelNode();
         address.add("deployment", "JMSResourceDefinitionsTestCase.jar");
-        for (Property prop: jmsOperations.getServerAddress().asPropertyList()) {
+        for (Property prop : jmsOperations.getServerAddress().asPropertyList()) {
             address.add(prop.getName(), prop.getValue().asString());
         }
         address.add(resourceType, resourceName);

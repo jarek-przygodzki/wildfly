@@ -22,10 +22,6 @@
 
 package org.jboss.as.ee.metadata.property;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -35,6 +31,10 @@ import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.vfs.VFSUtils;
 import org.jboss.vfs.VirtualFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * @author John Bailey
  */
@@ -43,7 +43,7 @@ public class DeploymentPropertiesProcessor implements DeploymentUnitProcessor {
 
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-        if(deploymentUnit.hasAttachment(Attachments.DEPLOYMENT_PROPERTIES)) {
+        if (deploymentUnit.hasAttachment(Attachments.DEPLOYMENT_PROPERTIES)) {
             return;
         }
         final ResourceRoot deploymentRoot = deploymentUnit.getAttachment(org.jboss.as.server.deployment.Attachments.DEPLOYMENT_ROOT);

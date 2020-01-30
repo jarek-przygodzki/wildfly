@@ -22,27 +22,6 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.substitution;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
-
-import java.util.logging.Logger;
-
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.MapMessage;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -60,14 +39,33 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.MapMessage;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import java.util.logging.Logger;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
+
 /**
  * Tests that the Resource injection with substitution works as expected
- * 
+ *
  * @author wangchao
- * 
  */
 @RunWith(Arquillian.class)
-@ServerSetup({ ResourceInjectionSubstitutionTestCase.SystemPropertySetup.class })
+@ServerSetup({ResourceInjectionSubstitutionTestCase.SystemPropertySetup.class})
 public class ResourceInjectionSubstitutionTestCase {
 
     private static final Logger logger = Logger.getLogger(ResourceInjectionSubstitutionTestCase.class.getName());
@@ -77,6 +75,73 @@ public class ResourceInjectionSubstitutionTestCase {
 
     private SimpleSLSB slsb;
     private SimpleSFSB sfsb;
+
+    @Deployment
+    public static WebArchive createWebDeployment() {
+        final WebArchive war = ShrinkWrap.create(WebArchive.class, "resource-injection-substitution-test.war");
+        war.addPackage(SimpleSLSB.class.getPackage()).addPackage(JMSOperations.class.getPackage());
+        war.addAsWebInfResource(ResourceInjectionSubstitutionTestCase.class.getPackage(), "web.xml", "web.xml");
+        return war;
+    }
+
+    @Before
+    public void beforeTest() throws Exception {
+        Context ctx = new InitialContext();
+        slsb = (SimpleSLSB) ctx.lookup("java:module/" + SimpleSLSB.class.getSimpleName() + "!" + SimpleSLSB.class.getName());
+        sfsb = (SimpleSFSB) ctx.lookup("java:module/" + SimpleSFSB.class.getSimpleName() + "!" + SimpleSFSB.class.getName());
+    }
+
+    /**
+     * Test resource injection with SLSB
+     */
+    @Test
+    public void testResourceInjectionSubstitutionSlsb() {
+        Assert.assertTrue("@Resource with name wasn't injected in SLSB", slsb.isResourceWithNameInjected());
+        Assert.assertTrue("@Resource with lookup wasn't injected in SLSB", slsb.isResourceWithLookupNameInjected());
+        Assert.assertTrue("@Resource with mappedName wasn't injected in SLSB", slsb.isResourceWithMappedNameInjected());
+    }
+
+    /**
+     * Test resource injection with SFSB
+     */
+    @Test
+    public void testResourceInjectionSubstitutionSfsb() {
+        Assert.assertTrue("@Resource with name wasn't injected in SFSB", sfsb.isResourceWithNameInjected());
+        Assert.assertTrue("@Resource with lookup wasn't injected in SFSB", sfsb.isResourceWithLookupNameInjected());
+        Assert.assertTrue("@Resource with mappedName wasn't injected in SFSB", sfsb.isResourceWithMappedNameInjected());
+    }
+
+    /**
+     * Test resource injection with MDB
+     */
+    @Test
+    public void testResourceInjectionSubstitutionMdb() throws Exception {
+        // ConnectionFactory and Reply message are injected in SimpleMDB
+        ConnectionFactory factory = (ConnectionFactory) ctx.lookup("ConnectionFactory");
+        Connection con = factory.createConnection();
+        try {
+            Destination dest = (Destination) ctx.lookup("java:jboss/queue/testQueue");
+
+            Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            MessageProducer producer = session.createProducer(dest);
+
+            Queue replyQueue = session.createTemporaryQueue();
+            MessageConsumer consumer = session.createConsumer(replyQueue);
+
+            con.start();
+
+            TextMessage msg = session.createTextMessage();
+            msg.setJMSReplyTo(replyQueue);
+            msg.setText("This is message one");
+            producer.send(msg);
+
+            MapMessage replyMsg = (MapMessage) consumer.receive(5000);
+            Assert.assertNotNull(replyMsg);
+            Assert.assertEquals("It's Friday!!!", replyMsg.getString("replyMsg"));
+        } finally {
+            con.close();
+        }
+    }
 
     static class SystemPropertySetup implements ServerSetupTask {
 
@@ -185,73 +250,6 @@ public class ResourceInjectionSubstitutionTestCase {
             } else {
                 throw new RuntimeException("Operation not successful; outcome = " + result.get("outcome"));
             }
-        }
-    }
-
-    @Before
-    public void beforeTest() throws Exception {
-        Context ctx = new InitialContext();
-        slsb = (SimpleSLSB) ctx.lookup("java:module/" + SimpleSLSB.class.getSimpleName() + "!" + SimpleSLSB.class.getName());
-        sfsb = (SimpleSFSB) ctx.lookup("java:module/" + SimpleSFSB.class.getSimpleName() + "!" + SimpleSFSB.class.getName());
-    }
-
-    @Deployment
-    public static WebArchive createWebDeployment() {
-        final WebArchive war = ShrinkWrap.create(WebArchive.class, "resource-injection-substitution-test.war");
-        war.addPackage(SimpleSLSB.class.getPackage()).addPackage(JMSOperations.class.getPackage());
-        war.addAsWebInfResource(ResourceInjectionSubstitutionTestCase.class.getPackage(), "web.xml", "web.xml");
-        return war;
-    }
-
-    /**
-     * Test resource injection with SLSB
-     */
-    @Test
-    public void testResourceInjectionSubstitutionSlsb() {
-        Assert.assertTrue("@Resource with name wasn't injected in SLSB", slsb.isResourceWithNameInjected());
-        Assert.assertTrue("@Resource with lookup wasn't injected in SLSB", slsb.isResourceWithLookupNameInjected());
-        Assert.assertTrue("@Resource with mappedName wasn't injected in SLSB", slsb.isResourceWithMappedNameInjected());
-    }
-
-    /**
-     * Test resource injection with SFSB
-     */
-    @Test
-    public void testResourceInjectionSubstitutionSfsb() {
-        Assert.assertTrue("@Resource with name wasn't injected in SFSB", sfsb.isResourceWithNameInjected());
-        Assert.assertTrue("@Resource with lookup wasn't injected in SFSB", sfsb.isResourceWithLookupNameInjected());
-        Assert.assertTrue("@Resource with mappedName wasn't injected in SFSB", sfsb.isResourceWithMappedNameInjected());
-    }
-
-    /**
-     * Test resource injection with MDB
-     */
-    @Test
-    public void testResourceInjectionSubstitutionMdb() throws Exception {
-        // ConnectionFactory and Reply message are injected in SimpleMDB
-        ConnectionFactory factory = (ConnectionFactory) ctx.lookup("ConnectionFactory");
-        Connection con = factory.createConnection();
-        try {
-            Destination dest = (Destination) ctx.lookup("java:jboss/queue/testQueue");
-
-            Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            MessageProducer producer = session.createProducer(dest);
-
-            Queue replyQueue = session.createTemporaryQueue();
-            MessageConsumer consumer = session.createConsumer(replyQueue);
-
-            con.start();
-
-            TextMessage msg = session.createTextMessage();
-            msg.setJMSReplyTo(replyQueue);
-            msg.setText("This is message one");
-            producer.send(msg);
-
-            MapMessage replyMsg = (MapMessage) consumer.receive(5000);
-            Assert.assertNotNull(replyMsg);
-            Assert.assertEquals("It's Friday!!!", replyMsg.getString("replyMsg"));
-        } finally {
-            con.close();
         }
     }
 }

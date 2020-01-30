@@ -22,16 +22,16 @@
 
 package org.jboss.as.ee.component;
 
+import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
-
 /**
- *
  * TODO: do we still need this?
+ *
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
 public final class EEModuleConfiguration {

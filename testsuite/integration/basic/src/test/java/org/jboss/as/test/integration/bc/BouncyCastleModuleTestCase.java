@@ -52,7 +52,8 @@ public class BouncyCastleModuleTestCase {
     private static final String BC_DEPLOYMENT = "bc-test";
     private static final Logger logger = Logger.getLogger(BouncyCastleModuleTestCase.class);
 
-    @Deployment(name = BC_DEPLOYMENT, testable = true) public static WebArchive createDeployment() {
+    @Deployment(name = BC_DEPLOYMENT, testable = true)
+    public static WebArchive createDeployment() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, BC_DEPLOYMENT + ".war");
         archive.addPackage(BouncyCastleModuleTestCase.class.getPackage());
         archive.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml"); //needed to load CDI for arquillian
@@ -63,26 +64,6 @@ public class BouncyCastleModuleTestCase {
                 + "Manifest-Version: 1.0\n"
                 + "Dependencies: org.bouncycastle\n"));
         return archive;
-    }
-
-    @Test
-    public void testBouncyCastleProviderIsUsableThroughJceApi() throws Exception {
-
-        BouncyCastleProvider bcProvider = null;
-        try {
-            bcProvider = new BouncyCastleProvider();
-            useBouncyCastleProviderThroughJceApi(bcProvider);
-        } catch (Exception e) {
-            if (e instanceof SecurityException && e.getMessage().contains("JCE cannot authenticate the provider")) {
-                String bcLocation = (bcProvider == null)
-                        ? ""
-                        : "(" + bcProvider.getClass().getResource("/") + ")";
-                throw new Exception("Packaging with BouncyCastleProvider" + bcLocation
-                        + " is probably not properly signed for JCE usage, see server log for details.", e);
-            } else {
-                throw e;
-            }
-        }
     }
 
     private static void useBouncyCastleProviderThroughJceApi(BouncyCastleProvider bcProvider) throws Exception {
@@ -115,5 +96,25 @@ public class BouncyCastleModuleTestCase {
         // Decrypt the text
         byte[] textDecrypted = desCipher.doFinal(textEncrypted);
         logger.debug("Text Decryted: " + new String(textDecrypted));
+    }
+
+    @Test
+    public void testBouncyCastleProviderIsUsableThroughJceApi() throws Exception {
+
+        BouncyCastleProvider bcProvider = null;
+        try {
+            bcProvider = new BouncyCastleProvider();
+            useBouncyCastleProviderThroughJceApi(bcProvider);
+        } catch (Exception e) {
+            if (e instanceof SecurityException && e.getMessage().contains("JCE cannot authenticate the provider")) {
+                String bcLocation = (bcProvider == null)
+                        ? ""
+                        : "(" + bcProvider.getClass().getResource("/") + ")";
+                throw new Exception("Packaging with BouncyCastleProvider" + bcLocation
+                        + " is probably not properly signed for JCE usage, see server log for details.", e);
+            } else {
+                throw e;
+            }
+        }
     }
 }

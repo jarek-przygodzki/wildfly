@@ -27,7 +27,7 @@ import javax.naming.NamingException;
 
 /**
  * ResourceRefRemote
- * 
+ *
  * @author Jaikiran Pai
  */
 @Remote

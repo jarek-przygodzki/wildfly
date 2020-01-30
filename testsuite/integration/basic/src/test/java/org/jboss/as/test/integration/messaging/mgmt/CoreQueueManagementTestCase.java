@@ -22,16 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.mgmt;
 
-import static java.util.UUID.randomUUID;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.INCLUDE_RUNTIME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
@@ -53,6 +43,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.util.UUID.randomUUID;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.INCLUDE_RUNTIME;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the management API for Artemis core queues.
@@ -87,7 +87,7 @@ public class CoreQueueManagementTestCase {
         ServerLocator locator = ActiveMQClient.createServerLocatorWithoutHA(transportConfiguration);
         locator.setBlockOnDurableSend(true);
         locator.setBlockOnNonDurableSend(true);
-        sessionFactory =  locator.createSessionFactory();
+        sessionFactory = locator.createSessionFactory();
 
         session = sessionFactory.createSession("guest", "guest", false, true, true, false, 1);
         session.createQueue(getQueueName(), getQueueName(), false);
@@ -223,7 +223,7 @@ public class CoreQueueManagementTestCase {
         Assert.assertFalse(result.asBoolean());
     }
 
-//    @org.junit.Ignore("AS7-2480")
+    //    @org.junit.Ignore("AS7-2480")
     @Test
     public void testMessageRemoval() throws Exception {
 
@@ -259,7 +259,7 @@ public class CoreQueueManagementTestCase {
         return result.get(0).get("messageID").asLong();
     }
 
-//    @org.junit.Ignore("AS7-2480")
+    //    @org.junit.Ignore("AS7-2480")
     @Test
     public void testMessageMovement() throws Exception {
 
@@ -294,7 +294,7 @@ public class CoreQueueManagementTestCase {
 
     }
 
-//    @org.junit.Ignore("AS7-2480")
+    //    @org.junit.Ignore("AS7-2480")
     @Test
     public void testChangeMessagePriority() throws Exception {
 

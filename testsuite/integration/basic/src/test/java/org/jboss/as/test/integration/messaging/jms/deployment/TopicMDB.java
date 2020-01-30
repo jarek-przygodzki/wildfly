@@ -22,8 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.deployment;
 
-import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.TOPIC_LOOKUP;
-
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -33,12 +31,14 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.TOPIC_LOOKUP;
+
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2014 Red Hat inc.
  */
 @MessageDriven(
         activationConfig = {
-            @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = TOPIC_LOOKUP)
+                @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = TOPIC_LOOKUP)
         }
 )
 public class TopicMDB implements MessageListener {
@@ -46,15 +46,14 @@ public class TopicMDB implements MessageListener {
     @Inject
     private JMSContext context;
 
-    public void onMessage(final Message m)
-    {
+    public void onMessage(final Message m) {
         try {
-            TextMessage message = (TextMessage)m;
+            TextMessage message = (TextMessage) m;
             Destination replyTo = m.getJMSReplyTo();
 
             context.createProducer()
-                   .setJMSCorrelationID(message.getJMSMessageID())
-                   .send(replyTo, message.getText());
+                    .setJMSCorrelationID(message.getJMSMessageID())
+                    .send(replyTo, message.getText());
         } catch (Exception e) {
             e.printStackTrace();
         }

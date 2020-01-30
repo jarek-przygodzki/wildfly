@@ -22,15 +22,14 @@
 
 package org.jboss.as.ee.component.deployers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.jboss.as.ee.metadata.AbstractEEAnnotationProcessor;
+import org.jboss.as.ee.metadata.ClassAnnotationInformationFactory;
 
 import javax.interceptor.ExcludeClassInterceptors;
 import javax.interceptor.ExcludeDefaultInterceptors;
-
-import org.jboss.as.ee.metadata.AbstractEEAnnotationProcessor;
-import org.jboss.as.ee.metadata.ClassAnnotationInformationFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Processes EJB annotations and attaches them to the {@link org.jboss.as.ee.component.EEModuleClassDescription}

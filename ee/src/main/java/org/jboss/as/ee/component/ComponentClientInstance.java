@@ -10,13 +10,13 @@ import java.util.Map;
 /**
  * Class that represents an instance of a component client. It should only be referenced from client
  * post construct interceptors.
- *
+ * <p>
  * This stores all the context data for the client, such as the SFSB session ID etc.
- *
+ * <p>
  * Previously this was achieved using stateful interceptor chains. This information can only be set during view
  * construction for thread safety reasons. If mutable data is required then a mutable and thread safe structure should
  * be inserted into the map at construction time.
- *
+ * <p>
  * The class is only used at component creation time, after that the information that is contains is attached to the
  * private data of the interceptor context.
  *
@@ -32,14 +32,14 @@ public class ComponentClientInstance implements Serializable {
     }
 
     public void setViewInstanceData(final Object key, final Object data) {
-        if(constructionComplete) {
+        if (constructionComplete) {
             throw EeLogger.ROOT_LOGGER.instanceDataCanOnlyBeSetDuringConstruction();
         }
         contextInformation.put(key, data);
     }
 
-    void prepareInterceptorContext(InterceptorContext interceptorContext){
-        for(Map.Entry<Object, Object> entry : contextInformation.entrySet()) {
+    void prepareInterceptorContext(InterceptorContext interceptorContext) {
+        for (Map.Entry<Object, Object> entry : contextInformation.entrySet()) {
             interceptorContext.putPrivateData(entry.getKey(), entry.getValue());
         }
     }

@@ -62,9 +62,9 @@ public abstract class AbstractComponentConfigProcessor implements DeploymentUnit
     /**
      * Process the component configuration instance.
      *
-     * @param deploymentUnit         The deployment unit
-     * @param phaseContext           The phase context
-     * @param index                  The annotation index
+     * @param deploymentUnit       The deployment unit
+     * @param phaseContext         The phase context
+     * @param index                The annotation index
      * @param componentDescription The component configuration
      * @throws DeploymentUnitProcessingException if any problems occur
      */

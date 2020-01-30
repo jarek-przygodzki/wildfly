@@ -1,8 +1,5 @@
 package org.jboss.as.ee.component;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import org.jboss.as.naming.ConstructorManagedReferenceFactory;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.as.naming.ManagedReferenceFactory;
@@ -12,6 +9,9 @@ import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.wildfly.security.manager.WildFlySecurityManager;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  * @author Stuart Douglas

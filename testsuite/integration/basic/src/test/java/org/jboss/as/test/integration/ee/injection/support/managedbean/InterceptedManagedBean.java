@@ -21,9 +21,9 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.managedbean;
 
-import javax.annotation.ManagedBean;
-
 import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
+
+import javax.annotation.ManagedBean;
 
 @AroundConstructBinding
 @ManagedBean("InterceptedManagedBean")

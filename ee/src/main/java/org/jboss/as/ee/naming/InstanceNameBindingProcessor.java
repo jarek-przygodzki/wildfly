@@ -55,21 +55,21 @@ public class InstanceNameBindingProcessor implements DeploymentUnitProcessor {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
         final EEModuleDescription moduleDescription = deploymentUnit.getAttachment(Attachments.EE_MODULE_DESCRIPTION);
 
-        if(moduleDescription == null) {
+        if (moduleDescription == null) {
             return;
         }
 
         final ServiceTarget serviceTarget = phaseContext.getServiceTarget();
         //if this is a war we need to bind to the modules comp namespace
-        if(DeploymentTypeMarker.isType(DeploymentType.WAR,deploymentUnit) ||
+        if (DeploymentTypeMarker.isType(DeploymentType.WAR, deploymentUnit) ||
                 DeploymentTypeMarker.isType(DeploymentType.APPLICATION_CLIENT, deploymentUnit)) {
-            final ServiceName moduleContextServiceName = ContextNames.contextServiceNameOfModule(moduleDescription.getApplicationName(),moduleDescription.getModuleName());
+            final ServiceName moduleContextServiceName = ContextNames.contextServiceNameOfModule(moduleDescription.getApplicationName(), moduleDescription.getModuleName());
             bindServices(deploymentUnit, serviceTarget, moduleContextServiceName);
         }
 
-        for(ComponentDescription component : moduleDescription.getComponentDescriptions()) {
-            if(component.getNamingMode() == ComponentNamingMode.CREATE) {
-                final ServiceName compContextServiceName = ContextNames.contextServiceNameOfComponent(moduleDescription.getApplicationName(),moduleDescription.getModuleName(),component.getComponentName());
+        for (ComponentDescription component : moduleDescription.getComponentDescriptions()) {
+            if (component.getNamingMode() == ComponentNamingMode.CREATE) {
+                final ServiceName compContextServiceName = ContextNames.contextServiceNameOfComponent(moduleDescription.getApplicationName(), moduleDescription.getModuleName(), component.getComponentName());
                 bindServices(deploymentUnit, serviceTarget, compContextServiceName);
             }
         }
@@ -81,35 +81,35 @@ public class InstanceNameBindingProcessor implements DeploymentUnitProcessor {
         final ServiceName instanceNameServiceName = contextServiceName.append("InstanceName");
         final BinderService instanceNameService = new BinderService("InstanceName");
         serviceTarget.addService(instanceNameServiceName, instanceNameService)
-            .addDependency(contextServiceName, ServiceBasedNamingStore.class, instanceNameService.getNamingStoreInjector())
-            .addDependency(ServerEnvironmentService.SERVICE_NAME, ServerEnvironment.class, new Injector<ServerEnvironment>() {
-                @Override
-                public void inject(final ServerEnvironment serverEnvironment) throws InjectionException {
-                    instanceNameService.getManagedObjectInjector().inject(new ManagedReferenceFactory() {
-                        @Override
-                        public ManagedReference getReference() {
-                            return new ManagedReference() {
-                                @Override
-                                public void release() {
+                .addDependency(contextServiceName, ServiceBasedNamingStore.class, instanceNameService.getNamingStoreInjector())
+                .addDependency(ServerEnvironmentService.SERVICE_NAME, ServerEnvironment.class, new Injector<ServerEnvironment>() {
+                    @Override
+                    public void inject(final ServerEnvironment serverEnvironment) throws InjectionException {
+                        instanceNameService.getManagedObjectInjector().inject(new ManagedReferenceFactory() {
+                            @Override
+                            public ManagedReference getReference() {
+                                return new ManagedReference() {
+                                    @Override
+                                    public void release() {
 
-                                }
+                                    }
 
-                                @Override
-                                public Object getInstance() {
-                                    final String nodeName = serverEnvironment.getNodeName();
-                                    return nodeName == null ? "" : nodeName;
-                                }
-                            };
-                        }
-                    });
-                }
+                                    @Override
+                                    public Object getInstance() {
+                                        final String nodeName = serverEnvironment.getNodeName();
+                                        return nodeName == null ? "" : nodeName;
+                                    }
+                                };
+                            }
+                        });
+                    }
 
-                @Override
-                public void uninject() {
-                    instanceNameService.getManagedObjectInjector().uninject();
-                }
-            })
-            .install();
+                    @Override
+                    public void uninject() {
+                        instanceNameService.getManagedObjectInjector().uninject();
+                    }
+                })
+                .install();
         deploymentUnit.addToAttachmentList(org.jboss.as.server.deployment.Attachments.JNDI_DEPENDENCIES, instanceNameServiceName);
 
     }

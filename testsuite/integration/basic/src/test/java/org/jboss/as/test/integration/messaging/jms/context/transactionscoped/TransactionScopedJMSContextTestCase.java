@@ -22,17 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.transactionscoped;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.messaging.jms.context.transactionscoped.auxiliary.AppScopedBean;
@@ -43,6 +32,17 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
@@ -50,15 +50,12 @@ import org.junit.runner.RunWith;
 public class TransactionScopedJMSContextTestCase {
 
     public static final String QUEUE_NAME = "java:app/TransactionScopedJMSContextTestCase";
-
-    @Resource(mappedName = "/JmsXA")
-    private ConnectionFactory factory;
-
-    @Resource(mappedName = QUEUE_NAME)
-    private Queue queue;
-
     @EJB
     ThreadLauncher launcher;
+    @Resource(mappedName = "/JmsXA")
+    private ConnectionFactory factory;
+    @Resource(mappedName = QUEUE_NAME)
+    private Queue queue;
 
     @Deployment
     public static JavaArchive createTestArchive() {
@@ -75,7 +72,7 @@ public class TransactionScopedJMSContextTestCase {
         launcher.start(numThreads, numMessages);
 
         int receivedMessages = 0;
-        try(JMSContext context = factory.createContext()) {
+        try (JMSContext context = factory.createContext()) {
             JMSConsumer consumer = context.createConsumer(queue);
             Message m;
             do {

@@ -40,7 +40,7 @@ public final class FixedInjectionSource extends InjectionSource {
      * Construct a new instance.
      *
      * @param factory The managed reference factory to inject
-     * @param value the value to use for equality comparison
+     * @param value   the value to use for equality comparison
      */
     public FixedInjectionSource(final ManagedReferenceFactory factory, final Object value) {
         managedReferenceFactory = factory;

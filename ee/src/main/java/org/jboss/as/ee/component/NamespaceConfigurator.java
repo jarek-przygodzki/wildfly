@@ -42,7 +42,9 @@ import org.jboss.msc.service.ServiceName;
  */
 public final class NamespaceConfigurator implements ComponentConfigurator {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void configure(final DeploymentPhaseContext context, final ComponentDescription description, final ComponentConfiguration configuration) throws DeploymentUnitProcessingException {
         final ComponentNamingMode namingMode = description.getNamingMode();
         final InjectedEENamespaceContextSelector selector = new InjectedEENamespaceContextSelector();
@@ -65,7 +67,7 @@ public final class NamespaceConfigurator implements ComponentConfigurator {
                 serviceBuilder.addDependency(moduleContextServiceName, NamingStore.class, moduleInjector);
                 if (namingMode == ComponentNamingMode.CREATE) {
                     serviceBuilder.addDependency(compContextServiceName, NamingStore.class, compInjector);
-                } else if(namingMode == ComponentNamingMode.USE_MODULE) {
+                } else if (namingMode == ComponentNamingMode.USE_MODULE) {
                     serviceBuilder.addDependency(moduleContextServiceName, NamingStore.class, compInjector);
                 }
                 serviceBuilder.addDependency(ContextNames.GLOBAL_CONTEXT_SERVICE_NAME, NamingStore.class, globalInjector);
@@ -76,7 +78,7 @@ public final class NamespaceConfigurator implements ComponentConfigurator {
         final InterceptorFactory interceptorFactory = new ImmediateInterceptorFactory(new NamespaceContextInterceptor(selector, context.getDeploymentUnit().getServiceName()));
         configuration.addPostConstructInterceptor(interceptorFactory, InterceptorOrder.ComponentPostConstruct.JNDI_NAMESPACE_INTERCEPTOR);
         configuration.addPreDestroyInterceptor(interceptorFactory, InterceptorOrder.ComponentPreDestroy.JNDI_NAMESPACE_INTERCEPTOR);
-        if(description.isPassivationApplicable()) {
+        if (description.isPassivationApplicable()) {
             configuration.addPrePassivateInterceptor(interceptorFactory, InterceptorOrder.ComponentPassivation.JNDI_NAMESPACE_INTERCEPTOR);
             configuration.addPostActivateInterceptor(interceptorFactory, InterceptorOrder.ComponentPassivation.JNDI_NAMESPACE_INTERCEPTOR);
         }

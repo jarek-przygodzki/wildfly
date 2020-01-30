@@ -1,11 +1,11 @@
 package org.jboss.as.ee.component;
 
+import org.jboss.as.naming.ManagedReference;
+import org.jboss.invocation.InterceptorContext;
+
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import org.jboss.as.naming.ManagedReference;
-import org.jboss.invocation.InterceptorContext;
 
 /**
  * @author Stuart Douglas

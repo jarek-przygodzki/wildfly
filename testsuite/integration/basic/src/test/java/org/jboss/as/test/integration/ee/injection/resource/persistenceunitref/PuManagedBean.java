@@ -27,6 +27,7 @@ import javax.persistence.PersistenceUnit;
 
 /**
  * Managed bean with persistence unit definitions.
+ *
  * @author Stuart Douglas
  */
 @ManagedBean("puManagedBean")

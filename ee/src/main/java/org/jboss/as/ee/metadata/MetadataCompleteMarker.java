@@ -33,6 +33,9 @@ public class MetadataCompleteMarker {
 
     private static final AttachmentKey<Boolean> KEY = AttachmentKey.create(Boolean.class);
 
+    private MetadataCompleteMarker() {
+    }
+
     public static void setMetadataComplete(final DeploymentUnit deploymentUnit, final boolean value) {
         deploymentUnit.putAttachment(KEY, value);
     }
@@ -40,8 +43,5 @@ public class MetadataCompleteMarker {
     public static boolean isMetadataComplete(final DeploymentUnit deploymentUnit) {
         final Boolean marker = deploymentUnit.getAttachment(KEY);
         return marker != null && marker;
-    }
-
-    private MetadataCompleteMarker() {
     }
 }

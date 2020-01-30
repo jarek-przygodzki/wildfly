@@ -21,11 +21,13 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
+import org.jboss.as.test.integration.ee.injection.support.Alpha;
+import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
+import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.Bravo;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
+import org.jboss.as.test.integration.ee.injection.support.ProducedString;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -37,14 +39,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import org.jboss.as.test.integration.ee.injection.support.Alpha;
-import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
-import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.Bravo;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
-import org.jboss.as.test.integration.ee.injection.support.ProducedString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @ComponentInterceptorBinding
 @AroundConstructBinding

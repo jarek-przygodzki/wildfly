@@ -35,8 +35,8 @@ public final class ResourceInjectionConfiguration {
     /**
      * Construct a new instance.
      *
-     * @param target the resource injection target
-     * @param source the resource injection source
+     * @param target   the resource injection target
+     * @param source   the resource injection source
      * @param optional if the injection is optional or not
      */
     public ResourceInjectionConfiguration(final InjectionTarget target, final InjectionSource source, boolean optional) {
@@ -74,7 +74,6 @@ public final class ResourceInjectionConfiguration {
     }
 
     /**
-     *
      * @return True if the injection is optional
      */
     public boolean isOptional() {

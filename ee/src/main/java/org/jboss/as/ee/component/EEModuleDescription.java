@@ -22,6 +22,12 @@
 
 package org.jboss.as.ee.component;
 
+import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
+import org.jboss.as.ee.concurrent.ConcurrentContext;
+import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.naming.InjectedEENamespaceContextSelector;
+import org.jboss.msc.service.ServiceName;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,51 +35,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.as.ee.logging.EeLogger;
-import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
-import org.jboss.as.ee.concurrent.ConcurrentContext;
-import org.jboss.as.ee.naming.InjectedEENamespaceContextSelector;
-import org.jboss.msc.service.ServiceName;
-
 /**
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
 public final class EEModuleDescription implements ResourceInjectionTarget {
     private final String applicationName;
-    private volatile String moduleName;
     private final String earApplicationName;
-    //distinct name defaults to the empty string
-    private volatile String distinctName = "";
     private final Map<String, ComponentDescription> componentsByName = new HashMap<String, ComponentDescription>();
     private final Map<String, List<ComponentDescription>> componentsByClassName = new HashMap<String, List<ComponentDescription>>();
     private final Map<String, EEModuleClassDescription> classDescriptions = new HashMap<String, EEModuleClassDescription>();
     private final Map<String, InterceptorClassDescription> interceptorClassOverrides = new HashMap<String, InterceptorClassDescription>();
-
     /**
      * Additional interceptor environment that was defined in the deployment descriptor <interceptors/> element.
      */
     private final Map<String, InterceptorEnvironment> interceptorEnvironment = new HashMap<String, InterceptorEnvironment>();
-
     /**
      * A map of message destinations names to their resolved JNDI name
      */
     private final Map<String, String> messageDestinations = new HashMap<String, String>();
-
-    private InjectedEENamespaceContextSelector namespaceContextSelector;
-
     // Module Bindings
     private final List<BindingConfiguration> bindingConfigurations = new ArrayList<BindingConfiguration>();
     //injections that have been set in the components deployment descriptor
     private final Map<String, Map<InjectionTarget, ResourceInjectionConfiguration>> resourceInjections = new HashMap<String, Map<InjectionTarget, ResourceInjectionConfiguration>>();
-
     private final boolean appClient;
-
-    private ServiceName defaultClassIntrospectorServiceName = ReflectiveClassIntrospector.SERVICE_NAME;
-
     private final ConcurrentContext concurrentContext;
-
     private final EEDefaultResourceJndiNames defaultResourceJndiNames;
-
+    private volatile String moduleName;
+    //distinct name defaults to the empty string
+    private volatile String distinctName = "";
+    private InjectedEENamespaceContextSelector namespaceContextSelector;
+    private ServiceName defaultClassIntrospectorServiceName = ReflectiveClassIntrospector.SERVICE_NAME;
     /**
      * The default security domain for the module.
      */
@@ -190,7 +181,7 @@ public final class EEModuleDescription implements ResourceInjectionTarget {
         //if no application name is set just return the module name
         //this means that if the module name is changed the application name
         //will change as well
-        if(applicationName == null) {
+        if (applicationName == null) {
             return moduleName;
         }
         return applicationName;
@@ -198,6 +189,10 @@ public final class EEModuleDescription implements ResourceInjectionTarget {
 
     public String getModuleName() {
         return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
     public boolean hasComponent(final String name) {
@@ -209,10 +204,6 @@ public final class EEModuleDescription implements ResourceInjectionTarget {
      */
     public boolean isAppClient() {
         return appClient;
-    }
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
     }
 
     public ComponentDescription getComponentByName(String name) {

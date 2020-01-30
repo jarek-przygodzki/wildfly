@@ -21,12 +21,12 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.jaxrs;
 
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
+
 import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
 
 @Interceptor
 @Priority(900)

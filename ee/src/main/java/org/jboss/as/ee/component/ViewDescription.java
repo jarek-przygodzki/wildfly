@@ -22,15 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import java.lang.reflect.Method;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.jboss.as.ee.component.interceptors.ComponentDispatcherInterceptor;
 import org.jboss.as.ee.component.interceptors.InterceptorOrder;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -48,6 +39,15 @@ import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.value.Value;
 import org.jboss.msc.value.Values;
 
+import java.lang.reflect.Method;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static java.lang.reflect.Modifier.ABSTRACT;
 import static java.lang.reflect.Modifier.PUBLIC;
 import static java.lang.reflect.Modifier.STATIC;
@@ -62,7 +62,12 @@ public class ViewDescription {
 
     //JVM bridge method flag
     public static final int BRIDGE = 0x0040;
-
+    public static final ImmediateInterceptorFactory CLIENT_DISPATCHER_INTERCEPTOR_FACTORY = new ImmediateInterceptorFactory(new Interceptor() {
+        public Object processInvocation(final InterceptorContext context) throws Exception {
+            ComponentView view = context.getPrivateData(ComponentView.class);
+            return view.invoke(context);
+        }
+    });
     private final String viewClassName;
     private final ComponentDescription componentDescription;
     private final List<String> viewNameParts = new ArrayList<String>();
@@ -179,88 +184,6 @@ public class ViewDescription {
         return new ViewBindingInjectionSource(serviceName);
     }
 
-    public static final ImmediateInterceptorFactory CLIENT_DISPATCHER_INTERCEPTOR_FACTORY = new ImmediateInterceptorFactory(new Interceptor() {
-        public Object processInvocation(final InterceptorContext context) throws Exception {
-            ComponentView view = context.getPrivateData(ComponentView.class);
-            return view.invoke(context);
-        }
-    });
-
-    private static class DefaultConfigurator implements ViewConfigurator {
-
-        public static final DefaultConfigurator INSTANCE = new DefaultConfigurator();
-
-        public void configure(final DeploymentPhaseContext context, final ComponentConfiguration componentConfiguration, final ViewDescription description, final ViewConfiguration configuration) throws DeploymentUnitProcessingException {
-            // Create method indexes
-            final DeploymentReflectionIndex reflectionIndex = context.getDeploymentUnit().getAttachment(REFLECTION_INDEX);
-            final List<Method> methods = configuration.getProxyFactory().getCachedMethods();
-            for (final Method method : methods) {
-                MethodIdentifier methodIdentifier = MethodIdentifier.getIdentifierForMethod(method);
-                Method componentMethod = ClassReflectionIndexUtil.findMethod(reflectionIndex, componentConfiguration.getComponentClass(), methodIdentifier);
-
-                if (componentMethod == null && method.getDeclaringClass().isInterface() && (method.getModifiers() & (ABSTRACT | PUBLIC | STATIC)) == PUBLIC) {
-                    // no component method and the interface method is defaulted, so we really do want to invoke on the interface method
-                    componentMethod = method;
-                }
-                if (componentMethod != null) {
-
-                    if ((BRIDGE & componentMethod.getModifiers()) != 0) {
-                        Method other = findRealMethodForBridgeMethod(componentMethod, componentConfiguration, reflectionIndex, methodIdentifier);
-                        //try and find the non-bridge method to delegate to
-                        if(other != null) {
-                                componentMethod = other;
-                        }
-                    }
-
-                    configuration.addViewInterceptor(method, new ImmediateInterceptorFactory(new ComponentDispatcherInterceptor(componentMethod)), InterceptorOrder.View.COMPONENT_DISPATCHER);
-                    configuration.addClientInterceptor(method, CLIENT_DISPATCHER_INTERCEPTOR_FACTORY, InterceptorOrder.Client.CLIENT_DISPATCHER);
-                    configuration.getViewToComponentMethodMap().put(method, componentMethod);
-                }
-            }
-
-            configuration.addClientPostConstructInterceptor(Interceptors.getTerminalInterceptorFactory(), InterceptorOrder.ClientPostConstruct.TERMINAL_INTERCEPTOR);
-            configuration.addClientPreDestroyInterceptor(Interceptors.getTerminalInterceptorFactory(), InterceptorOrder.ClientPreDestroy.TERMINAL_INTERCEPTOR);
-        }
-
-        private Method findRealMethodForBridgeMethod(final Method componentMethod, final ComponentConfiguration componentConfiguration, final DeploymentReflectionIndex reflectionIndex, final MethodIdentifier methodIdentifier) {
-            final ClassReflectionIndex classIndex = reflectionIndex.getClassIndex(componentMethod.getDeclaringClass()); //the non-bridge method will be on the same class as the bridge method
-            final Collection<Method> methods = classIndex.getAllMethods(componentMethod.getName(), componentMethod.getParameterTypes().length);
-            for(final Method method : methods) {
-                if ((BRIDGE & method.getModifiers()) == 0) {
-                    if(componentMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
-                        boolean ok = true;
-                        for(int i = 0; i < method.getParameterTypes().length; ++i) {
-                            if(!componentMethod.getParameterTypes()[i].isAssignableFrom(method.getParameterTypes()[i])) {
-                                ok = false;
-                                break;
-                            }
-                        }
-                        if(ok) {
-                            return method;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
-
-    private static class ViewBindingConfigurator implements ViewConfigurator {
-
-        public static final ViewBindingConfigurator INSTANCE = new ViewBindingConfigurator();
-
-        @Override
-        public void configure(final DeploymentPhaseContext context, final ComponentConfiguration componentConfiguration, final ViewDescription description, final ViewConfiguration configuration) throws DeploymentUnitProcessingException {
-
-            // Create view bindings
-            final List<BindingConfiguration> bindingConfigurations = configuration.getBindingConfigurations();
-            for (String bindingName : description.getBindingNames()) {
-                bindingConfigurations.add(new BindingConfiguration(bindingName, description.createInjectionSource(description.getServiceName(), Values.immediateValue(componentConfiguration.getModuleClassLoader()))));
-            }
-        }
-    }
-
     public boolean isSerializable() {
         return serializable;
     }
@@ -303,5 +226,79 @@ public class ViewDescription {
         int result = viewClassName != null ? viewClassName.hashCode() : 0;
         result = 31 * result + (componentDescription != null ? componentDescription.hashCode() : 0);
         return result;
+    }
+
+    private static class DefaultConfigurator implements ViewConfigurator {
+
+        public static final DefaultConfigurator INSTANCE = new DefaultConfigurator();
+
+        public void configure(final DeploymentPhaseContext context, final ComponentConfiguration componentConfiguration, final ViewDescription description, final ViewConfiguration configuration) throws DeploymentUnitProcessingException {
+            // Create method indexes
+            final DeploymentReflectionIndex reflectionIndex = context.getDeploymentUnit().getAttachment(REFLECTION_INDEX);
+            final List<Method> methods = configuration.getProxyFactory().getCachedMethods();
+            for (final Method method : methods) {
+                MethodIdentifier methodIdentifier = MethodIdentifier.getIdentifierForMethod(method);
+                Method componentMethod = ClassReflectionIndexUtil.findMethod(reflectionIndex, componentConfiguration.getComponentClass(), methodIdentifier);
+
+                if (componentMethod == null && method.getDeclaringClass().isInterface() && (method.getModifiers() & (ABSTRACT | PUBLIC | STATIC)) == PUBLIC) {
+                    // no component method and the interface method is defaulted, so we really do want to invoke on the interface method
+                    componentMethod = method;
+                }
+                if (componentMethod != null) {
+
+                    if ((BRIDGE & componentMethod.getModifiers()) != 0) {
+                        Method other = findRealMethodForBridgeMethod(componentMethod, componentConfiguration, reflectionIndex, methodIdentifier);
+                        //try and find the non-bridge method to delegate to
+                        if (other != null) {
+                            componentMethod = other;
+                        }
+                    }
+
+                    configuration.addViewInterceptor(method, new ImmediateInterceptorFactory(new ComponentDispatcherInterceptor(componentMethod)), InterceptorOrder.View.COMPONENT_DISPATCHER);
+                    configuration.addClientInterceptor(method, CLIENT_DISPATCHER_INTERCEPTOR_FACTORY, InterceptorOrder.Client.CLIENT_DISPATCHER);
+                    configuration.getViewToComponentMethodMap().put(method, componentMethod);
+                }
+            }
+
+            configuration.addClientPostConstructInterceptor(Interceptors.getTerminalInterceptorFactory(), InterceptorOrder.ClientPostConstruct.TERMINAL_INTERCEPTOR);
+            configuration.addClientPreDestroyInterceptor(Interceptors.getTerminalInterceptorFactory(), InterceptorOrder.ClientPreDestroy.TERMINAL_INTERCEPTOR);
+        }
+
+        private Method findRealMethodForBridgeMethod(final Method componentMethod, final ComponentConfiguration componentConfiguration, final DeploymentReflectionIndex reflectionIndex, final MethodIdentifier methodIdentifier) {
+            final ClassReflectionIndex classIndex = reflectionIndex.getClassIndex(componentMethod.getDeclaringClass()); //the non-bridge method will be on the same class as the bridge method
+            final Collection<Method> methods = classIndex.getAllMethods(componentMethod.getName(), componentMethod.getParameterTypes().length);
+            for (final Method method : methods) {
+                if ((BRIDGE & method.getModifiers()) == 0) {
+                    if (componentMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
+                        boolean ok = true;
+                        for (int i = 0; i < method.getParameterTypes().length; ++i) {
+                            if (!componentMethod.getParameterTypes()[i].isAssignableFrom(method.getParameterTypes()[i])) {
+                                ok = false;
+                                break;
+                            }
+                        }
+                        if (ok) {
+                            return method;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    private static class ViewBindingConfigurator implements ViewConfigurator {
+
+        public static final ViewBindingConfigurator INSTANCE = new ViewBindingConfigurator();
+
+        @Override
+        public void configure(final DeploymentPhaseContext context, final ComponentConfiguration componentConfiguration, final ViewDescription description, final ViewConfiguration configuration) throws DeploymentUnitProcessingException {
+
+            // Create view bindings
+            final List<BindingConfiguration> bindingConfigurations = configuration.getBindingConfigurations();
+            for (String bindingName : description.getBindingNames()) {
+                bindingConfigurations.add(new BindingConfiguration(bindingName, description.createInjectionSource(description.getServiceName(), Values.immediateValue(componentConfiguration.getModuleClassLoader()))));
+            }
+        }
     }
 }

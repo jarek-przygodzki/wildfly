@@ -22,23 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.mgmt;
 
-import static javax.jms.Session.AUTO_ACKNOWLEDGE;
-import static org.jboss.as.controller.client.helpers.ClientConstants.NAME;
-import static org.jboss.as.controller.client.helpers.ClientConstants.VALUE;
-import static org.jboss.as.controller.client.helpers.ClientConstants.WRITE_ATTRIBUTE_OPERATION;
-import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.Topic;
-import javax.jms.TopicSubscriber;
-import javax.naming.Context;
-
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ContainerResource;
@@ -55,6 +38,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.Topic;
+import javax.jms.TopicSubscriber;
+import javax.naming.Context;
+import java.io.IOException;
+
+import static javax.jms.Session.AUTO_ACKNOWLEDGE;
+import static org.jboss.as.controller.client.helpers.ClientConstants.NAME;
+import static org.jboss.as.controller.client.helpers.ClientConstants.VALUE;
+import static org.jboss.as.controller.client.helpers.ClientConstants.WRITE_ATTRIBUTE_OPERATION;
+import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the management API for JMS topics.
@@ -85,6 +84,19 @@ public class JMSTopicManagementTestCase {
     private Connection consumerConn;
     private Session consumerSession;
 
+    static void applyUpdate(ModelNode update, final ModelControllerClient client) throws IOException {
+        ModelNode result = client.execute(new OperationBuilder(update).build());
+        if (result.hasDefined("outcome") && "success".equals(result.get("outcome").asString())) {
+            if (result.hasDefined("result")) {
+                System.out.println(result.get("result"));
+            }
+        } else if (result.hasDefined("failure-description")) {
+            throw new RuntimeException(result.get("failure-description").toString());
+        } else {
+            throw new RuntimeException("Operation not successful; outcome = " + result.get("outcome"));
+        }
+    }
+
     @Before
     public void before() throws Exception {
         cf = (ConnectionFactory) remoteContext.lookup("jms/RemoteConnectionFactory");
@@ -109,8 +121,7 @@ public class JMSTopicManagementTestCase {
         addSecuritySettings();
     }
 
-    private void addSecuritySettings() throws Exception
-    {
+    private void addSecuritySettings() throws Exception {
         // <jms server address>/security-setting=#/role=guest:write-attribute(name=create-durable-queue, value=TRUE)
         ModelNode address = adminSupport.getServerAddress()
                 .add("security-setting", "#")
@@ -162,8 +173,7 @@ public class JMSTopicManagementTestCase {
         }
     }
 
-    private void removeSecuritySetting() throws Exception
-    {
+    private void removeSecuritySetting() throws Exception {
         // <jms server address>/security-setting=#/role=guest:write-attribute(name=create-durable-queue, value=FALSE)
         ModelNode address = adminSupport.getServerAddress()
                 .add("security-setting", "#")
@@ -458,20 +468,5 @@ public class JMSTopicManagementTestCase {
 
     private String getTopicJndiName() {
         return "topic/" + getTopicName();
-    }
-
-   static void applyUpdate(ModelNode update, final ModelControllerClient client) throws IOException {
-        ModelNode result = client.execute(new OperationBuilder(update).build());
-        if (result.hasDefined("outcome") && "success".equals(result.get("outcome").asString())) {
-            if (result.hasDefined("result")) {
-                System.out.println(result.get("result"));
-            }
-        }
-        else if (result.hasDefined("failure-description")){
-            throw new RuntimeException(result.get("failure-description").toString());
-        }
-        else {
-            throw new RuntimeException("Operation not successful; outcome = " + result.get("outcome"));
-        }
     }
 }

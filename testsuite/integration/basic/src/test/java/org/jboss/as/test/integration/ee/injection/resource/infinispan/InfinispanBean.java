@@ -22,9 +22,9 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.infinispan;
 
-import org.junit.Assert;
 import org.infinispan.Cache;
 import org.infinispan.manager.CacheContainer;
+import org.junit.Assert;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
@@ -76,8 +76,7 @@ public class InfinispanBean {
 
     }
 
-    public static class Bean implements java.io.Serializable
-    {
+    public static class Bean implements java.io.Serializable {
         private static final long serialVersionUID = -7265704761812104791L;
     }
 }

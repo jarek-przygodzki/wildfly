@@ -22,32 +22,6 @@
 
 package org.jboss.as.test.integration.ee.jmx.property;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -70,9 +44,33 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xnio.IoUtils;
 
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @author baranowb
- *
  */
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -80,45 +78,25 @@ public class JMXPropertyEditorsTestCase {
 
     private static final String SAR_DEPLOMENT_NAME = "property-editors-beans";
     private static final String SAR_DEPLOMENT_FILE = SAR_DEPLOMENT_NAME + ".sar";
-
-    @ArquillianResource
-    private Deployer deployer;
-
-    @ContainerResource
-    private ManagementClient managementClient;
-
-    private MBeanServerConnection connection;
-    private JMXConnector connector;
     private static final String USER_SYS_PROP;
+
     static {
         String osName = System.getProperty("os.name");
-        if ( osName.contains( "Windows" ) ) {
+        if (osName.contains("Windows")) {
             USER_SYS_PROP = "USERNAME";
-        } else if ( osName.contains( "SunOS" ) ) {
+        } else if (osName.contains("SunOS")) {
             USER_SYS_PROP = "LOGNAME";
         } else {
             USER_SYS_PROP = "USER";
         }
     }
 
-    @Before
-    public void initialize() throws Exception {
-        connection = getMBeanServerConnection();
-        Assert.assertNotNull(connection);
-    }
-
-    @After
-    public void closeConnection() throws Exception {
-        connection = null;
-        IoUtils.safeClose(connector);
-    }
-
-    private MBeanServerConnection getMBeanServerConnection() throws IOException {
-        final String address = managementClient.getMgmtAddress()+":"+managementClient.getMgmtPort();
-        connector = JMXConnectorFactory.connect(new JMXServiceURL("service:jmx:http-remoting-jmx://"+address));
-        return connector.getMBeanServerConnection();
-
-    }
+    @ArquillianResource
+    private Deployer deployer;
+    @ContainerResource
+    private ManagementClient managementClient;
+    private MBeanServerConnection connection;
+    private JMXConnector connector;
 
     private static Asset createServiceAsset(String attributeName, String attributeValue) {
         return new StringAsset(
@@ -153,6 +131,532 @@ public class JMXPropertyEditorsTestCase {
         return jmxSAR;
     }
 
+    @Deployment(name = "AtomicInteger", managed = false)
+    public static Archive<?> deploymentAtomicInteger() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("AtomicInteger");
+
+        Asset asset = createServiceAsset("AtomicInteger", "3");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "AtomicLong", managed = false)
+    public static Archive<?> deploymentAtomicLong() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("AtomicLong");
+
+        Asset asset = createServiceAsset("AtomicLong", "2");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "BigDecimal", managed = false)
+    public static Archive<?> deploymentBigDecimal() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("BigDecimal");
+
+        Asset asset = createServiceAsset("BigDecimal", "100000000");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "BigInteger", managed = false)
+    public static Archive<?> deploymentBigIntegerl() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("BigInteger");
+
+        Asset asset = createServiceAsset("BigInteger", "100000000");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Boolean", managed = false)
+    public static Archive<?> deploymentBoolean() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Boolean");
+
+        Asset asset = createServiceAsset("Boolean", "true");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "BooleanArray", managed = false)
+    public static Archive<?> deploymentBooleanArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("BooleanArray");
+
+        Asset asset = createServiceAsset("BooleanArray", "true,false");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Byte", managed = false)
+    public static Archive<?> deploymentByte() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Byte");
+
+        Asset asset = createServiceAsset("Byte", "1");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ByteArray", managed = false)
+    public static Archive<?> deploymentByteArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ByteArray");
+
+        Asset asset = createServiceAsset("ByteArray", "1,2,3");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Char", managed = false)
+    public static Archive<?> deploymentChar() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Char");
+
+        Asset asset = createServiceAsset("Char", "R");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "CharacterArray", managed = false)
+    public static Archive<?> deploymentCharacterArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("CharacterArray");
+
+        Asset asset = createServiceAsset("CharacterArray", "R,R,X");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Clazz", managed = false)
+    public static Archive<?> deploymentClazz() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Clazz");
+
+        Asset asset = createServiceAsset("Clazz", "java.lang.String");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ClassArray", managed = false)
+    public static Archive<?> deploymentClassArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ClassArray");
+
+        Asset asset = createServiceAsset("ClassArray", "java.lang.String,java.util.List");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Document", managed = false)
+    public static Archive<?> deploymentDocument() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Document");
+
+        Asset asset = createServiceAsset("Document", "<document><element/><document>");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Double", managed = false)
+    public static Archive<?> deploymentDouble() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Double");
+
+        Asset asset = createServiceAsset("Double", "4");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Element", managed = false)
+    public static Archive<?> deploymentElement() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Element");
+
+        Asset asset = createServiceAsset("Element", "<element/>");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "File", managed = false)
+    public static Archive<?> deploymentFile() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("File");
+
+        Asset asset = createServiceAsset("File", "/I_DONT_EXIST/DUNNO");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Float", managed = false)
+    public static Archive<?> deploymentFloat() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Float");
+
+        Asset asset = createServiceAsset("Float", "1.5");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "FloatArray", managed = false)
+    public static Archive<?> deploymentFloatArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("FloatArray");
+
+        Asset asset = createServiceAsset("FloatArray", "1.5,2.5");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "InetAddress", managed = false)
+    public static Archive<?> deploymentInetAddress() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("InetAddress");
+
+        Asset asset = createServiceAsset("InetAddress", "10.10.10.1");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "InetAddressArray", managed = false)
+    public static Archive<?> deploymentInetAddressArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("InetAddressArray");
+
+        Asset asset = createServiceAsset("InetAddressArray", "10.10.10.1,localhost");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Integer", managed = false)
+    public static Archive<?> deploymentInteger() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Integer");
+
+        Asset asset = createServiceAsset("Integer", "1");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "IntegerArray", managed = false)
+    public static Archive<?> deploymentIntegerArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("IntegerArray");
+
+        Asset asset = createServiceAsset("IntegerArray", "1,5,4");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Locale", managed = false)
+    public static Archive<?> deploymentLocale() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Locale");
+
+        Asset asset = createServiceAsset("Locale", Locale.ENGLISH.toString());
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Long", managed = false)
+    public static Archive<?> deploymentLong() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Long");
+
+        Asset asset = createServiceAsset("Long", "14");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "LongArray", managed = false)
+    public static Archive<?> deploymentLongArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("LongArray");
+
+        Asset asset = createServiceAsset("LongArray", "14,15");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectBoolean", managed = false)
+    public static Archive<?> deploymentObjectBoolean() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectBoolean");
+
+        Asset asset = createServiceAsset("ObjectBoolean", "true");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectByte", managed = false)
+    public static Archive<?> deploymentObjectByte() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectByte");
+
+        Asset asset = createServiceAsset("ObjectByte", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectChar", managed = false)
+    public static Archive<?> deploymentObjectCharacter() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectChar");
+
+        Asset asset = createServiceAsset("ObjectChar", "Z");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectDouble", managed = false)
+    public static Archive<?> deploymentObjectDouble() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectDouble");
+
+        Asset asset = createServiceAsset("ObjectDouble", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectFloat", managed = false)
+    public static Archive<?> deploymentObjectFloat() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectFloat");
+
+        Asset asset = createServiceAsset("ObjectFloat", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectInteger", managed = false)
+    public static Archive<?> deploymentObjectInteger() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectInteger");
+
+        Asset asset = createServiceAsset("ObjectInteger", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectLong", managed = false)
+    public static Archive<?> deploymentObjectLong() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectLong");
+
+        Asset asset = createServiceAsset("ObjectLong", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ObjectShort", managed = false)
+    public static Archive<?> deploymentObjectShort() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ObjectShort");
+
+        Asset asset = createServiceAsset("ObjectShort", "10");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Properties", managed = false)
+    public static Archive<?> deploymentProperties() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Properties");
+
+        Asset asset = createServiceAsset("Properties", "prop1=ugabuga\nprop2=HAHA\nenv=${env." + USER_SYS_PROP + "}");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "Short", managed = false)
+    public static Archive<?> deploymentShort() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("Short");
+
+        Asset asset = createServiceAsset("Short", "1");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "ShortArray", managed = false)
+    public static Archive<?> deploymentShortArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("ShortArray");
+
+        Asset asset = createServiceAsset("ShortArray", "1,20");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "StringArray", managed = false)
+    public static Archive<?> deploymentStringArray() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("StringArray");
+
+        Asset asset = createServiceAsset("StringArray", "1,20");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "URI", managed = false)
+    public static Archive<?> deploymentURI() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("URI");
+
+        Asset asset = createServiceAsset("URI", "http://nowhere.com");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Deployment(name = "URL", managed = false)
+    public static Archive<?> deploymentURL() {
+
+        // jar
+        final JavaArchive jmxSAR = createArchive("URL");
+
+        Asset asset = createServiceAsset("URL", "http://nowhere.com");
+        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
+
+        System.err.println(jmxSAR.toString(true));
+        return jmxSAR;
+    }
+
+    @Before
+    public void initialize() throws Exception {
+        connection = getMBeanServerConnection();
+        Assert.assertNotNull(connection);
+    }
+
+    @After
+    public void closeConnection() throws Exception {
+        connection = null;
+        IoUtils.safeClose(connector);
+    }
+
+    private MBeanServerConnection getMBeanServerConnection() throws IOException {
+        final String address = managementClient.getMgmtAddress() + ":" + managementClient.getMgmtPort();
+        connector = JMXConnectorFactory.connect(new JMXServiceURL("service:jmx:http-remoting-jmx://" + address));
+        return connector.getMBeanServerConnection();
+
+    }
+
     @Test
     public void testAtomicBoolean() throws Exception {
         try {
@@ -175,19 +679,6 @@ public class JMXPropertyEditorsTestCase {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Deployment(name = "AtomicInteger", managed = false)
-    public static Archive<?> deploymentAtomicInteger() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("AtomicInteger");
-
-        Asset asset = createServiceAsset("AtomicInteger", "3");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -214,19 +705,6 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "AtomicLong", managed = false)
-    public static Archive<?> deploymentAtomicLong() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("AtomicLong");
-
-        Asset asset = createServiceAsset("AtomicLong", "2");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testAtomicLong() throws Exception {
         try {
@@ -251,19 +729,6 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "BigDecimal", managed = false)
-    public static Archive<?> deploymentBigDecimal() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("BigDecimal");
-
-        Asset asset = createServiceAsset("BigDecimal", "100000000");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testBigDecimal() throws Exception {
         try {
@@ -277,19 +742,6 @@ public class JMXPropertyEditorsTestCase {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Deployment(name = "BigInteger", managed = false)
-    public static Archive<?> deploymentBigIntegerl() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("BigInteger");
-
-        Asset asset = createServiceAsset("BigInteger", "100000000");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -307,19 +759,6 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "Boolean", managed = false)
-    public static Archive<?> deploymentBoolean() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Boolean");
-
-        Asset asset = createServiceAsset("Boolean", "true");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testBoolean() throws Exception {
         try {
@@ -335,24 +774,11 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "BooleanArray", managed = false)
-    public static Archive<?> deploymentBooleanArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("BooleanArray");
-
-        Asset asset = createServiceAsset("BooleanArray", "true,false");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testBooleanArray() throws Exception {
         try {
             deployer.deploy("BooleanArray");
-            performTest("BooleanArray", new boolean[] { true, false }, new Comparator() {
+            performTest("BooleanArray", new boolean[]{true, false}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -371,19 +797,6 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "Byte", managed = false)
-    public static Archive<?> deploymentByte() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Byte");
-
-        Asset asset = createServiceAsset("Byte", "1");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testByte() throws Exception {
         try {
@@ -399,24 +812,11 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "ByteArray", managed = false)
-    public static Archive<?> deploymentByteArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ByteArray");
-
-        Asset asset = createServiceAsset("ByteArray", "1,2,3");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testByteArray() throws Exception {
         try {
             deployer.deploy("ByteArray");
-            performTest("ByteArray", new byte[] { 1, 2, 3 }, new Comparator() {
+            performTest("ByteArray", new byte[]{1, 2, 3}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -435,19 +835,6 @@ public class JMXPropertyEditorsTestCase {
         }
     }
 
-    @Deployment(name = "Char", managed = false)
-    public static Archive<?> deploymentChar() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Char");
-
-        Asset asset = createServiceAsset("Char", "R");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testChar() throws Exception {
         try {
@@ -464,24 +851,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "CharacterArray", managed = false)
-    public static Archive<?> deploymentCharacterArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("CharacterArray");
-
-        Asset asset = createServiceAsset("CharacterArray", "R,R,X");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testCharacterArray() throws Exception {
         try {
             deployer.deploy("CharacterArray");
-            performTest("CharacterArray", new char[] { 'R', 'R', 'X' }, new Comparator() {
+            performTest("CharacterArray", new char[]{'R', 'R', 'X'}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -501,19 +875,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Clazz", managed = false)
-    public static Archive<?> deploymentClazz() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Clazz");
-
-        Asset asset = createServiceAsset("Clazz", "java.lang.String");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testClazz() throws Exception {
         try {
@@ -530,24 +891,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ClassArray", managed = false)
-    public static Archive<?> deploymentClassArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ClassArray");
-
-        Asset asset = createServiceAsset("ClassArray", "java.lang.String,java.util.List");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testClassArray() throws Exception {
         try {
             deployer.deploy("ClassArray");
-            performTest("ClassArray", new Class[] { String.class, List.class }, new Comparator() {
+            performTest("ClassArray", new Class[]{String.class, List.class}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -565,19 +913,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "Document", managed = false)
-    public static Archive<?> deploymentDocument() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Document");
-
-        Asset asset = createServiceAsset("Document", "<document><element/><document>");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -602,19 +937,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Double", managed = false)
-    public static Archive<?> deploymentDouble() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Double");
-
-        Asset asset = createServiceAsset("Double", "4");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testDouble() throws Exception {
         try {
@@ -629,19 +951,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "Element", managed = false)
-    public static Archive<?> deploymentElement() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Element");
-
-        Asset asset = createServiceAsset("Element", "<element/>");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -666,19 +975,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "File", managed = false)
-    public static Archive<?> deploymentFile() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("File");
-
-        Asset asset = createServiceAsset("File", "/I_DONT_EXIST/DUNNO");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testFile() throws Exception {
         try {
@@ -693,19 +989,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "Float", managed = false)
-    public static Archive<?> deploymentFloat() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Float");
-
-        Asset asset = createServiceAsset("Float", "1.5");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -724,24 +1007,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "FloatArray", managed = false)
-    public static Archive<?> deploymentFloatArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("FloatArray");
-
-        Asset asset = createServiceAsset("FloatArray", "1.5,2.5");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testFloatArray() throws Exception {
         try {
             deployer.deploy("FloatArray");
-            performTest("FloatArray", new float[] { 1.5f, 2.5f }, new Comparator() {
+            performTest("FloatArray", new float[]{1.5f, 2.5f}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -761,24 +1031,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "InetAddress", managed = false)
-    public static Archive<?> deploymentInetAddress() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("InetAddress");
-
-        Asset asset = createServiceAsset("InetAddress", "10.10.10.1");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testInetAddress() throws Exception {
         try {
             deployer.deploy("InetAddress");
-            performTest("InetAddress", InetAddress.getByAddress(new byte[] { 10, 10, 10, 1 }));
+            performTest("InetAddress", InetAddress.getByAddress(new byte[]{10, 10, 10, 1}));
         } finally {
 
             try {
@@ -790,25 +1047,12 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "InetAddressArray", managed = false)
-    public static Archive<?> deploymentInetAddressArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("InetAddressArray");
-
-        Asset asset = createServiceAsset("InetAddressArray", "10.10.10.1,localhost");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testInetAddressArray() throws Exception {
         try {
             deployer.deploy("InetAddressArray");
-            performTest("InetAddressArray", new InetAddress[] { InetAddress.getByAddress(new byte[] { 10, 10, 10, 1 }),
-                    InetAddress.getByName("localhost") }, new Comparator() {
+            performTest("InetAddressArray", new InetAddress[]{InetAddress.getByAddress(new byte[]{10, 10, 10, 1}),
+                    InetAddress.getByName("localhost")}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -828,19 +1072,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Integer", managed = false)
-    public static Archive<?> deploymentInteger() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Integer");
-
-        Asset asset = createServiceAsset("Integer", "1");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testInteger() throws Exception {
         try {
@@ -857,24 +1088,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "IntegerArray", managed = false)
-    public static Archive<?> deploymentIntegerArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("IntegerArray");
-
-        Asset asset = createServiceAsset("IntegerArray", "1,5,4");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testIntegerArray() throws Exception {
         try {
             deployer.deploy("IntegerArray");
-            performTest("IntegerArray", new int[] { 1, 5, 4 }, new Comparator() {
+            performTest("IntegerArray", new int[]{1, 5, 4}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -894,19 +1112,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Locale", managed = false)
-    public static Archive<?> deploymentLocale() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Locale");
-
-        Asset asset = createServiceAsset("Locale", Locale.ENGLISH.toString());
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testLocale() throws Exception {
         try {
@@ -921,19 +1126,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "Long", managed = false)
-    public static Archive<?> deploymentLong() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Long");
-
-        Asset asset = createServiceAsset("Long", "14");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -952,24 +1144,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "LongArray", managed = false)
-    public static Archive<?> deploymentLongArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("LongArray");
-
-        Asset asset = createServiceAsset("LongArray", "14,15");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testLongArray() throws Exception {
         try {
             deployer.deploy("LongArray");
-            performTest("LongArray", new long[] { 14, 15 }, new Comparator() {
+            performTest("LongArray", new long[]{14, 15}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -989,19 +1168,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ObjectBoolean", managed = false)
-    public static Archive<?> deploymentObjectBoolean() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectBoolean");
-
-        Asset asset = createServiceAsset("ObjectBoolean", "true");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testObjectBoolean() throws Exception {
         try {
@@ -1016,19 +1182,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "ObjectByte", managed = false)
-    public static Archive<?> deploymentObjectByte() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectByte");
-
-        Asset asset = createServiceAsset("ObjectByte", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -1047,19 +1200,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ObjectChar", managed = false)
-    public static Archive<?> deploymentObjectCharacter() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectChar");
-
-        Asset asset = createServiceAsset("ObjectChar", "Z");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testObjectCharacter() throws Exception {
         try {
@@ -1074,19 +1214,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "ObjectDouble", managed = false)
-    public static Archive<?> deploymentObjectDouble() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectDouble");
-
-        Asset asset = createServiceAsset("ObjectDouble", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -1105,19 +1232,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ObjectFloat", managed = false)
-    public static Archive<?> deploymentObjectFloat() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectFloat");
-
-        Asset asset = createServiceAsset("ObjectFloat", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testObjectFloat() throws Exception {
         try {
@@ -1132,19 +1246,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "ObjectInteger", managed = false)
-    public static Archive<?> deploymentObjectInteger() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectInteger");
-
-        Asset asset = createServiceAsset("ObjectInteger", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -1163,19 +1264,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ObjectLong", managed = false)
-    public static Archive<?> deploymentObjectLong() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectLong");
-
-        Asset asset = createServiceAsset("ObjectLong", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testObjectLong() throws Exception {
         try {
@@ -1190,19 +1278,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "ObjectShort", managed = false)
-    public static Archive<?> deploymentObjectShort() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ObjectShort");
-
-        Asset asset = createServiceAsset("ObjectShort", "10");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -1221,19 +1296,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Properties", managed = false)
-    public static Archive<?> deploymentProperties() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Properties");
-
-        Asset asset = createServiceAsset("Properties", "prop1=ugabuga\nprop2=HAHA\nenv=${env."+USER_SYS_PROP+"}");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testProperties() throws Exception {
         try {
@@ -1249,24 +1311,24 @@ public class JMXPropertyEditorsTestCase {
                 public int compare(Object o1, Object o2) {
                     Properties p1 = (Properties) o1;
                     Properties p2 = (Properties) o2;
-                    System.err.println("["+p1.size()+"]:"+p1+"\n["+p2.size()+"]:"+p2);
+                    System.err.println("[" + p1.size() + "]:" + p1 + "\n[" + p2.size() + "]:" + p2);
                     System.err.println("------- x");
                     if (p1.size() != p2.size()) {
                         System.err.println("------- 0");
                         return 1;
                     }
                     System.err.println("------- 1");
-                    if(!p1.keySet().containsAll(p2.keySet())){
+                    if (!p1.keySet().containsAll(p2.keySet())) {
                         System.err.println("------- 2");
                         return 1;
                     }
 
                     Set<Object> keys1 = p1.keySet();
-                    for(Object key:keys1){
+                    for (Object key : keys1) {
                         Object v1 = p1.get(key);
                         Object v2 = p2.get(key);
-                        if(!v1.equals(v2)){
-                            System.err.println("------- 3: "+v1+":"+v2);
+                        if (!v1.equals(v2)) {
+                            System.err.println("------- 3: " + v1 + ":" + v2);
                             return 1;
                         }
                     }
@@ -1285,19 +1347,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "Short", managed = false)
-    public static Archive<?> deploymentShort() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("Short");
-
-        Asset asset = createServiceAsset("Short", "1");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testShort() throws Exception {
         try {
@@ -1314,24 +1363,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "ShortArray", managed = false)
-    public static Archive<?> deploymentShortArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("ShortArray");
-
-        Asset asset = createServiceAsset("ShortArray", "1,20");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testShortArray() throws Exception {
         try {
             deployer.deploy("ShortArray");
-            performTest("ShortArray", new short[] { 1, 20 }, new Comparator() {
+            performTest("ShortArray", new short[]{1, 20}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -1351,24 +1387,11 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "StringArray", managed = false)
-    public static Archive<?> deploymentStringArray() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("StringArray");
-
-        Asset asset = createServiceAsset("StringArray", "1,20");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testStringArray() throws Exception {
         try {
             deployer.deploy("StringArray");
-            performTest("StringArray", new String[] { "1", "20" }, new Comparator() {
+            performTest("StringArray", new String[]{"1", "20"}, new Comparator() {
 
                 @Override
                 public int compare(Object o1, Object o2) {
@@ -1388,19 +1411,6 @@ public class JMXPropertyEditorsTestCase {
 
     }
 
-    @Deployment(name = "URI", managed = false)
-    public static Archive<?> deploymentURI() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("URI");
-
-        Asset asset = createServiceAsset("URI", "http://nowhere.com");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
-    }
-
     @Test
     public void testURI() throws Exception {
         try {
@@ -1415,19 +1425,6 @@ public class JMXPropertyEditorsTestCase {
             }
         }
 
-    }
-
-    @Deployment(name = "URL", managed = false)
-    public static Archive<?> deploymentURL() {
-
-        // jar
-        final JavaArchive jmxSAR = createArchive("URL");
-
-        Asset asset = createServiceAsset("URL", "http://nowhere.com");
-        jmxSAR.addAsManifestResource(asset, "jboss-service.xml");
-
-        System.err.println(jmxSAR.toString(true));
-        return jmxSAR;
     }
 
     @Test
@@ -1458,7 +1455,7 @@ public class JMXPropertyEditorsTestCase {
             Assert.assertEquals("Found wrong attribute value for '" + attributeName + "'", expectedValue, attributeValue);
         } else {
             boolean equal = comparator.compare(expectedValue, attributeValue) == 0;
-            Assert.assertTrue("Found wrong attribute value for '" + attributeName + "', value: '"+attributeValue+"' expected: '"+expectedValue+"'", equal);
+            Assert.assertTrue("Found wrong attribute value for '" + attributeName + "', value: '" + attributeValue + "' expected: '" + expectedValue + "'", equal);
         }
 
     }

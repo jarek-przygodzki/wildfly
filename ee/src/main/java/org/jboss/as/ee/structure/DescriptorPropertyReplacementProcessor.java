@@ -31,12 +31,11 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 /**
  * {@link org.jboss.as.server.deployment.DeploymentUnitProcessor} responsible for determining if
  * property replacement should be done on EE spec descriptors.
- *
  */
 public class DescriptorPropertyReplacementProcessor implements DeploymentUnitProcessor {
 
-    private volatile boolean descriptorPropertyReplacement = true;
     private final AttachmentKey<Boolean> attachmentKey;
+    private volatile boolean descriptorPropertyReplacement = true;
 
     public DescriptorPropertyReplacementProcessor(final AttachmentKey<Boolean> attachmentKey) {
         this.attachmentKey = attachmentKey;

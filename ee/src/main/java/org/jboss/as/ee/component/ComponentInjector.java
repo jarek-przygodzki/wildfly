@@ -31,7 +31,7 @@ public interface ComponentInjector {
 
     /**
      * If this injector is a service then this will return the service name. Otherwise it will return null.
-     *
+     * <p>
      * The injected component should add this as a dependency to it's start task.
      *
      * @return The service name

@@ -22,26 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.context;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.jboss.as.test.shared.TimeoutUtil.adjust;
-import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.createPermissionsXmlAsset;
-import static org.junit.Assert.assertThat;
-
-import java.util.PropertyPermission;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.jms.TemporaryQueue;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.messaging.jms.context.auxiliary.TransactedMDB;
@@ -53,6 +33,25 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.TemporaryQueue;
+import java.util.PropertyPermission;
+import java.util.UUID;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.jboss.as.test.shared.TimeoutUtil.adjust;
+import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.createPermissionsXmlAsset;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
@@ -83,7 +82,7 @@ public class InjectedJMSContextTestCase {
     @After
     public void tearDown() throws JMSException {
         // drain the queue to remove any pending messages from it
-        try(JMSContext context = factory.createContext()) {
+        try (JMSContext context = factory.createContext()) {
             JMSConsumer consumer = context.createConsumer(queue);
             Message m;
             do {

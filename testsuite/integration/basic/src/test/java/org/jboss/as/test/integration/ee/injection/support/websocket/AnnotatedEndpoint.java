@@ -21,17 +21,17 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.websocket;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.websocket.OnMessage;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import org.jboss.as.test.integration.ee.injection.support.Alpha;
 import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
 import org.jboss.as.test.integration.ee.injection.support.Bravo;
 import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
 import org.jboss.as.test.integration.ee.injection.support.ProducedString;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.websocket.OnMessage;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 
 @AroundConstructBinding
 @ServerEndpoint("/websocket/{name}")
@@ -51,6 +51,16 @@ public class AnnotatedEndpoint {
         AnnotatedEndpoint.name = name + "#AnnotatedEndpoint";
     }
 
+    public static String getName() {
+        return name;
+    }
+
+    public static void reset() {
+        postConstructCalled = false;
+        injectionOK = false;
+        AnnotatedEndpoint.name = null;
+    }
+
     @Inject
     public void setBravo(Bravo bravo) {
         injectionOK = (alpha != null) && (bravo != null) && (name != null);
@@ -65,15 +75,5 @@ public class AnnotatedEndpoint {
     @ComponentInterceptorBinding
     public String message(String message, @PathParam("name") String name) {
         return message + " " + name;
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-    public static void reset() {
-        postConstructCalled = false;
-        injectionOK = false;
-        AnnotatedEndpoint.name = null;
     }
 }

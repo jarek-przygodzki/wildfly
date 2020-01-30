@@ -22,14 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.activemq.artemis.api.config.ActiveMQDefaultConfiguration;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.ActiveMQExceptionType;
@@ -48,6 +40,14 @@ import org.jboss.as.arquillian.container.ManagementClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  * Tests the security integration for HornetQ
  *
@@ -59,6 +59,16 @@ public class SecurityTestCase {
 
     @ContainerResource
     private ManagementClient managementClient;
+
+    static ClientSessionFactory createClientSessionFactory(String host, int port) throws Exception {
+        final Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put("host", host);
+        properties.put("port", port);
+        properties.put(TransportConstants.HTTP_UPGRADE_ENABLED_PROP_NAME, true);
+        properties.put(TransportConstants.HTTP_UPGRADE_ENDPOINT_PROP_NAME, "http-acceptor");
+        final TransportConfiguration configuration = new TransportConfiguration(NettyConnectorFactory.class.getName(), properties);
+        return ActiveMQClient.createServerLocatorWithoutHA(configuration).createSessionFactory();
+    }
 
     @Test
     public void testFailedAuthenticationBadUserPass() throws Exception {
@@ -144,7 +154,6 @@ public class SecurityTestCase {
         }
     }
 
-
     @Test
     public void testUnsuccessfulAuthorization() throws Exception {
         final String queueName = "queue.testUnsuccessfulAuthorization";
@@ -163,15 +172,5 @@ public class SecurityTestCase {
                 session.close();
             }
         }
-    }
-
-    static ClientSessionFactory createClientSessionFactory(String host, int port) throws Exception {
-        final Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("host", host);
-        properties.put("port", port);
-        properties.put(TransportConstants.HTTP_UPGRADE_ENABLED_PROP_NAME, true);
-        properties.put(TransportConstants.HTTP_UPGRADE_ENDPOINT_PROP_NAME, "http-acceptor");
-        final TransportConfiguration configuration = new TransportConfiguration(NettyConnectorFactory.class.getName(), properties);
-        return ActiveMQClient.createServerLocatorWithoutHA(configuration).createSessionFactory();
     }
 }

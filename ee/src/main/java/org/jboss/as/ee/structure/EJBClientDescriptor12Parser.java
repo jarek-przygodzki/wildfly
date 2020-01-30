@@ -22,18 +22,17 @@
 
 package org.jboss.as.ee.structure;
 
-import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
+import org.jboss.metadata.property.PropertyReplacer;
+import org.jboss.staxmapper.XMLExtendedStreamReader;
 
+import javax.xml.stream.XMLStreamException;
 import java.util.EnumSet;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
-import org.jboss.metadata.property.PropertyReplacer;
-import org.jboss.staxmapper.XMLExtendedStreamReader;
+import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
 /**
  * Parser for urn:jboss:ejb-client:1.2:jboss-ejb-client
@@ -51,7 +50,7 @@ class EJBClientDescriptor12Parser extends EJBClientDescriptor11Parser {
     }
 
     protected void parseClientContext(final XMLExtendedStreamReader reader,
-            final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
+                                      final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
         final int count = reader.getAttributeCount();
         for (int i = 0; i < count; i++) {
             final EJBClientDescriptorXMLAttribute attribute = EJBClientDescriptorXMLAttribute.forName(reader
@@ -106,7 +105,7 @@ class EJBClientDescriptor12Parser extends EJBClientDescriptor11Parser {
      * connectTimeout added
      */
     protected void parseRemotingReceiver(final XMLExtendedStreamReader reader,
-            final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
+                                         final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
         String outboundConnectionRef = null;
         final Set<EJBClientDescriptorXMLAttribute> required = EnumSet
                 .of(EJBClientDescriptorXMLAttribute.OUTBOUND_CONNECTION_REF);

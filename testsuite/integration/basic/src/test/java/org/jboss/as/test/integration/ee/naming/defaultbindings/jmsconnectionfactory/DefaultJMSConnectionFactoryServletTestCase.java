@@ -36,7 +36,7 @@ import java.net.URL;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- *  Test for EE's default data source on a Servlet
+ * Test for EE's default data source on a Servlet
  *
  * @author Eduardo Martins
  */
@@ -49,7 +49,7 @@ public class DefaultJMSConnectionFactoryServletTestCase {
 
     @Deployment
     public static WebArchive deployment() {
-        WebArchive war = ShrinkWrap.create(WebArchive.class, DefaultJMSConnectionFactoryServletTestCase.class.getSimpleName()+".war");
+        WebArchive war = ShrinkWrap.create(WebArchive.class, DefaultJMSConnectionFactoryServletTestCase.class.getSimpleName() + ".war");
         war.addClasses(HttpRequest.class, DefaultJMSConnectionFactoryTestServlet.class);
         return war;
     }

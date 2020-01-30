@@ -1,12 +1,5 @@
 package org.jboss.as.ee.component;
 
-import java.lang.reflect.Method;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Set;
-
 import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
 import org.jboss.as.ee.component.interceptors.InterceptorOrder;
 import org.jboss.as.ee.component.interceptors.UserInterceptorFactory;
@@ -23,6 +16,13 @@ import org.jboss.invocation.Interceptors;
 import org.jboss.invocation.PrivilegedWithCombinerInterceptor;
 import org.jboss.invocation.proxy.MethodIdentifier;
 import org.jboss.modules.Module;
+
+import java.lang.reflect.Method;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.Set;
 
 import static org.jboss.as.server.deployment.Attachments.REFLECTION_INDEX;
 
@@ -109,7 +109,7 @@ class DefaultComponentConfigurator extends AbstractComponentConfigurator impleme
                     if (isNotOverriden(clazz, method, configuration.getComponentClass(), deploymentReflectionIndex)) {
                         InterceptorFactory interceptorFactory = new ImmediateInterceptorFactory(new ManagedReferenceLifecycleMethodInterceptor(BasicComponentInstance.INSTANCE_KEY, method, changeMethod, lifecycleMethod));
                         interceptors.add(interceptorFactory);
-                        if(lifecycleMethod) {
+                        if (lifecycleMethod) {
                             configuration.addLifecycleMethod(method);
                         }
                     }
@@ -176,7 +176,7 @@ class DefaultComponentConfigurator extends AbstractComponentConfigurator impleme
 
                 // first add the default interceptors (if not excluded) to the deque
                 final boolean requiresTimerChain = description.isTimerServiceRequired() && timeoutMethods.contains(identifier);
-                if(requiresTimerChain) {
+                if (requiresTimerChain) {
                     configuration.addComponentInterceptor(method, new UserInterceptorFactory(weaved(componentUserAroundInvoke), weaved(componentUserAroundTimeout)), InterceptorOrder.Component.COMPONENT_USER_INTERCEPTORS);
                 } else {
                     configuration.addComponentInterceptors(method, componentUserAroundInvoke, InterceptorOrder.Component.COMPONENT_USER_INTERCEPTORS);

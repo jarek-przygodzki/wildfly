@@ -22,14 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.utils.DescriptorUtils;
 import org.jboss.as.naming.ManagedReference;
@@ -46,6 +38,14 @@ import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.jboss.msc.value.InjectedValue;
 import org.wildfly.security.manager.WildFlySecurityManager;
+
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 
@@ -97,7 +97,7 @@ public final class ViewService implements Service<ComponentView> {
         } else {
             viewInstanceFactory = viewConfiguration.getViewInstanceFactory();
         }
-        if(viewConfiguration.getPrivateData().isEmpty()) {
+        if (viewConfiguration.getPrivateData().isEmpty()) {
             privateData = Collections.emptyMap();
         } else {
             privateData = viewConfiguration.getPrivateData();
@@ -190,7 +190,7 @@ public final class ViewService implements Service<ComponentView> {
 
         @Override
         public Object invoke(InterceptorContext interceptorContext) throws Exception {
-            if(component instanceof BasicComponent) {
+            if (component instanceof BasicComponent) {
                 ((BasicComponent) component).waitForComponentStart();
             }
             final Method method = interceptorContext.getMethod();
@@ -299,7 +299,7 @@ public final class ViewService implements Service<ComponentView> {
             context.putPrivateData(Component.class, component);
             context.putPrivateData(ComponentClientInstance.class, instance);
             context.setContextData(new HashMap<String, Object>());
-            for(Map.Entry<Object, Object> entry : contextData.entrySet()) {
+            for (Map.Entry<Object, Object> entry : contextData.entrySet()) {
                 context.putPrivateData(entry.getKey(), entry.getValue());
             }
             clientPostConstructInterceptor.processInvocation(context);

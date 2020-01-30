@@ -22,16 +22,15 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.transactionscoped.auxiliary;
 
-import static org.jboss.as.test.integration.messaging.jms.context.transactionscoped.TransactionScopedJMSContextTestCase.QUEUE_NAME;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import javax.annotation.Resource;
 import javax.ejb.Stateful;
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.inject.Inject;
 import javax.jms.JMSDestinationDefinition;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import static org.jboss.as.test.integration.messaging.jms.context.transactionscoped.TransactionScopedJMSContextTestCase.QUEUE_NAME;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.

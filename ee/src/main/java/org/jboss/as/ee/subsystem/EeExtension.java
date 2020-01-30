@@ -22,13 +22,6 @@
 
 package org.jboss.as.ee.subsystem;
 
-import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.ANNOTATIONS;
-import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.META_INF;
-import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.SERVICES;
-
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
@@ -53,6 +46,13 @@ import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.ANNOTATIONS;
+import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.META_INF;
+import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.SERVICES;
+
 /**
  * JBossAS domain extension used to initialize the ee subsystem handlers and associated classes.
  *
@@ -62,11 +62,9 @@ import org.jboss.dmr.ModelType;
 public class EeExtension implements Extension {
 
     public static final String SUBSYSTEM_NAME = "ee";
-    private static final String RESOURCE_NAME = EeExtension.class.getPackage().getName() + ".LocalDescriptions";
-
-    private static final ModelVersion CURRENT_MODEL_VERSION = ModelVersion.create(4, 0, 0);
-
     protected static final PathElement PATH_SUBSYSTEM = PathElement.pathElement(ModelDescriptionConstants.SUBSYSTEM, SUBSYSTEM_NAME);
+    private static final String RESOURCE_NAME = EeExtension.class.getPackage().getName() + ".LocalDescriptions";
+    private static final ModelVersion CURRENT_MODEL_VERSION = ModelVersion.create(4, 0, 0);
 
     static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
         return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, EeExtension.class.getClassLoader(), true, true);
@@ -147,7 +145,7 @@ public class EeExtension implements Extension {
                 .addRejectCheck(RejectAttributeChecker.DEFINED, EeSubsystemRootResource.ANNOTATION_PROPERTY_REPLACEMENT);
 
 
-        chainedBuilder.buildAndRegister(subsystem, new ModelVersion[] {
+        chainedBuilder.buildAndRegister(subsystem, new ModelVersion[]{
                 v1_0_0,
                 v1_1_0,
                 v3_0_0

@@ -42,6 +42,16 @@ enum Namespace {
      * The current namespace version.
      */
     public static final Namespace CURRENT = EE_4_0;
+    private static final Map<String, Namespace> MAP;
+
+    static {
+        final Map<String, Namespace> map = new HashMap<String, Namespace>();
+        for (Namespace namespace : values()) {
+            final String name = namespace.getUriString();
+            if (name != null) map.put(name, namespace);
+        }
+        MAP = map;
+    }
 
     private final String name;
     private final boolean beanValidationIncluded;
@@ -49,6 +59,11 @@ enum Namespace {
     Namespace(final String name, final boolean beanValidationIncluded) {
         this.name = name;
         this.beanValidationIncluded = beanValidationIncluded;
+    }
+
+    public static Namespace forUri(String uri) {
+        final Namespace element = MAP.get(uri);
+        return element == null ? UNKNOWN : element;
     }
 
     /**
@@ -62,21 +77,5 @@ enum Namespace {
 
     public boolean isBeanValidationIncluded() {
         return beanValidationIncluded;
-    }
-
-    private static final Map<String, Namespace> MAP;
-
-    static {
-        final Map<String, Namespace> map = new HashMap<String, Namespace>();
-        for (Namespace namespace : values()) {
-            final String name = namespace.getUriString();
-            if (name != null) map.put(name, namespace);
-        }
-        MAP = map;
-    }
-
-    public static Namespace forUri(String uri) {
-        final Namespace element = MAP.get(uri);
-        return element == null ? UNKNOWN : element;
     }
 }

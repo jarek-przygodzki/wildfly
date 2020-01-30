@@ -28,15 +28,17 @@ import org.jboss.as.server.deployment.DeploymentUnit;
  * Marker for top level deployments that contain a beans.xml file
  *
  * @author Stuart Douglas
- *
  */
 public class WeldDeploymentMarker {
 
     private static final AttachmentKey<Boolean> MARKER = AttachmentKey.create(Boolean.class);
 
+    private WeldDeploymentMarker() {
+
+    }
+
     /**
      * Mark this deployment and the top level deployment as being a weld deployment.
-     *
      */
     public static void mark(DeploymentUnit unit) {
         unit.putAttachment(MARKER, Boolean.TRUE);
@@ -62,9 +64,5 @@ public class WeldDeploymentMarker {
      */
     public static boolean isWeldDeployment(DeploymentUnit unit) {
         return unit.getAttachment(MARKER) != null;
-    }
-
-    private WeldDeploymentMarker() {
-
     }
 }

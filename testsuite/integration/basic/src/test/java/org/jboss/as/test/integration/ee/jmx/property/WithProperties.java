@@ -22,6 +22,9 @@
 
 package org.jboss.as.test.integration.ee.jmx.property;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,12 +37,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 /**
  * @author baranowb
- * 
  */
 public class WithProperties implements WithPropertiesMBean {
 
@@ -90,7 +89,7 @@ public class WithProperties implements WithPropertiesMBean {
     private URL url;
 
     /**
-     * 
+     *
      */
     public WithProperties() {
         // TODO Auto-generated constructor stub
@@ -102,203 +101,13 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
-    public AtomicInteger getAtomicInteger() {
-        return atomicInteger;
-    }
-
-    @Override
-    public AtomicLong getAtomicLong() {
-        return atomicLong;
-    }
-
-    @Override
-    public BigDecimal getBigDecimal() {
-        return this.bigDecimal;
-    }
-
-    @Override
-    public BigInteger getBigInteger() {
-        return bigInteger;
-    }
-
-    @Override
-    public boolean getBoolean() {
-        return this._boolean;
-    }
-
-    @Override
-    public boolean[] getBooleanArray() {
-        return booleanArray;
-    }
-
-    @Override
-    public byte getByte() {
-        return _byte;
-    }
-
-    @Override
-    public byte[] getByteArray() {
-        return this.byteArray;
-    }
-
-    @Override
-    public char getChar() {
-        return _char;
-    }
-
-    @Override
-    public char[] getCharacterArray() {
-        return this.characterArray;
-    }
-
-    @Override
-    public Class[] getClassArray() {
-        return this.classArray;
-    }
-
-    @Override
-    public Class getClazz() {
-        return this.clazz;
-    }
-
-    @Override
-    public Document getDocument() {
-        return this.document;
-    }
-
-    @Override
-    public double getDouble() {
-        return _double;
-    }
-
-    @Override
-    public Element getElement() {
-        return this.element;
-    }
-
-    @Override
-    public File getFile() {
-        return this.file;
-    }
-
-    @Override
-    public float getFloat() {
-        return _float;
-    }
-
-    @Override
-    public float[] getFloatArray() {
-        return this.floatArray;
-    }
-
-    @Override
-    public InetAddress getInetAddress() {
-        return this.inetAddress;
-    }
-
-    @Override
-    public InetAddress[] getInetAddressArray() {
-        return this.inetAddressArray;
-    }
-
-    @Override
-    public int getInteger() {
-        return _integer;
-    }
-
-    @Override
-    public int[] getIntegerArray() {
-        return this.integerArray;
-    }
-
-    @Override
-    public Locale getLocale() {
-        return this.locale;
-    }
-
-    @Override
-    public long getLong() {
-        return _long;
-    }
-
-    @Override
-    public long[] getLongArray() {
-        return this.longArray;
-    }
-
-    @Override
-    public Boolean getObjectBoolean() {
-        return objectBoolean;
-    }
-
-    @Override
-    public Byte getObjectByte() {
-        return objectByte;
-    }
-
-    @Override
-    public Character getObjectChar() {
-        return objectChar;
-    }
-
-    @Override
-    public Double getObjectDouble() {
-        return objectDouble;
-    }
-
-    @Override
-    public Float getObjectFloat() {
-        return objectFloat;
-    }
-
-    @Override
-    public Integer getObjectInteger() {
-        return objectInteger;
-    }
-
-    @Override
-    public Long getObjectLong() {
-        return objectLong;
-    }
-
-    @Override
-    public Short getObjectShort() {
-        return objectShort;
-    }
-
-    @Override
-    public Properties getProperties() {
-        return this.properties;
-    }
-
-    @Override
-    public short getShort() {
-        return _short;
-    }
-
-    @Override
-    public short[] getShortArray() {
-        return this.shortArray;
-    }
-
-    @Override
-    public String[] getStringArray() {
-        return this.stringArray;
-    }
-
-    @Override
-    public URI getURI() {
-        return this.uri;
-    }
-
-    @Override
-    public URL getURL() {
-        return this.url;
-    }
-
-    @Override
     public void setAtomicBoolean(AtomicBoolean atomicBoolean) {
         this.atomicBoolean = atomicBoolean;
+    }
+
+    @Override
+    public AtomicInteger getAtomicInteger() {
+        return atomicInteger;
     }
 
     @Override
@@ -307,8 +116,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public AtomicLong getAtomicLong() {
+        return atomicLong;
+    }
+
+    @Override
     public void setAtomicLong(AtomicLong atomicLong) {
         this.atomicLong = atomicLong;
+    }
+
+    @Override
+    public BigDecimal getBigDecimal() {
+        return this.bigDecimal;
     }
 
     @Override
@@ -317,8 +136,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public BigInteger getBigInteger() {
+        return bigInteger;
+    }
+
+    @Override
     public void setBigInteger(BigInteger bigInteger) {
         this.bigInteger = bigInteger;
+    }
+
+    @Override
+    public boolean getBoolean() {
+        return this._boolean;
     }
 
     @Override
@@ -328,9 +157,19 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public boolean[] getBooleanArray() {
+        return booleanArray;
+    }
+
+    @Override
     public void setBooleanArray(boolean[] b) {
         this.booleanArray = b;
 
+    }
+
+    @Override
+    public byte getByte() {
+        return _byte;
     }
 
     @Override
@@ -339,8 +178,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public byte[] getByteArray() {
+        return this.byteArray;
+    }
+
+    @Override
     public void setByteArray(byte[] b) {
         this.byteArray = b;
+    }
+
+    @Override
+    public char getChar() {
+        return _char;
     }
 
     @Override
@@ -349,8 +198,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public char[] getCharacterArray() {
+        return this.characterArray;
+    }
+
+    @Override
     public void setCharacterArray(char[] b) {
         this.characterArray = b;
+    }
+
+    @Override
+    public Class[] getClassArray() {
+        return this.classArray;
     }
 
     @Override
@@ -359,8 +218,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Class getClazz() {
+        return this.clazz;
+    }
+
+    @Override
     public void setClazz(Class b) {
         this.clazz = b;
+    }
+
+    @Override
+    public Document getDocument() {
+        return this.document;
     }
 
     @Override
@@ -369,13 +238,28 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public double getDouble() {
+        return _double;
+    }
+
+    @Override
     public void setDouble(double _double) {
         this._double = _double;
     }
 
     @Override
+    public Element getElement() {
+        return this.element;
+    }
+
+    @Override
     public void setElement(Element b) {
         this.element = b;
+    }
+
+    @Override
+    public File getFile() {
+        return this.file;
     }
 
     @Override
@@ -385,8 +269,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public float getFloat() {
+        return _float;
+    }
+
+    @Override
     public void setFloat(float _float) {
         this._float = _float;
+    }
+
+    @Override
+    public float[] getFloatArray() {
+        return this.floatArray;
     }
 
     @Override
@@ -396,9 +290,19 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
-    public void setInetAddress(InetAddress b) {
-        this.inetAddress =b;
+    public InetAddress getInetAddress() {
+        return this.inetAddress;
+    }
 
+    @Override
+    public void setInetAddress(InetAddress b) {
+        this.inetAddress = b;
+
+    }
+
+    @Override
+    public InetAddress[] getInetAddressArray() {
+        return this.inetAddressArray;
     }
 
     @Override
@@ -407,8 +311,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public int getInteger() {
+        return _integer;
+    }
+
+    @Override
     public void setInteger(int _integer) {
         this._integer = _integer;
+    }
+
+    @Override
+    public int[] getIntegerArray() {
+        return this.integerArray;
     }
 
     @Override
@@ -417,8 +331,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    @Override
     public void setLocale(Locale b) {
-        this.locale =b;
+        this.locale = b;
+    }
+
+    @Override
+    public long getLong() {
+        return _long;
     }
 
     @Override
@@ -427,8 +351,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public long[] getLongArray() {
+        return this.longArray;
+    }
+
+    @Override
     public void setLongArray(long[] b) {
         this.longArray = b;
+    }
+
+    @Override
+    public Boolean getObjectBoolean() {
+        return objectBoolean;
     }
 
     @Override
@@ -437,8 +371,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Byte getObjectByte() {
+        return objectByte;
+    }
+
+    @Override
     public void setObjectByte(Byte objectByte) {
         this.objectByte = objectByte;
+    }
+
+    @Override
+    public Character getObjectChar() {
+        return objectChar;
     }
 
     @Override
@@ -447,8 +391,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Double getObjectDouble() {
+        return objectDouble;
+    }
+
+    @Override
     public void setObjectDouble(Double objectDouble) {
         this.objectDouble = objectDouble;
+    }
+
+    @Override
+    public Float getObjectFloat() {
+        return objectFloat;
     }
 
     @Override
@@ -457,8 +411,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Integer getObjectInteger() {
+        return objectInteger;
+    }
+
+    @Override
     public void setObjectInteger(Integer objectInteger) {
         this.objectInteger = objectInteger;
+    }
+
+    @Override
+    public Long getObjectLong() {
+        return objectLong;
     }
 
     @Override
@@ -467,8 +431,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public Short getObjectShort() {
+        return objectShort;
+    }
+
+    @Override
     public void setObjectShort(Short objectShort) {
         this.objectShort = objectShort;
+    }
+
+    @Override
+    public Properties getProperties() {
+        return this.properties;
     }
 
     @Override
@@ -477,8 +451,18 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public short getShort() {
+        return _short;
+    }
+
+    @Override
     public void setShort(short _short) {
         this._short = _short;
+    }
+
+    @Override
+    public short[] getShortArray() {
+        return this.shortArray;
     }
 
     @Override
@@ -488,14 +472,29 @@ public class WithProperties implements WithPropertiesMBean {
     }
 
     @Override
+    public String[] getStringArray() {
+        return this.stringArray;
+    }
+
+    @Override
     public void setStringArray(String[] b) {
         this.stringArray = b;
 
     }
 
     @Override
+    public URI getURI() {
+        return this.uri;
+    }
+
+    @Override
     public void setURI(URI b) {
         this.uri = b;
+    }
+
+    @Override
+    public URL getURL() {
+        return this.url;
     }
 
     @Override

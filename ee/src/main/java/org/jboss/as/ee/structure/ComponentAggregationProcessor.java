@@ -38,7 +38,9 @@ import org.jboss.msc.value.ImmediateValue;
 import java.util.List;
 import java.util.Map;
 
-import static org.jboss.as.ee.component.Attachments.*;
+import static org.jboss.as.ee.component.Attachments.COMPONENT_REGISTRY;
+import static org.jboss.as.ee.component.Attachments.EE_APPLICATION_DESCRIPTION;
+import static org.jboss.as.ee.component.Attachments.EE_MODULE_DESCRIPTION;
 import static org.jboss.as.server.deployment.Attachments.SUB_DEPLOYMENTS;
 
 /**
@@ -53,7 +55,7 @@ public final class ComponentAggregationProcessor implements DeploymentUnitProces
         final ComponentRegistry componentRegistry = new ComponentRegistry(phaseContext.getServiceRegistry());
 
         final EEModuleDescription moduleDescription = deploymentUnit.getAttachment(EE_MODULE_DESCRIPTION);
-        if(moduleDescription == null) {
+        if (moduleDescription == null) {
             return;
         }
 
@@ -73,9 +75,9 @@ public final class ComponentAggregationProcessor implements DeploymentUnitProces
             }
 
             /*
-            * We are an EAR, so we must inspect all of our subdeployments and aggregate all their component views
-            * into a single index, so that inter-module resolution will work.
-            */
+             * We are an EAR, so we must inspect all of our subdeployments and aggregate all their component views
+             * into a single index, so that inter-module resolution will work.
+             */
             // Add the application description
             final List<DeploymentUnit> subdeployments = deploymentUnit.getAttachmentList(SUB_DEPLOYMENTS);
             for (final DeploymentUnit subdeployment : subdeployments) {

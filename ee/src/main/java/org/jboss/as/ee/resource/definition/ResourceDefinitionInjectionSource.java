@@ -31,6 +31,7 @@ import java.util.Map;
 
 /**
  * The abstract InjectionSource for EE Resource Definitions.
+ *
  * @author Eduardo Martins
  */
 public abstract class ResourceDefinitionInjectionSource extends InjectionSource {
@@ -52,6 +53,7 @@ public abstract class ResourceDefinitionInjectionSource extends InjectionSource 
 
     /**
      * Add the specified properties.
+     *
      * @param annotationProperties an array of propertyName = propertyValue strings
      */
     public void addProperties(final String[] annotationProperties) {
@@ -60,8 +62,9 @@ public abstract class ResourceDefinitionInjectionSource extends InjectionSource 
 
     /**
      * Add the specified properties.
+     *
      * @param annotationProperties an array of propertyName = propertyValue strings
-     * @param propertyReplacer if not null all property names and values will be processed by the replacer.
+     * @param propertyReplacer     if not null all property names and values will be processed by the replacer.
      */
     public void addProperties(final String[] annotationProperties, final PropertyReplacer propertyReplacer) {
         if (annotationProperties != null) {
@@ -86,6 +89,7 @@ public abstract class ResourceDefinitionInjectionSource extends InjectionSource 
 
     /**
      * Add the specified properties.
+     *
      * @param descriptorProperties the metadata properties to add
      */
     public void addProperties(final PropertiesMetaData descriptorProperties) {

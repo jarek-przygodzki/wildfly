@@ -29,8 +29,6 @@ import java.util.List;
  * Class that represents the environment entries of an interceptor, defined in the interceptors section
  * of ejb-jar.xml.
  *
- *
- *
  * @author Stuart Douglas
  */
 public class InterceptorEnvironment implements ResourceInjectionTarget {

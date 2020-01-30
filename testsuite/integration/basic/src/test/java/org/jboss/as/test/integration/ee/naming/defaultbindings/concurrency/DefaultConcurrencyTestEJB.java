@@ -49,21 +49,20 @@ public class DefaultConcurrencyTestEJB {
     private ManagedThreadFactory managedThreadFactory;
 
     /**
-     *
      * @throws Throwable
      */
     public void test() throws Throwable {
         // check injected resources
-        if(contextService == null) {
+        if (contextService == null) {
             throw new NullPointerException("contextService");
         }
-        if(managedExecutorService == null) {
+        if (managedExecutorService == null) {
             throw new NullPointerException("managedExecutorService");
         }
-        if(managedScheduledExecutorService == null) {
+        if (managedScheduledExecutorService == null) {
             throw new NullPointerException("managedScheduledExecutorService");
         }
-        if(managedThreadFactory == null) {
+        if (managedThreadFactory == null) {
             throw new NullPointerException("managedThreadFactory");
         }
         // checked jndi lookup

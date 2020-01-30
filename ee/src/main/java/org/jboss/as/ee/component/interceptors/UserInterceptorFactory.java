@@ -48,7 +48,7 @@ public class UserInterceptorFactory implements InterceptorFactory {
     public Interceptor create(final InterceptorFactoryContext context) {
         final Interceptor aroundInvoke = this.aroundInvoke.create(context);
         final Interceptor aroundTimeout;
-        if(this.aroundTimeout != null) {
+        if (this.aroundTimeout != null) {
             aroundTimeout = this.aroundTimeout.create(context);
         } else {
             aroundTimeout = null;

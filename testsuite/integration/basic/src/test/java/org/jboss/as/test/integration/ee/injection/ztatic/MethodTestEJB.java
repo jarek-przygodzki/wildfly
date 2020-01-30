@@ -29,7 +29,6 @@ import javax.ejb.Stateless;
  * An EJB that "asks" for the forbidden static method injection.
  *
  * @author Eduardo Martins
- *
  */
 @Stateless
 public class MethodTestEJB {

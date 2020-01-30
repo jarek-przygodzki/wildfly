@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<web-app version="3.0"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="3.0"
          xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
 
@@ -10,7 +10,9 @@
         <ejb-ref-name>simple</ejb-ref-name>
         <lookup-name>java:module/SimpleSLSB</lookup-name>
         <injection-target>
-            <injection-target-class>org.jboss.as.test.integration.ee.injection.resource.ejblocalref.EjbLocalRefInjectionServlet</injection-target-class>
+            <injection-target-class>
+                org.jboss.as.test.integration.ee.injection.resource.ejblocalref.EjbLocalRefInjectionServlet
+            </injection-target-class>
             <injection-target-name>simple</injection-target-name>
         </injection-target>
     </ejb-local-ref>
@@ -23,7 +25,9 @@
         <ejb-ref-name>named</ejb-ref-name>
         <ejb-link>namedBean</ejb-link>
         <injection-target>
-            <injection-target-class>org.jboss.as.test.integration.ee.injection.resource.ejblocalref.EjbLocalRefInjectionServlet</injection-target-class>
+            <injection-target-class>
+                org.jboss.as.test.integration.ee.injection.resource.ejblocalref.EjbLocalRefInjectionServlet
+            </injection-target-class>
             <injection-target-name>named</injection-target-name>
         </injection-target>
     </ejb-local-ref>

@@ -33,11 +33,11 @@ public class MyInterceptor {
     /**
      * This should create a binding for java:module/env/org.jboss.as.test.integration.injection.resource.multiple.MyInterceptor/simpleManagedBean
      */
-    @Resource(lookup="java:module/simpleManagedBean")
+    @Resource(lookup = "java:module/simpleManagedBean")
     private SimpleManagedBean simpleManagedBean;
 
     @AroundInvoke
-    public Object intercept(InvocationContext context ) throws Exception {
+    public Object intercept(InvocationContext context) throws Exception {
         return context.proceed();
     }
 }

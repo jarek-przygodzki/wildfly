@@ -21,13 +21,13 @@
  */
 package org.jboss.as.ee.component;
 
-import java.util.Map;
-
 import org.jboss.as.naming.ManagedReference;
+
+import java.util.Map;
 
 /**
  * Factory that can be used to customize a views proxy creation
- *
+ * <p>
  * TODO: this needs to be thought through a bit more
  *
  * @author Stuart Douglas

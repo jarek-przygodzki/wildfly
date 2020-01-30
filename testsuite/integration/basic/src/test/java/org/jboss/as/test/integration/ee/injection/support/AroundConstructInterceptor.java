@@ -36,6 +36,10 @@ public class AroundConstructInterceptor {
 
     private static String prefix = "AroundConstructInterceptor#";
 
+    public static void reset() {
+        aroundConstructCalled = false;
+    }
+
     @AroundConstruct
     public Object intercept(InvocationContext ctx) throws Exception {
         aroundConstructCalled = true;
@@ -44,9 +48,5 @@ public class AroundConstructInterceptor {
             params[0] = prefix + (String) params[0];
         }
         return ctx.proceed();
-    }
-
-    public static void reset() {
-        aroundConstructCalled = false;
     }
 }

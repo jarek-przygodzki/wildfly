@@ -34,7 +34,6 @@ import java.util.Set;
  * Sets and restores the <code>java:</code> contexts
  *
  * @author Stuart Douglas
- *
  */
 public class JavaNamespaceSetup implements SetupAction {
 

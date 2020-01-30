@@ -22,18 +22,18 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.basic;
 
+import org.omg.CORBA.ORB;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.PortableServer.POA;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.omg.CORBA.ORB;
-import org.omg.CORBA.ORBPackage.InvalidName;
-import org.omg.PortableServer.POA;
-
 /**
  * This beans checks both methods of getting an ORB.
- * 
+ *
  * @author carlo
  */
 @Stateless

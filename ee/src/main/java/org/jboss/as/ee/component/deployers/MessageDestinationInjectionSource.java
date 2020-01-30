@@ -22,11 +22,9 @@
 
 package org.jboss.as.ee.component.deployers;
 
-import java.util.Set;
-
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.EEApplicationDescription;
 import org.jboss.as.ee.component.InjectionSource;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.as.server.deployment.Attachments;
@@ -36,6 +34,8 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.msc.inject.Injector;
 import org.jboss.msc.service.ServiceBuilder;
+
+import java.util.Set;
 
 import static org.jboss.as.ee.component.Attachments.EE_APPLICATION_DESCRIPTION;
 
@@ -53,6 +53,10 @@ public class MessageDestinationInjectionSource extends InjectionSource {
     public MessageDestinationInjectionSource(final String messageDestinationName, final String bindingName) {
         this.messageDestinationName = messageDestinationName;
         this.bindingName = bindingName;
+    }
+
+    private static boolean eq(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
     }
 
     public void getResourceValue(final ResolutionContext resolutionContext, final ServiceBuilder<?> serviceBuilder, final DeploymentPhaseContext phaseContext, final Injector<ManagedReferenceFactory> injector) throws DeploymentUnitProcessingException {
@@ -101,7 +105,6 @@ public class MessageDestinationInjectionSource extends InjectionSource {
         resolvedLookupName = names.iterator().next();
     }
 
-
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -122,9 +125,5 @@ public class MessageDestinationInjectionSource extends InjectionSource {
 
     public int hashCode() {
         return messageDestinationName.hashCode();
-    }
-
-    private static boolean eq(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
     }
 }

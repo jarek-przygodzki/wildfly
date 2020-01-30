@@ -22,19 +22,6 @@
 
 package org.jboss.as.ee.logging;
 
-import static org.jboss.logging.Logger.Level.ERROR;
-import static org.jboss.logging.Logger.Level.WARN;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Set;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.Location;
-import javax.xml.stream.XMLStreamException;
-
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.ee.component.BindingConfiguration;
 import org.jboss.as.ee.component.ComponentConfiguration;
@@ -55,6 +42,18 @@ import org.jboss.logging.annotations.MessageLogger;
 import org.jboss.logging.annotations.Param;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.vfs.VirtualFile;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.Location;
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Set;
+
+import static org.jboss.logging.Logger.Level.ERROR;
+import static org.jboss.logging.Logger.Level.WARN;
 
 /**
  * @author <a href="mailto:jperkins@redhat.com">James R. Perkins</a>
@@ -133,7 +132,7 @@ public interface EeLogger extends BasicLogger {
     /**
      * Logs a warning message indicating the component is not being installed due to an exception.
      *
-     * @param name  the name of the component.
+     * @param name the name of the component.
      */
     @LogMessage(level = WARN)
     @Message(id = 7, value = "Not installing optional component %s due to an exception (enable DEBUG log level to see the cause)")
@@ -220,7 +219,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param deploymentDescriptor the alternate deployment descriptor.
      * @param moduleFile           the module file.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 19, value = "Could not find alternate deployment descriptor %s specified for %s")
@@ -231,7 +229,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param annotation the annotation.
      * @param attribute  the attribute.
-     *
      * @return an {@link IllegalArgumentException} for the exception.
      */
     @Message(id = 20, value = "%s annotations must provide a %s.")
@@ -249,7 +246,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the {@code name} cannot be empty.
      *
      * @param name the name that cannot be empty.
-     *
      * @return a {@link RuntimeException} for the error.
      */
     @Message(id = 22, value = "%s may not be empty")
@@ -260,7 +256,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param name  the name that cannot be empty.
      * @param value the value of the object.
-     *
      * @return a {@link IllegalArgumentException} for the error.
      */
     @Message(id = 23, value = "%s cannot be null or empty: %s")
@@ -272,7 +267,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause the cause of the error.
      * @param name  the name of the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 24, value = "Could not configure component %s")
@@ -282,7 +276,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the type for the resource-env-ref could not be determined.
      *
      * @param name the name of the of the resource environment reference.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 25, value = "Could not determine type for resource-env-ref %s")
@@ -294,7 +287,6 @@ public interface EeLogger extends BasicLogger {
      * @param tag     the tag name.
      * @param value   the value of the tag.
      * @param typeTag the type tag.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 26, value = "Could not determine type for %s %s please specify the %s.")
@@ -305,7 +297,6 @@ public interface EeLogger extends BasicLogger {
      * loaded.
      *
      * @param injectionTarget the injection target.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 27, value = "Could not load %s referenced in env-entry")
@@ -317,7 +308,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause           the cause of the error.
      * @param injectionTarget the injection target.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     DeploymentUnitProcessingException cannotLoad(@Cause Throwable cause, String injectionTarget);
@@ -327,7 +317,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause     the cause of the error.
      * @param className the name of the interceptor class.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 28, value = "Could not load interceptor class %s")
@@ -339,7 +328,6 @@ public interface EeLogger extends BasicLogger {
      * @param cause     the cause of the error.
      * @param className the name of the interceptor class.
      * @param component the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 29, value = "Could not load interceptor class %s on component %s")
@@ -352,7 +340,6 @@ public interface EeLogger extends BasicLogger {
      * @param cause     the cause of the error.
      * @param className the name of the class.
      * @param component the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 30, value = "Could not load view class %s for component %s")
@@ -364,7 +351,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param earFile    the EAR file.
      * @param moduleFile the module file.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 31, value = "Unable to process modules in application.xml for EAR [%s], module file %s not found")
@@ -375,7 +361,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause the cause of the error.
      * @param uri   the URI.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 32, value = "Unable to parse resource-ref URI: %s")
@@ -386,7 +371,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param targetName the injection point name.
      * @param className  the class name.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 33, value = "Could not resolve injection point %s on class %s specified in web.xml")
@@ -398,7 +382,6 @@ public interface EeLogger extends BasicLogger {
      * @param method      the method.
      * @param component   the class.
      * @param annotations the annotations.
-     *
      * @return a {@link RuntimeException} for the error.
      */
     @Message(id = 34, value = "Could not resolve method %s on class %s with annotations %s")
@@ -411,7 +394,6 @@ public interface EeLogger extends BasicLogger {
      * @param cause     the cause of the error.
      * @param name      the name of the property.
      * @param className the datasource class name.
-     *
      * @return a {@link RuntimeException} for the error.
      */
     @Message(id = 35, value = "Could not set property %s on datasource class %s")
@@ -423,7 +405,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param element1 the first element.
      * @param element2 the second element.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 36, value = "Cannot specify both a %s and a %s in an environment entry.")
@@ -433,7 +414,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating a circular dependency is installing.
      *
      * @param bindingName the binding name.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 37, value = "Circular dependency installing %s")
@@ -444,7 +424,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param annotation the annotation.
      * @param target     the annotation target.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 38, value = "%s annotation is only allowed on a class. %s is not a class.")
@@ -454,7 +433,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the annotation is only allowed on method or class targets.
      *
      * @param annotation the annotation.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 39, value = "@%s annotation is only allowed on methods and classes")
@@ -465,7 +443,6 @@ public interface EeLogger extends BasicLogger {
      * this module.
      *
      * @param name the name of the module.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 40, value = "A component named '%s' is already defined in this module")
@@ -478,7 +455,6 @@ public interface EeLogger extends BasicLogger {
      * @param className     the class name.
      * @param componentName the name of the component.
      * @param errorMsg      the error message.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 41, value = "Component class %s for component %s has errors: %n%s")
@@ -488,7 +464,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating a failure to construct a component instance.
      *
      * @param cause the cause of the error.
-     *
      * @return an {@link IllegalStateException} for the error.
      */
     @Message(id = 42, value = "Failed to construct component instance")
@@ -514,7 +489,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating no component was found for the type.
      *
      * @param typeName the name of the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 45, value = "No component found for type '%s'")
@@ -524,7 +498,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating a failure to construct a component view.
      *
      * @param cause the cause of the error.
-     *
      * @return an {@link IllegalStateException} for the error.
      */
     @Message(id = 46, value = "Failed to instantiate component view")
@@ -535,7 +508,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param bindingName the binding name.
      * @param source      the source.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 47, value = "Incompatible conflicting binding at %s source: %s")
@@ -546,7 +518,6 @@ public interface EeLogger extends BasicLogger {
      * parameter, could not be found.
      *
      * @param clazz the class.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 48, value = "Could not find default constructor for %s")
@@ -558,7 +529,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param annotation the annotation.
      * @param className  the name of the class.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 49, value = "Could not find default constructor for %s class %s")
@@ -570,7 +540,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param className the name of the class.
      * @param component the component name.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 50, value = "No default constructor for interceptor class %s on component %s")
@@ -581,7 +550,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param element   the element.
      * @param attribute the attribute.
-     *
      * @return an {@link IllegalArgumentException} for the exception.
      */
     @Message(id = 51, value = "%s elements must provide a %s.")
@@ -592,7 +560,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause the cause of the error.
      * @param name  the name of the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 52, value = "Failed to install component %s")
@@ -603,7 +570,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause   the cause of the error.
      * @param xmlFile the XML file.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 53, value = "Failed to parse %s")
@@ -614,7 +580,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param cause   the cause of the error.
      * @param earFile the EAR file.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 54, value = "Failed to process children for EAR [%s]")
@@ -625,7 +590,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param entryName the name of the entry.
      * @param appName   the application name.
-     *
      * @return the message.
      */
     @Message(id = 55, value = "Failed to read %s entries for application [%s]")
@@ -637,7 +601,6 @@ public interface EeLogger extends BasicLogger {
      * @param entryName  the name of the entry.
      * @param appName    the application name.
      * @param moduleName the module name.
-     *
      * @return the message.
      */
     @Message(id = 56, value = "Failed to read %s entries for module [%s, %s]")
@@ -650,7 +613,6 @@ public interface EeLogger extends BasicLogger {
      * @param appName       the application name.
      * @param moduleName    the module name.
      * @param componentName the component name
-     *
      * @return the message.
      */
     @Message(id = 57, value = "Failed to read %s entries for component [%s, %s, %s]")
@@ -660,7 +622,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the field, represented by the {@code name} parameter, was not found.
      *
      * @param name the name of the field.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 58, value = "No matching field found for '%s'")
@@ -679,7 +640,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param elementName the element name.
      * @param value       the value.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 60, value = "%s of type java.lang.Character is not exactly one character long %s")
@@ -689,7 +649,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the descriptor is not valid.
      *
      * @param descriptor the invalid descriptor
-     *
      * @return a {@link RuntimeException} for the error.
      */
     @Message(id = 61, value = "%s is not a valid descriptor")
@@ -702,7 +661,6 @@ public interface EeLogger extends BasicLogger {
      * @param targetName the name of the target.
      * @param targetType the type of the target.
      * @param type       the type provided.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 62, value = "Injection target %s on class %s is not compatible with the type of injection: %s")
@@ -715,7 +673,6 @@ public interface EeLogger extends BasicLogger {
      * @param methodName the name of the method.
      * @param annotation the annotation.
      * @param className  the name of the class.
-     *
      * @return the message.
      */
     @Message(id = 63, value = "Invalid number of arguments for method %s annotated with %s on class %s")
@@ -730,7 +687,6 @@ public interface EeLogger extends BasicLogger {
      * @param methodName the name of the method.
      * @param annotation the annotation.
      * @param className  the name of the class.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 64, value = "A return type of %s is required for method %s annotated with %s on class %s")
@@ -743,7 +699,6 @@ public interface EeLogger extends BasicLogger {
      * @param annotation   the annotation.
      * @param className    the class name.
      * @param signatureArg the signature argument.
-     *
      * @return the message.
      */
     @Message(id = 65, value = "Invalid signature for method %s annotated with %s on class %s, signature must be '%s'")
@@ -755,7 +710,6 @@ public interface EeLogger extends BasicLogger {
      * @param value    the invalid value.
      * @param element  the element.
      * @param location the location of the error.
-     *
      * @return {@link XMLStreamException} for the error.
      */
     @Message(id = 66, value = "Invalid value: %s for '%s' element")
@@ -765,7 +719,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the method does not exist.
      *
      * @param method the method that does not exist.
-     *
      * @return an {@link IllegalStateException} for the error.
      */
     @Message(id = 67, value = "Method does not exist %s")
@@ -777,7 +730,6 @@ public interface EeLogger extends BasicLogger {
      * @param name      the name of the method.
      * @param paramType the parameter type.
      * @param className the class name.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 68, value = "No matching method found for method %s (%s) on %s")
@@ -787,7 +739,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the annotation is only allowed on method targets.
      *
      * @param annotation the annotation.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 69, value = "@%s is only valid on method targets.")
@@ -797,7 +748,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating multiple components were found for the type.
      *
      * @param typeName the name of the component.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 70, value = "Multiple components found for type '%s'")
@@ -809,7 +759,6 @@ public interface EeLogger extends BasicLogger {
      * @param name      the name of the method.
      * @param paramType the parameter type.
      * @param className the class name.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 71, value = "More than one matching method found for method '%s (%s) on %s")
@@ -820,7 +769,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param targetName the name of the method.
      * @param className  the class name.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 72, value = "Multiple setter methods for %s on class %s found when applying <injection-target> for env-entry")
@@ -838,7 +786,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the binding name must not be {@code null}.
      *
      * @param config the binding configuration.
-     *
      * @return an {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 74, value = "Binding name must not be null: %s")
@@ -872,7 +819,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the variable, represented by the {@code name} parameter, is {@code null}.
      *
      * @param name the name of the variable.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 78, value = "%s is null")
@@ -884,7 +830,6 @@ public interface EeLogger extends BasicLogger {
      * @param item        the item that was not added.
      * @param hexPriority the priority.
      * @param current     the current item at that priority.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 79, value = "Can't add %s, priority 0x%s is already taken by %s")
@@ -902,7 +847,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the resource reference for the {@code type} is not registered.
      *
      * @param type the resource reference type.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 81, value = "Resource reference for type: %s is not registered. Cannot unregister")
@@ -922,7 +866,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param annotation the annotation.
      * @param methodInfo the method information.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 83, value = "%s injection target is invalid.  Only setter methods are allowed: %s")
@@ -932,7 +875,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the {@link AnnotationTarget AnnotationTarget} type is unknown.
      *
      * @param target the annotation target.
-     *
      * @return a {@link RuntimeException} for the error.
      */
     @Message(id = 84, value = "Unknown AnnotationTarget type: %s")
@@ -943,7 +885,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param elementName the name of the element.
      * @param type        the type.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 85, value = "Unknown %s type %s")
@@ -956,7 +897,6 @@ public interface EeLogger extends BasicLogger {
      * @param descriptor the method descriptor.
      * @param viewClass  the view class.
      * @param component  the component class.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 86, value = "Could not find method %s %s on view %s of %s")
@@ -972,7 +912,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param name     the unexpected element name.
      * @param location the location of the error.
-     *
      * @return a {@link XMLStreamException} for the error.
      */
     @Message(id = 88, value = "Unexpected element '%s' encountered")
@@ -989,9 +928,7 @@ public interface EeLogger extends BasicLogger {
     /**
      * Creates an exception indicating that there was an exception while parsing a jboss-ejb-client.xml
      *
-     *
      * @param fileLocation the location of jboss-ejb-client.xml
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 90, value = "Exception while parsing jboss-ejb-client.xml file found at %s")
@@ -1000,9 +937,8 @@ public interface EeLogger extends BasicLogger {
     /**
      * Creates an exception indicating that there was an exception while parsing a jboss-ejb-client.xml
      *
-     * @param message The error message
+     * @param message  The error message
      * @param location The location of the error
-     *
      * @return a {@link XMLStreamException} for the error.
      */
     @Message(id = 91, value = "%s")
@@ -1069,9 +1005,8 @@ public interface EeLogger extends BasicLogger {
     /**
      * Creates an exception indicating that there was a exception while deploying AroundInvokeInterceptor
      *
-     * @param className the name of the class.
+     * @param className                the name of the class.
      * @param numberOfAnnotatedMethods the number of @aroundInvoke annotations in the specified class.
-     *
      * @return a {@link DeploymentUnitProcessingException} for the error.
      */
     @Message(id = 109, value = "A class must not declare more than one AroundInvoke method. %s has %s methods annotated.")
@@ -1088,7 +1023,6 @@ public interface EeLogger extends BasicLogger {
      * Creates an exception indicating the core-threads must be greater than 0 for the task queue.
      *
      * @param queueLengthValue the queue length value
-     *
      * @return an {@link OperationFailedException} for the exception
      */
     @Message(id = 112, value = "The core-threads value must be greater than 0 when the queue-length is %s")
@@ -1099,7 +1033,6 @@ public interface EeLogger extends BasicLogger {
      *
      * @param maxThreads  the size for the max threads
      * @param coreThreads the size for the core threads
-     *
      * @return an {@link OperationFailedException} for the exception
      */
     @Message(id = 113, value = "The max-threads value %d cannot be less than the core-threads value %d.")

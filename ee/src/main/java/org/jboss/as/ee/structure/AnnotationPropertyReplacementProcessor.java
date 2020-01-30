@@ -34,8 +34,8 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
  */
 public class AnnotationPropertyReplacementProcessor implements DeploymentUnitProcessor {
 
-    private volatile boolean annotationPropertyReplacement = false;
     private final AttachmentKey<Boolean> attachmentKey;
+    private volatile boolean annotationPropertyReplacement = false;
 
     public AnnotationPropertyReplacementProcessor(final AttachmentKey<Boolean> attachmentKey) {
         this.attachmentKey = attachmentKey;

@@ -22,15 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.deployment;
 
-import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.net.URL;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -46,11 +37,20 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.net.URL;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 /**
  * Test that invoking a management operation that removes a JMS resource that is used by a deployed archive must fail:
  * the resource must not be removed and any depending services must be recovered.
  * The deployment must still be operating after the failing management operation.
-
+ *
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2014 Red Hat inc.
  */
 @RunWith(Arquillian.class)
@@ -70,22 +70,6 @@ public class DependentMessagingDeploymentTestCase {
     @ArquillianResource
     private URL url;
 
-    static class MessagingResourcesSetupTask implements ServerSetupTask {
-
-        @Override
-        public void setup(ManagementClient managementClient, String containerId) throws Exception {
-            JMSOperationsProvider.getInstance(managementClient).createJmsQueue(QUEUE_NAME, QUEUE_LOOKUP);
-            JMSOperationsProvider.getInstance(managementClient).createJmsTopic(TOPIC_NAME, TOPIC_LOOKUP);
-        }
-
-
-        @Override
-        public void tearDown(ManagementClient managementClient, String containerId) throws Exception {
-            JMSOperationsProvider.getInstance(managementClient).removeJmsQueue(QUEUE_NAME);
-            JMSOperationsProvider.getInstance(managementClient).removeJmsTopic(TOPIC_NAME);
-        }
-    }
-
     @Deployment
     public static WebArchive createArchive() {
         return create(WebArchive.class, "DependentMessagingDeploymentTestCase.war")
@@ -101,7 +85,7 @@ public class DependentMessagingDeploymentTestCase {
         try {
             JMSOperationsProvider.getInstance(managementClient).removeJmsQueue(QUEUE_NAME);
             fail("removing a JMS resource that the deployment is depending upon must fail");
-        } catch(Exception e) {
+        } catch (Exception e) {
         }
 
         sendAndReceiveMessage(true);
@@ -114,7 +98,7 @@ public class DependentMessagingDeploymentTestCase {
         try {
             JMSOperationsProvider.getInstance(managementClient).removeJmsTopic(TOPIC_NAME);
             fail("removing a JMS resource that the deployment is depending upon must fail");
-        } catch(Exception e) {
+        } catch (Exception e) {
         }
 
         sendAndReceiveMessage(false);
@@ -128,5 +112,21 @@ public class DependentMessagingDeploymentTestCase {
 
         assertNotNull(reply);
         assertEquals(text, reply);
+    }
+
+    static class MessagingResourcesSetupTask implements ServerSetupTask {
+
+        @Override
+        public void setup(ManagementClient managementClient, String containerId) throws Exception {
+            JMSOperationsProvider.getInstance(managementClient).createJmsQueue(QUEUE_NAME, QUEUE_LOOKUP);
+            JMSOperationsProvider.getInstance(managementClient).createJmsTopic(TOPIC_NAME, TOPIC_LOOKUP);
+        }
+
+
+        @Override
+        public void tearDown(ManagementClient managementClient, String containerId) throws Exception {
+            JMSOperationsProvider.getInstance(managementClient).removeJmsQueue(QUEUE_NAME);
+            JMSOperationsProvider.getInstance(managementClient).removeJmsTopic(TOPIC_NAME);
+        }
     }
 }

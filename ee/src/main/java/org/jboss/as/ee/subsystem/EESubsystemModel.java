@@ -43,6 +43,6 @@ public interface EESubsystemModel {
     String MANAGED_SCHEDULED_EXECUTOR_SERVICE = "managed-scheduled-executor-service";
     String SERVICE = "service";
 
-    PathElement DEFAULT_BINDINGS_PATH = PathElement.pathElement(SERVICE,DEFAULT_BINDINGS);
+    PathElement DEFAULT_BINDINGS_PATH = PathElement.pathElement(SERVICE, DEFAULT_BINDINGS);
 
 }

@@ -22,12 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import static org.jboss.as.server.deployment.Attachments.MODULE;
-import static org.jboss.as.server.deployment.Attachments.REFLECTION_INDEX;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -39,6 +33,12 @@ import org.jboss.modules.Module;
 import org.jboss.modules.ModuleClassLoader;
 import org.jboss.msc.value.Value;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import static org.jboss.as.server.deployment.Attachments.MODULE;
+import static org.jboss.as.server.deployment.Attachments.REFLECTION_INDEX;
+
 /**
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  * @author Eduardo Martins
@@ -47,7 +47,6 @@ public final class FieldInjectionTarget extends InjectionTarget {
 
 
     /**
-     *
      * @param className
      * @param name
      * @param fieldType

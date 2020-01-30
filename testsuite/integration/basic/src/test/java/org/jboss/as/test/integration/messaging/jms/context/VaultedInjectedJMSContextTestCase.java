@@ -22,33 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.context;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.CORE_SERVICE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT_OPTIONS;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
-import static org.jboss.as.test.shared.TimeoutUtil.adjust;
-import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.createPermissionsXmlAsset;
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.net.SocketPermission;
-import java.util.PropertyPermission;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.TemporaryQueue;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ServerSetup;
@@ -65,6 +38,32 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.TemporaryQueue;
+import java.io.IOException;
+import java.net.SocketPermission;
+import java.util.PropertyPermission;
+import java.util.UUID;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.CORE_SERVICE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT_OPTIONS;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
+import static org.jboss.as.test.shared.TimeoutUtil.adjust;
+import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.createPermissionsXmlAsset;
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
@@ -73,6 +72,40 @@ import org.junit.runner.RunWith;
 public class VaultedInjectedJMSContextTestCase {
 
     static final String VAULT_LOCATION = VaultedInjectedJMSContextTestCase.class.getResource("/").getPath() + "security/jms-vault/";
+    @Resource(mappedName = "/JmsXA")
+    private ConnectionFactory factory;
+    @EJB
+    private VaultedMessageProducer producerBean;
+
+    @Deployment
+    public static JavaArchive createTestArchive() {
+        return ShrinkWrap.create(JavaArchive.class, "VaultedInjectedJMSContextTestCase.jar")
+                .addClass(TimeoutUtil.class)
+                .addPackage(VaultedMessageProducer.class.getPackage())
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsResource(createPermissionsXmlAsset(
+                        new PropertyPermission("ts.timeout.factor", "read"),
+                        // required because the VaultedMessageProducer uses the RemoteConnectionFactory
+                        // (that requires auth with vaulted credentials)
+                        new SocketPermission("*", "connect"),
+                        new RuntimePermission("setContextClassLoader")), "META-INF/jboss-permissions.xml");
+    }
+
+    @Test
+    public void sendMessage() throws JMSException {
+        String text = UUID.randomUUID().toString();
+
+        try (JMSContext context = factory.createContext()) {
+
+            TemporaryQueue tempQueue = context.createTemporaryQueue();
+
+            producerBean.sendToDestination(tempQueue, text);
+
+            JMSConsumer consumer = context.createConsumer(tempQueue);
+            String reply = consumer.receiveBody(String.class, adjust(2000));
+            assertEquals(text, reply);
+        }
+    }
 
     static class StoreVaultedPropertyTask implements ServerSetupTask {
 
@@ -87,9 +120,7 @@ public class VaultedInjectedJMSContextTestCase {
             vaultHandler = new VaultHandler(VAULT_LOCATION);
             // store the destination lookup into the vault
             String vaultedUserName = vaultHandler.addSecuredAttribute("messaging", "userName", "guest".toCharArray());
-            //System.out.println("vaultedUserName = " + vaultedUserName);
             String vaultedPassword = vaultHandler.addSecuredAttribute("messaging", "password", "guest".toCharArray());
-            //System.out.println("vaultedPassword = " + vaultedPassword);
 
             addVaultConfiguration(managementClient);
 
@@ -137,42 +168,6 @@ public class VaultedInjectedJMSContextTestCase {
             op.get(NAME).set("annotation-property-replacement");
             op.get(VALUE).set(value);
             managementClient.getControllerClient().execute(new OperationBuilder(op).build());
-        }
-    }
-
-    @Resource(mappedName = "/JmsXA")
-    private ConnectionFactory factory;
-
-    @EJB
-    private VaultedMessageProducer producerBean;
-
-    @Deployment
-    public static JavaArchive createTestArchive() {
-        return ShrinkWrap.create(JavaArchive.class, "VaultedInjectedJMSContextTestCase.jar")
-                .addClass(TimeoutUtil.class)
-                .addPackage(VaultedMessageProducer.class.getPackage())
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource(createPermissionsXmlAsset(
-                        new PropertyPermission("ts.timeout.factor", "read"),
-                        // required because the VaultedMessageProducer uses the RemoteConnectionFactory
-                        // (that requires auth with vaulted credentials)
-                        new SocketPermission("*", "connect"),
-                        new RuntimePermission("setContextClassLoader")), "META-INF/jboss-permissions.xml");
-    }
-
-    @Test
-    public void sendMessage() throws JMSException {
-        String text = UUID.randomUUID().toString();
-
-        try (JMSContext context = factory.createContext()) {
-
-            TemporaryQueue tempQueue = context.createTemporaryQueue();
-
-            producerBean.sendToDestination(tempQueue, text);
-
-            JMSConsumer consumer = context.createConsumer(tempQueue);
-            String reply = consumer.receiveBody(String.class, adjust(2000));
-            assertEquals(text, reply);
         }
     }
 }

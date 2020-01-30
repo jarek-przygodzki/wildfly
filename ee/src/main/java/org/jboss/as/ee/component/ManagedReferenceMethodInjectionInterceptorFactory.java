@@ -22,11 +22,8 @@
 
 package org.jboss.as.ee.component;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.interceptors.InvocationType;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.invocation.Interceptor;
@@ -34,6 +31,9 @@ import org.jboss.invocation.InterceptorContext;
 import org.jboss.invocation.InterceptorFactory;
 import org.jboss.invocation.InterceptorFactoryContext;
 import org.jboss.msc.value.Value;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>

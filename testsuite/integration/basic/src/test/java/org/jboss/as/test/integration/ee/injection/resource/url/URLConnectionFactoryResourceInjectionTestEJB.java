@@ -39,12 +39,11 @@ public class URLConnectionFactoryResourceInjectionTestEJB {
     private URL url2;
 
     /**
-     *
      * @throws Exception
      */
     public void validateResourceInjection() throws Exception {
         if (url1 == null) {
-           throw new NullPointerException("url1 resource not injected");
+            throw new NullPointerException("url1 resource not injected");
         }
         if (url2 == null) {
             throw new NullPointerException("url2 resource not injected");

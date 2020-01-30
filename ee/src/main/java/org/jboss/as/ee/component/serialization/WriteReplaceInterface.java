@@ -26,6 +26,7 @@ import java.io.IOException;
 /**
  * Interface used to allow the proxy to support serialization. Currently used to work around
  * a limitation in the ProxyFactory
+ *
  * @author Stuart Douglas
  */
 public interface WriteReplaceInterface {

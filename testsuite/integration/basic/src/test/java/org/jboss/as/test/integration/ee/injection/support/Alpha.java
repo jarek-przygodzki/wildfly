@@ -21,10 +21,9 @@
  */
 package org.jboss.as.test.integration.ee.injection.support;
 
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.util.UUID;
 
 @ApplicationScoped
 public class Alpha {

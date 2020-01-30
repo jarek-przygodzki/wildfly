@@ -4,8 +4,6 @@ import org.jboss.as.naming.ManagedReference;
 import org.jboss.as.naming.ManagedReferenceFactory;
 
 /**
- *
- *
  * @author Stuart Douglas
  */
 public interface EEClassIntrospector {

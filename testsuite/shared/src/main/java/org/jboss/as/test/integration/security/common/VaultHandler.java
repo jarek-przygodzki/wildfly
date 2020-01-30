@@ -81,7 +81,7 @@ public class VaultHandler {
      * @param iterationCount
      */
     public VaultHandler(String keyStore, String keyStorePassword, String keyStoreType, String encodedVaultFileDirectory,
-            int keySize, String alias, String salt, int iterationCount) {
+                        int keySize, String alias, String salt, int iterationCount) {
 
         if (alias != null) {
             this.alias = alias;

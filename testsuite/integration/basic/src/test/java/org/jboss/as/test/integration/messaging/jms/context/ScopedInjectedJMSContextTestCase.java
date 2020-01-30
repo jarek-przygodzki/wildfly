@@ -22,22 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.context;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static javax.jms.DeliveryMode.NON_PERSISTENT;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-import javax.jms.TemporaryQueue;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.messaging.jms.context.auxiliary.BeanManagedMessageConsumer;
@@ -47,6 +31,20 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
+import javax.jms.TemporaryQueue;
+import java.util.UUID;
+
+import static javax.jms.DeliveryMode.NON_PERSISTENT;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.

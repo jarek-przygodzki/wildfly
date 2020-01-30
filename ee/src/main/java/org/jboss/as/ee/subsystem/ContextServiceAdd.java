@@ -61,9 +61,9 @@ public class ContextServiceAdd extends AbstractAddStepHandler {
         final ContextServiceService contextServiceService = new ContextServiceService(name, jndiName);
         final ServiceBuilder<ContextServiceImpl> serviceBuilder = context.getServiceTarget().addService(ConcurrentServiceNames.getContextServiceServiceName(name), contextServiceService)
                 .addInjectionValue(contextServiceService.getContextSetupProvider(), new ImmediateValue<ContextSetupProvider>(new DefaultContextSetupProviderImpl()));
-        if(useTransactionSetupProvider) {
+        if (useTransactionSetupProvider) {
             // add it to deps of context service's service, for injection of its value
-            serviceBuilder.addDependency(ConcurrentServiceNames.TRANSACTION_SETUP_PROVIDER_SERVICE_NAME,TransactionSetupProvider.class,contextServiceService.getTransactionSetupProvider());
+            serviceBuilder.addDependency(ConcurrentServiceNames.TRANSACTION_SETUP_PROVIDER_SERVICE_NAME, TransactionSetupProvider.class, contextServiceService.getTransactionSetupProvider());
         }
         serviceBuilder.install();
     }

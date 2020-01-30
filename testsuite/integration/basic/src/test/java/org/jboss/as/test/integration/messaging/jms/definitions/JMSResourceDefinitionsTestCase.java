@@ -22,23 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.jms.definitions;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.CORE_SERVICE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT_OPTIONS;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
-import static org.jboss.shrinkwrap.api.ArchivePaths.create;
-
-import java.io.IOException;
-
-import javax.ejb.EJB;
-import javax.jms.JMSException;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ServerSetup;
@@ -53,6 +36,22 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ejb.EJB;
+import javax.jms.JMSException;
+import java.io.IOException;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.CORE_SERVICE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VAULT_OPTIONS;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
+import static org.jboss.shrinkwrap.api.ArchivePaths.create;
+
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
@@ -61,6 +60,36 @@ import org.junit.runner.RunWith;
 public class JMSResourceDefinitionsTestCase {
 
     static final String VAULT_LOCATION = JMSResourceDefinitionsTestCase.class.getResource("/").getPath() + "security/jms-vault/";
+    @EJB
+    private MessagingBean bean;
+
+    @Deployment
+    public static JavaArchive createArchive() {
+        JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "JMSResourceDefinitionsTestCase.jar")
+                .addPackage(MessagingBean.class.getPackage())
+                .addAsManifestResource(
+                        MessagingBean.class.getPackage(), "ejb-jar.xml", "ejb-jar.xml")
+                .addAsManifestResource(
+                        EmptyAsset.INSTANCE,
+                        create("beans.xml"));
+        System.out.println("archive = " + archive.toString(true));
+        return archive;
+    }
+
+    @Test
+    public void testInjectedDefinitions() throws JMSException {
+        bean.checkInjectedResources();
+    }
+
+    @Test
+    public void testAnnotationBasedDefinitionsWithVaultedAttributes() throws JMSException {
+        bean.checkAnnotationBasedDefinitionsWithVaultedAttributes();
+    }
+
+    @Test
+    public void testDeploymendDescriptorBasedDefinitionsWithVaultedAttributes() throws JMSException {
+        bean.checkDeploymendDescriptorBasedDefinitionsWithVaultedAttributes();
+    }
 
     static class StoreVaultedPropertyTask implements ServerSetupTask {
 
@@ -130,37 +159,6 @@ public class JMSResourceDefinitionsTestCase {
             op.get(VALUE).set(value);
             managementClient.getControllerClient().execute(new OperationBuilder(op).build());
         }
-    }
-
-    @EJB
-    private MessagingBean bean;
-
-    @Deployment
-    public static JavaArchive createArchive() {
-        JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "JMSResourceDefinitionsTestCase.jar")
-                .addPackage(MessagingBean.class.getPackage())
-                .addAsManifestResource(
-                        MessagingBean.class.getPackage(), "ejb-jar.xml", "ejb-jar.xml")
-                .addAsManifestResource(
-                        EmptyAsset.INSTANCE,
-                        create("beans.xml"));
-        System.out.println("archive = " + archive.toString(true));
-        return archive;
-    }
-
-    @Test
-    public void testInjectedDefinitions() throws JMSException {
-        bean.checkInjectedResources();
-    }
-
-    @Test
-    public void testAnnotationBasedDefinitionsWithVaultedAttributes() throws JMSException {
-        bean.checkAnnotationBasedDefinitionsWithVaultedAttributes();
-    }
-
-    @Test
-    public void testDeploymendDescriptorBasedDefinitionsWithVaultedAttributes() throws JMSException {
-        bean.checkDeploymendDescriptorBasedDefinitionsWithVaultedAttributes();
     }
 
 }

@@ -22,11 +22,7 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.auxiliary;
 
-import static javax.ejb.TransactionManagementType.BEAN;
-import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_REQUEST_SCOPE;
-import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_TRANSACTION_SCOPE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Assert;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -40,13 +36,17 @@ import javax.jms.JMSDestinationDefinitions;
 import javax.jms.JMSRuntimeException;
 import javax.transaction.UserTransaction;
 
-import org.junit.Assert;
+import static javax.ejb.TransactionManagementType.BEAN;
+import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_REQUEST_SCOPE;
+import static org.jboss.as.test.integration.messaging.jms.context.ScopedInjectedJMSContextTestCase.QUEUE_NAME_FOR_TRANSACTION_SCOPE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
 @JMSDestinationDefinitions(
-        value =  {
+        value = {
                 @JMSDestinationDefinition(
                         name = QUEUE_NAME_FOR_TRANSACTION_SCOPE,
                         interfaceName = "javax.jms.Queue",
@@ -61,11 +61,10 @@ import org.junit.Assert;
 @Stateless
 public class BeanManagedMessageConsumer {
 
-    @Inject
-    private JMSContext context;
-
     @Resource
     UserTransaction transaction;
+    @Inject
+    private JMSContext context;
 
     public boolean receive(Destination destination, String expectedText) throws Exception {
 

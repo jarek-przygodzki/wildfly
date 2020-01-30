@@ -22,28 +22,6 @@
 
 package org.jboss.as.test.integration.messaging.mgmt;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OUTCOME;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RESULT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUCCESS;
-import static org.jboss.as.test.shared.ServerReload.executeReloadAndWaitForCompletion;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.io.File;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.NamingException;
-
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ContainerResource;
@@ -56,6 +34,27 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import java.io.File;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OUTCOME;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RESULT;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUCCESS;
+import static org.jboss.as.test.shared.ServerReload.executeReloadAndWaitForCompletion;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2015 Red Hat inc.
@@ -73,7 +72,7 @@ public class ExportImportJournalTestCase {
     @ContainerResource
     private ManagementClient managementClient;
 
-    protected static  void sendMessage(Context ctx, String destinationLookup, String text) throws NamingException, JMSException {
+    protected static void sendMessage(Context ctx, String destinationLookup, String text) throws NamingException, JMSException {
         ConnectionFactory cf = (ConnectionFactory) ctx.lookup("jms/RemoteConnectionFactory");
         assertNotNull(cf);
         Destination destination = (Destination) ctx.lookup(destinationLookup);
@@ -86,7 +85,7 @@ public class ExportImportJournalTestCase {
         }
     }
 
-    protected static  void receiveMessage(Context ctx, String destinationLookup, boolean expectReceivedMessage, String expectedText) throws NamingException {
+    protected static void receiveMessage(Context ctx, String destinationLookup, boolean expectReceivedMessage, String expectedText) throws NamingException {
         ConnectionFactory cf = (ConnectionFactory) ctx.lookup("jms/RemoteConnectionFactory");
         assertNotNull(cf);
         Destination destination = (Destination) ctx.lookup(destinationLookup);

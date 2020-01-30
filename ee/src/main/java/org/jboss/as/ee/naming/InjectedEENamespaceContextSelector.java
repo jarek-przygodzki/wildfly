@@ -22,14 +22,14 @@
 
 package org.jboss.as.ee.naming;
 
-import javax.naming.CompositeName;
-import javax.naming.Context;
-import javax.naming.NamingException;
-
 import org.jboss.as.naming.NamingStore;
 import org.jboss.as.naming.context.NamespaceContextSelector;
 import org.jboss.msc.inject.Injector;
 import org.jboss.msc.value.InjectedValue;
+
+import javax.naming.CompositeName;
+import javax.naming.Context;
+import javax.naming.NamingException;
 
 /**
  * A simple EE-style namespace context selector which uses injected services for the contexts.
