@@ -22,12 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.interceptors.InvocationType;
-import org.jboss.as.ee.logging.EeLogger;
-import org.jboss.as.naming.ManagedReference;
-import org.jboss.invocation.Interceptor;
-import org.jboss.invocation.InterceptorContext;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -35,6 +29,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+
+import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.interceptors.InvocationType;
+import org.jboss.as.naming.ManagedReference;
+import org.jboss.invocation.Interceptor;
+import org.jboss.invocation.InterceptorContext;
 
 import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 
@@ -45,13 +45,17 @@ import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
  */
 public class BasicComponentInstance implements ComponentInstance {
 
-    public static final Object INSTANCE_KEY = BasicComponentInstanceKey.class;
     private static final long serialVersionUID = -8099216228976950066L;
-    private static final AtomicIntegerFieldUpdater<BasicComponentInstance> doneUpdater = AtomicIntegerFieldUpdater.newUpdater(BasicComponentInstance.class, "done");
+
+    public static final Object INSTANCE_KEY = BasicComponentInstanceKey.class;
+
     private final BasicComponent component;
     private final Interceptor preDestroy;
     @SuppressWarnings("unused")
     private volatile int done;
+
+    private static final AtomicIntegerFieldUpdater<BasicComponentInstance> doneUpdater = AtomicIntegerFieldUpdater.newUpdater(BasicComponentInstance.class, "done");
+
     private transient Map<Method, Interceptor> methodMap;
 
     private Map<Object, Object> instanceData = new HashMap<Object, Object>();
@@ -82,7 +86,7 @@ public class BasicComponentInstance implements ComponentInstance {
      */
     public Object getInstance() {
         ManagedReference managedReference = (ManagedReference) getInstanceData(INSTANCE_KEY);
-        if (managedReference == null) {
+        if(managedReference == null) {
             //can happen if around construct chain returns null
             return null;
         }
@@ -134,7 +138,7 @@ public class BasicComponentInstance implements ComponentInstance {
 
     @Override
     public void setInstanceData(Object key, Object value) {
-        if (constructionFinished) {
+        if(constructionFinished) {
             throw EeLogger.ROOT_LOGGER.instanceDataCanOnlyBeSetDuringConstruction();
         }
         instanceData.put(key, value);
@@ -146,6 +150,7 @@ public class BasicComponentInstance implements ComponentInstance {
 
     /**
      * Method that sub classes can use to override destroy logic.
+     *
      */
     protected void preDestroy() {
 

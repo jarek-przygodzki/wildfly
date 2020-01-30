@@ -22,6 +22,8 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.auxiliary;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
@@ -30,8 +32,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.Destination;
 import javax.jms.JMSContext;
-
-import static javax.ejb.TransactionAttributeType.REQUIRED;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.

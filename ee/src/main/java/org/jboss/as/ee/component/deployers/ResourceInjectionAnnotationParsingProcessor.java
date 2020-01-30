@@ -22,6 +22,7 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.BindingConfiguration;
 import org.jboss.as.ee.component.EEApplicationClasses;
@@ -33,7 +34,6 @@ import org.jboss.as.ee.component.InjectionTarget;
 import org.jboss.as.ee.component.LookupInjectionSource;
 import org.jboss.as.ee.component.MethodInjectionTarget;
 import org.jboss.as.ee.component.ResourceInjectionConfiguration;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.structure.EJBAnnotationPropertyReplacement;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -71,11 +71,11 @@ import java.util.Set;
  */
 public class ResourceInjectionAnnotationParsingProcessor implements DeploymentUnitProcessor {
 
-    public static final Map<String, String> FIXED_LOCATIONS;
-    public static final Set<String> SIMPLE_ENTRIES;
     private static final DotName RESOURCE_ANNOTATION_NAME = DotName.createSimple(Resource.class.getName());
     private static final DotName RESOURCES_ANNOTATION_NAME = DotName.createSimple(Resources.class.getName());
     private static final String JAVAX_NAMING_CONTEXT = "javax.naming.Context";
+    public static final Map<String, String> FIXED_LOCATIONS;
+    public static final Set<String> SIMPLE_ENTRIES;
 
     static {
         final Map<String, String> locations = new HashMap<String, String>();

@@ -21,10 +21,6 @@
  */
 package org.jboss.as.test.integration.ee.appclient.util;
 
-import org.jboss.as.test.shared.TestSuiteEnvironment;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.exporter.ZipExporter;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -36,6 +32,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.jboss.as.test.shared.TestSuiteEnvironment;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.exporter.ZipExporter;
+
 
 /**
  * @author Dominik Pospisil <dpospisi@redhat.com>
@@ -43,31 +43,34 @@ import java.util.concurrent.TimeUnit;
  */
 public class AppClientWrapper implements Runnable {
 
+    private String appClientCommand = null;
+
     private static final String outThreadHame = "APPCLIENT-out";
     private static final String errThreadHame = "APPCLIENT-err";
-    private final Archive<?> archive;
-    private final String clientArchiveName;
-    private final String appClientArgs;
-    private final String args;
-    private String appClientCommand = null;
+
     private Process appClientProcess;
     private PrintWriter writer;
     private BufferedReader outputReader;
     private BufferedReader errorReader;
     private BlockingQueue<String> outputQueue = new LinkedBlockingQueue<String>();
     private Thread shutdownThread;
+    private final Archive<?> archive;
+    private final String clientArchiveName;
+    private final String appClientArgs;
     private File archiveOnDisk;
+    private final String args;
 
     /**
      * Creates new CLI wrapper. If the connect parameter is set to true the CLI
      * will connect to the server using <code>connect</code> command.
+     *
      *
      * @param archive
      * @param clientArchiveName
      * @param args
      * @throws Exception
      */
-    public AppClientWrapper(final Archive<?> archive, final String appClientArgs, final String clientArchiveName, final String args) throws Exception {
+    public AppClientWrapper(final Archive<?> archive,final String appClientArgs, final String clientArchiveName, final String args) throws Exception {
         this.archive = archive;
         this.clientArchiveName = clientArchiveName;
         this.args = args;
@@ -163,13 +166,13 @@ public class AppClientWrapper implements Runnable {
 
         final String tempDir = System.getProperty("java.io.tmpdir");
         archiveOnDisk = new File(tempDir + File.separator + archive.getName());
-        if (archiveOnDisk.exists()) {
+        if(archiveOnDisk.exists()) {
             archiveOnDisk.delete();
         }
         final ZipExporter exporter = archive.as(ZipExporter.class);
         exporter.exportTo(archiveOnDisk);
         final String archiveArg;
-        if (clientArchiveName == null) {
+        if(clientArchiveName == null) {
             archiveArg = archiveOnDisk.getAbsolutePath();
         } else {
             archiveArg = archiveOnDisk.getAbsolutePath() + "#" + clientArchiveName;
@@ -180,37 +183,34 @@ public class AppClientWrapper implements Runnable {
         Properties props = System.getProperties();
         //props.list( System.out );
         Enumeration en = props.propertyNames();
-        while (en.hasMoreElements()) {
+        while( en.hasMoreElements() ){
             String name = (String) en.nextElement();
-            System.out.println("\t" + name + " = " + System.getProperty(name));
+            System.out.println( "\t" + name + " = " + System.getProperty(name) );
         }
 
 
         // TODO: Move to a shared testsuite lib.
         String asDist = System.getProperty("jboss.dist");
-        if (asDist == null) throw new Exception("'jboss.dist' property is not set.");
-        if (!new File(asDist).exists())
-            throw new Exception("AS dir from 'jboss.dist' doesn't exist: " + asDist + " user.dir: " + System.getProperty("user.dir"));
+        if( asDist == null ) throw new Exception("'jboss.dist' property is not set.");
+        if( ! new File(asDist).exists() ) throw new Exception("AS dir from 'jboss.dist' doesn't exist: " + asDist + " user.dir: " + System.getProperty("user.dir"));
 
         // TODO: Move to a shared testsuite lib.
         String asInst = System.getProperty("jboss.inst");
-        if (asInst == null)
-            throw new Exception("'jboss.inst' property is not set. Perhaps this test is in a multi-node tests group but runs outside container?");
-        if (!new File(asInst).exists())
-            throw new Exception("AS dir from 'jboss.inst' doesn't exist: " + asInst + " user.dir: " + System.getProperty("user.dir"));
+        if( asInst == null ) throw new Exception("'jboss.inst' property is not set. Perhaps this test is in a multi-node tests group but runs outside container?");
+        if( ! new File(asInst).exists() ) throw new Exception("AS dir from 'jboss.inst' doesn't exist: " + asInst + " user.dir: " + System.getProperty("user.dir"));
 
         String java = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 
         appClientCommand = java +
-                " -Djboss.modules.dir=" + asDist + "/modules" +
+                " -Djboss.modules.dir="+ asDist + "/modules" +
                 " -Djline.WindowsTerminal.directConsole=false" +
                 TestSuiteEnvironment.getIpv6Args() +
                 "-Djboss.bind.address=" + TestSuiteEnvironment.getServerAddress() +
-                " -jar " + asDist + "/jboss-modules.jar" +
-                " -mp " + asDist + "/modules" +
+                " -jar "+ asDist + "/jboss-modules.jar" +
+                " -mp "+ asDist + "/modules" +
                 " org.jboss.as.appclient" +
-                " -Djboss.server.base.dir=" + asInst + "/appclient" +
-                " -Djboss.home.dir=" + asInst +
+                " -Djboss.server.base.dir="+ asInst + "/appclient" +
+                " -Djboss.home.dir="+ asInst +
                 " " + this.appClientArgs + " " + archiveArg + " " + args;
         return appClientCommand;
     }

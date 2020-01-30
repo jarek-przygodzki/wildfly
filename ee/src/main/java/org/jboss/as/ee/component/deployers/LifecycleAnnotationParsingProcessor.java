@@ -22,12 +22,21 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.interceptor.AroundConstruct;
+import javax.interceptor.InvocationContext;
+
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.EEApplicationClasses;
 import org.jboss.as.ee.component.EEModuleClassDescription;
 import org.jboss.as.ee.component.EEModuleDescription;
 import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -40,14 +49,6 @@ import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.MethodInfo;
 import org.jboss.jandex.Type;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.interceptor.AroundConstruct;
-import javax.interceptor.InvocationContext;
-import java.util.List;
-
-import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 
 /**
  * Deployment processor responsible for finding @PostConstruct and @PreDestroy annotated methods.
@@ -100,13 +101,13 @@ public class LifecycleAnnotationParsingProcessor implements DeploymentUnitProces
             builder.setPostConstruct(getMethodIdentifier(args, methodInfo));
         } else if (annotationType == PRE_DESTROY_ANNOTATION) {
             builder.setPreDestroy(getMethodIdentifier(args, methodInfo));
-        } else if (annotationType == AROUND_CONSTRUCT_ANNOTATION) {
+        } else if(annotationType == AROUND_CONSTRUCT_ANNOTATION){
             builder.setAroundConstruct(getMethodIdentifier(args, methodInfo));
         }
         classDescription.setInterceptorClassDescription(builder.build());
     }
 
-    private MethodIdentifier getMethodIdentifier(Type[] args, MethodInfo methodInfo) {
+    private MethodIdentifier getMethodIdentifier(Type[] args, MethodInfo methodInfo){
         if (args.length == 0) {
             return MethodIdentifier.getIdentifier(Void.TYPE, methodInfo.name());
         } else {

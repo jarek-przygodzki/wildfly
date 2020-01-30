@@ -22,11 +22,16 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import java.util.List;
+
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.InvocationContext;
+
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.EEModuleClassDescription;
 import org.jboss.as.ee.component.EEModuleDescription;
 import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -39,10 +44,6 @@ import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.MethodInfo;
 import org.jboss.jandex.Type;
-
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.InvocationContext;
-import java.util.List;
 
 /**
  * Deployment processor responsible for finding @AroundInvoke annotated methods in classes within a deployment.
@@ -78,8 +79,8 @@ public class AroundInvokeAnnotationParsingProcessor implements DeploymentUnitPro
         final ClassInfo classInfo = methodInfo.declaringClass();
         final EEModuleClassDescription classDescription = eeModuleDescription.addOrGetLocalClassDescription(classInfo.name().toString());
         final List<AnnotationInstance> classAroundInvokes = classInfo.annotations().get(AROUND_INVOKE_ANNOTATION_NAME);
-        if (classAroundInvokes.size() > 1) {
-            throw EeLogger.ROOT_LOGGER.aroundInvokeAnnotationUsedTooManyTimes(classInfo.name(), classAroundInvokes.size());
+        if(classAroundInvokes.size() > 1) {
+           throw EeLogger.ROOT_LOGGER.aroundInvokeAnnotationUsedTooManyTimes(classInfo.name(), classAroundInvokes.size());
         }
         validateArgumentType(classInfo, methodInfo);
         InterceptorClassDescription.Builder builder = InterceptorClassDescription.builder(classDescription.getInterceptorClassDescription());

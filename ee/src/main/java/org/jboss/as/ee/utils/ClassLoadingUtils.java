@@ -10,10 +10,6 @@ import org.wildfly.security.manager.WildFlySecurityManager;
  */
 public class ClassLoadingUtils {
 
-    private ClassLoadingUtils() {
-
-    }
-
     public static Class<?> loadClass(final String className, final DeploymentUnit du) throws ClassNotFoundException {
         return loadClass(className, du.getAttachment(Attachments.MODULE));
     }
@@ -26,5 +22,9 @@ public class ClassLoadingUtils {
         } finally {
             WildFlySecurityManager.setCurrentContextClassLoaderPrivileged(oldTccl);
         }
+    }
+
+    private ClassLoadingUtils() {
+
     }
 }

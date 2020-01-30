@@ -40,8 +40,9 @@ public abstract class InjectionTarget {
     private final String declaredValueClassName;
 
     /**
-     * @param className              The class to inject into
-     * @param name                   The target name
+     *
+     * @param className The class to inject into
+     * @param name The target name
      * @param declaredValueClassName The type of injection
      */
     protected InjectionTarget(final String className, final String name, final String declaredValueClassName) {
@@ -80,20 +81,22 @@ public abstract class InjectionTarget {
     /**
      * Get an interceptor factory which will carry out injection into this target.
      *
+     *
      * @param targetContextKey the interceptor context key for the target
      * @param valueContextKey  the interceptor context key for the value
      * @param factoryValue     the value to inject
      * @param deploymentUnit   the deployment unit
      * @param optional         If this is an optional injection
      * @return the interceptor factory
-     * @throws DeploymentUnitProcessingException if an error occurs
+     * @throws DeploymentUnitProcessingException
+     *          if an error occurs
      */
     public abstract InterceptorFactory createInjectionInterceptorFactory(final Object targetContextKey, final Object valueContextKey, final Value<ManagedReferenceFactory> factoryValue, final DeploymentUnit deploymentUnit, final boolean optional) throws DeploymentUnitProcessingException;
 
     /**
      * Indicates if the target has the staic modifier.
      *
-     * @param deploymentUnit the deployment unit
+     * @param deploymentUnit   the deployment unit
      * @return true
      * @throws DeploymentUnitProcessingException if an error occurs
      */
@@ -107,8 +110,7 @@ public abstract class InjectionTarget {
         final InjectionTarget that = (InjectionTarget) o;
 
         if (className != null ? !className.equals(that.className) : that.className != null) return false;
-        if (declaredValueClassName != null ? !declaredValueClassName.equals(that.declaredValueClassName) : that.declaredValueClassName != null)
-            return false;
+        if (declaredValueClassName != null ? !declaredValueClassName.equals(that.declaredValueClassName) : that.declaredValueClassName != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;

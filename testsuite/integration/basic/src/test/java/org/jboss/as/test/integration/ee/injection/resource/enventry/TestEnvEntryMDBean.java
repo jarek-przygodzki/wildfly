@@ -22,8 +22,6 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.enventry;
 
-import org.jboss.logging.Logger;
-
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -37,12 +35,14 @@ import javax.jms.MessageProducer;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 
+import org.jboss.logging.Logger;
+
 /**
  * @author <a href="mailto:carlo@nerdnet.nl">Carlo de Wolf</a>
  */
 @MessageDriven(name = "TestEnvEntryMD", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/queue/testEnvEntry")})
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/queue/testEnvEntry") })
 public class TestEnvEntryMDBean implements MessageListener {
     private static final Logger log = Logger.getLogger(TestEnvEntryMDBean.class);
 

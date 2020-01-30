@@ -23,6 +23,7 @@
 package org.jboss.as.test.integration.messaging.jms.context.auxiliary;
 
 import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.Destination;
 import javax.jms.JMSConnectionFactory;
@@ -31,7 +32,7 @@ import javax.jms.JMSPasswordCredential;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
- * <p>
+ *
  * Use the RemoteConnectionFactory Connection Factory that requires authentication.
  */
 @Stateless

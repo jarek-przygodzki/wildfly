@@ -50,9 +50,7 @@ public final class ViewManagedReferenceFactory implements ContextListManagedRefe
         return view.getComponent().getComponentClass().getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public ManagedReference getReference() {
         try {
             return view.createInstance();
@@ -77,16 +75,12 @@ public final class ViewManagedReferenceFactory implements ContextListManagedRefe
             this.referenceFactoryInjector = referenceFactoryInjector;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         public void inject(final ComponentView value) throws InjectionException {
             referenceFactoryInjector.inject(new ViewManagedReferenceFactory(value));
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         public void uninject() {
             referenceFactoryInjector.uninject();
         }

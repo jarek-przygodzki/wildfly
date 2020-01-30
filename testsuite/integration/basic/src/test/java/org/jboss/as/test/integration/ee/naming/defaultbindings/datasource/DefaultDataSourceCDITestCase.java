@@ -33,15 +33,13 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 /**
+ *
  * Test for EE's default data source on a CDI Bean
  *
  * @author Eduardo Martins
  */
 @RunWith(Arquillian.class)
 public class DefaultDataSourceCDITestCase {
-
-    @Inject
-    private DefaultDataSourceTestCDIBean defaultDataSourceTestCDIBean;
 
     @Deployment
     public static Archive<?> deploy() {
@@ -50,6 +48,9 @@ public class DefaultDataSourceCDITestCase {
         jar.addAsManifestResource(new StringAsset(""), "beans.xml");
         return jar;
     }
+
+    @Inject
+    private DefaultDataSourceTestCDIBean defaultDataSourceTestCDIBean;
 
     @Test
     public void testCDI() throws Throwable {

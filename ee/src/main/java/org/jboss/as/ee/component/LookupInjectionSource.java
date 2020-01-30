@@ -63,7 +63,7 @@ public final class LookupInjectionSource extends InjectionSource {
     private final boolean optional;
 
     public LookupInjectionSource(final String lookupName) {
-        this(lookupName, false);
+        this(lookupName,false);
     }
 
     public LookupInjectionSource(final String lookupName, final boolean optional) {

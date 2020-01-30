@@ -35,7 +35,7 @@ public class VaultPropertyResolverProcessor implements DeploymentUnitProcessor {
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
         final AbstractVaultReader vaultReader = deploymentUnit.getAttachment(org.jboss.as.server.deployment.Attachments.VAULT_READER_ATTACHMENT_KEY);
-        if (vaultReader != null) {
+        if(vaultReader != null) {
             deploymentUnit.addToAttachmentList(Attachments.DEPLOYMENT_PROPERTY_RESOLVERS, new VaultPropertyResolver(vaultReader));
         }
     }

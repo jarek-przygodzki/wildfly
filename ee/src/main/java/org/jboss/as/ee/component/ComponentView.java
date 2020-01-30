@@ -22,12 +22,12 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.naming.ManagedReference;
-import org.jboss.invocation.InterceptorContext;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
+
+import org.jboss.as.naming.ManagedReference;
+import org.jboss.invocation.InterceptorContext;
 
 /**
  * A component view.
@@ -68,24 +68,26 @@ public interface ComponentView {
     Component getComponent();
 
     /**
+     *
      * @return The proxy class used in the view
      */
     Class<?> getProxyClass();
 
     /**
+     *
      * @return The class of the view
      */
     Class<?> getViewClass();
 
     /**
+     *
      * @return All methods that the view supports
      */
     Set<Method> getViewMethods();
 
     /**
      * Gets a view method based on name and descriptor
-     *
-     * @param name       the method name
+     * @param name the method name
      * @param descriptor The method descriptor in JVM format
      * @return The method that corresponds to the given name and descriptor
      * @throws IllegalArgumentException If the method cannot be found
@@ -94,7 +96,6 @@ public interface ComponentView {
 
     /**
      * Provides a mechanism to attach arbitrary data to the component view
-     *
      * @param clazz The class of attachment
      * @return The data, or null if it is not present
      */

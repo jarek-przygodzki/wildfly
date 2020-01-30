@@ -18,6 +18,16 @@ public enum EJBClientDescriptorXMLElement {
     // default unknown element
     UNKNOWN(null);
 
+    private final String name;
+
+    EJBClientDescriptorXMLElement(final String name) {
+        this.name = name;
+    }
+
+    public String getLocalName() {
+        return name;
+    }
+
     private static final Map<String, EJBClientDescriptorXMLElement> MAP;
 
     static {
@@ -29,18 +39,8 @@ public enum EJBClientDescriptorXMLElement {
         MAP = map;
     }
 
-    private final String name;
-
-    EJBClientDescriptorXMLElement(final String name) {
-        this.name = name;
-    }
-
     public static EJBClientDescriptorXMLElement forName(String localName) {
         final EJBClientDescriptorXMLElement element = MAP.get(localName);
         return element == null ? UNKNOWN : element;
-    }
-
-    public String getLocalName() {
-        return name;
     }
 }

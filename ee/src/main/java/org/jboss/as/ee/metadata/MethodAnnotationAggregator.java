@@ -21,9 +21,9 @@
  */
 package org.jboss.as.ee.metadata;
 
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.EEApplicationClasses;
 import org.jboss.as.ee.component.EEModuleClassDescription;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.reflect.ClassReflectionIndex;
 import org.jboss.as.server.deployment.reflect.DeploymentReflectionIndex;
 import org.jboss.invocation.proxy.MethodIdentifier;
@@ -84,7 +84,7 @@ public class MethodAnnotationAggregator {
 
             //we store all the method identifiers
             //so we can check if a method is overriden
-            for (Method method : (Iterable<Method>) classIndex.getMethods()) {
+            for (Method method : (Iterable<Method>)classIndex.getMethods()) {
                 //we do not have to worry about private methods being overridden
                 if (!Modifier.isPrivate(method.getModifiers())) {
                     methodIdentifiers.add(MethodIdentifier.getIdentifierForMethod(method));

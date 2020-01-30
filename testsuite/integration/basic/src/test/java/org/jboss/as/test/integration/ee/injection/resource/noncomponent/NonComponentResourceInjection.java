@@ -39,30 +39,41 @@ import javax.xml.ws.WebServiceRef;
  */
 public class NonComponentResourceInjection {
 
-    @Resource(mappedName = "java:/Mail")
-    public Session mailSessionJndiDefault;
-    @Resource(mappedName = "java:jboss/mail/foo/MyMailServer1")
-    public Session mailSessionJndiCustom;
-    @Resource
-    public Session mailSession;
     @Resource
     private UserTransaction userTransaction;
+
     /**
      * This should not fail the deployment, even though it is completely bogus
      */
     @Resource
     private NonComponentResourceInjectionTestCase randomInjection;
+
     @PersistenceContext(unitName = "bogus")
     private EntityManager entityManager;
+
     @PersistenceContext
     private EntityManager entityManagerDefault;
+
     @PersistenceUnit(unitName = "bogus")
     private EntityManagerFactory entityManagerFactory;
+
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactoryDefault;
+
     @EJB
     private NonComponentResourceInjection notReal;
+
     @WebServiceRef
     private NonComponentResourceInjection nonExitantWebService;
+
+    @Resource(mappedName = "java:/Mail")
+    public Session mailSessionJndiDefault;
+
+
+    @Resource(mappedName = "java:jboss/mail/foo/MyMailServer1")
+    public Session mailSessionJndiCustom;
+
+    @Resource
+    public Session mailSession;
 
 }

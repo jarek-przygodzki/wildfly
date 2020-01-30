@@ -25,8 +25,6 @@ package org.jboss.as.test.integration.common.jms;
 import org.jboss.as.controller.client.ModelControllerClient;
 import org.jboss.dmr.ModelNode;
 
-import java.util.Map;
-
 /**
  * Utility to administrate JMS-related resources on the server. An separate implementation should be created for
  * every possible JMS provider to be tested.
@@ -40,8 +38,6 @@ public interface JMSOperations {
     ModelControllerClient getControllerClient();
 
     ModelNode getServerAddress();
-
-    ModelNode getSubsystemAddress();
 
     String getProviderName();
 
@@ -61,10 +57,6 @@ public interface JMSOperations {
 
     void removeJmsConnectionFactory(final String name);
 
-    void addJmsExternalConnectionFactory(final String name, final String jndiName, ModelNode attributes);
-
-    void removeJmsExternalConnectionFactory(final String name);
-
     void addJmsBridge(String name, ModelNode attributes);
 
     void removeJmsBridge(String name);
@@ -73,32 +65,7 @@ public interface JMSOperations {
 
     void removeCoreQueue(final String queueName);
 
-    /**
-     * Creates remote acceptor
-     *
-     * @param name          name of the remote acceptor
-     * @param socketBinding name of socket binding
-     * @param params        params
-     */
-    void createRemoteAcceptor(String name, String socketBinding, Map<String, String> params);
-
-    /**
-     * Remove remote acceptor
-     *
-     * @param name          name of the remote acceptor
-     */
-    void removeRemoteAcceptor(String name);
-
     void close();
-
-    void addHttpConnector(String connectorName, String socketBinding, String endpoint, Map<String, String> parameters);
-
-    void removeHttpConnector(String connectorName);
-
-
-    void addExternalHttpConnector(String connectorName, String socketBinding, String endpoint);
-
-    void removeExternalHttpConnector(String connectorName);
 
     /**
      * Set system properties for the given destination and resourceAdapter.
@@ -108,4 +75,5 @@ public interface JMSOperations {
     void setSystemProperties(String destination, String resourceAdapter);
 
     void removeSystemProperties();
+
 }

@@ -22,8 +22,6 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.substitution;
 
-import org.jboss.logging.Logger;
-
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -37,12 +35,16 @@ import javax.jms.MessageProducer;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 
+import org.jboss.ejb3.annotation.ResourceAdapter;
+import org.jboss.logging.Logger;
+
 /**
  * @author wangchao
+ * 
  */
 @MessageDriven(name = "TestMD", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/queue/testQueue")})
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/queue/testQueue") })
 public class SimpleMDB implements MessageListener {
 
     private static final Logger log = Logger.getLogger(SimpleMDB.class);

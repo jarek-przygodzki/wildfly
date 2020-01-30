@@ -22,6 +22,17 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.enventry;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.MapMessage;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.InitialContext;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -38,22 +49,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.MapMessage;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.naming.InitialContext;
-
 /**
- * Migration test from EJB Testsuite (ejbthree-985 + enventry) to AS7 [JIRA JBQA-5483].
+ * Migration test from EJB Testsuite (ejbthree-985 + enventry) to AS7 [JIRA JBQA-5483]. 
  * Test to see if optional env-entry-value works (16.4.1.3).
  * Testing of behaviour of environment variables in ejb-jar.xml.
- *
+ * 
  * @author Carlo de Wolf, William DeCoste, Ondrej Chaloupka
  */
 @RunWith(Arquillian.class)
@@ -63,6 +63,25 @@ public class EnvEntryTestCase {
 
     @ArquillianResource
     InitialContext ctx;
+
+    static class JmsQueueSetup implements ServerSetupTask {
+
+        private JMSOperations jmsAdminOperations;
+
+        @Override
+        public void setup(ManagementClient managementClient, String containerId) throws Exception {
+            jmsAdminOperations = JMSOperationsProvider.getInstance(managementClient);
+            jmsAdminOperations.createJmsQueue("queue/testEnvEntry", "java:jboss/queue/testEnvEntry");
+        }
+
+        @Override
+        public void tearDown(ManagementClient managementClient, String containerId) throws Exception {
+            if (jmsAdminOperations != null) {
+                jmsAdminOperations.removeJmsQueue("queue/testEnvEntry");
+                jmsAdminOperations.close();
+            }
+        }
+    }
 
     @Deployment
     public static Archive<?> deploymentOptional() {
@@ -166,24 +185,5 @@ public class EnvEntryTestCase {
         Assert.assertNotNull(test);
 
         Assert.assertEquals(15, test.checkJNDI());
-    }
-
-    static class JmsQueueSetup implements ServerSetupTask {
-
-        private JMSOperations jmsAdminOperations;
-
-        @Override
-        public void setup(ManagementClient managementClient, String containerId) throws Exception {
-            jmsAdminOperations = JMSOperationsProvider.getInstance(managementClient);
-            jmsAdminOperations.createJmsQueue("queue/testEnvEntry", "java:jboss/queue/testEnvEntry");
-        }
-
-        @Override
-        public void tearDown(ManagementClient managementClient, String containerId) throws Exception {
-            if (jmsAdminOperations != null) {
-                jmsAdminOperations.removeJmsQueue("queue/testEnvEntry");
-                jmsAdminOperations.close();
-            }
-        }
     }
 }

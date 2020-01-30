@@ -35,7 +35,6 @@ public class Bean1 extends SuperBean {
 
     /**
      * We override the superclass method. These should be no injection done
-     *
      * @param simpleString
      */
     public void setSimpleString(final String simpleString) {

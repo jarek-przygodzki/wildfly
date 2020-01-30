@@ -9,9 +9,6 @@ import org.jboss.metadata.property.PropertyReplacers;
  */
 public class EjbClientDescriptorPropertyReplacement {
 
-    private EjbClientDescriptorPropertyReplacement() {
-    }
-
     public static PropertyReplacer propertyReplacer(final DeploymentUnit deploymentUnit) {
         Boolean replacement = deploymentUnit.getAttachment(Attachments.JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT);
         if (replacement == null || replacement) {
@@ -21,5 +18,8 @@ public class EjbClientDescriptorPropertyReplacement {
         } else {
             return PropertyReplacers.noop();
         }
+    }
+
+    private EjbClientDescriptorPropertyReplacement() {
     }
 }

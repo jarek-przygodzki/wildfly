@@ -22,6 +22,11 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.basic;
 
+import java.util.logging.Logger;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -30,10 +35,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import java.util.logging.Logger;
 
 /**
  * Tests that the Resource injection as specified by Java EE spec works as expected
@@ -47,19 +48,19 @@ public class ResourceInjectionTestCase {
 
     private SimpleSLSB slsb;
 
+    @Before
+    public void beforeTest() throws Exception {
+        Context ctx = new InitialContext();
+        this.slsb = (SimpleSLSB) ctx.lookup("java:module/" + SimpleSLSB.class.getSimpleName() + "!"
+                + SimpleSLSB.class.getName());
+    }
+
     @Deployment
     public static WebArchive createWebDeployment() {
         final WebArchive war = ShrinkWrap.create(WebArchive.class, "resource-injection-test.war");
         war.addPackage(SimpleSLSB.class.getPackage());
         war.addAsWebInfResource(ResourceInjectionTestCase.class.getPackage(), "web.xml", "web.xml");
         return war;
-    }
-
-    @Before
-    public void beforeTest() throws Exception {
-        Context ctx = new InitialContext();
-        this.slsb = (SimpleSLSB) ctx.lookup("java:module/" + SimpleSLSB.class.getSimpleName() + "!"
-                + SimpleSLSB.class.getName());
     }
 
     /**

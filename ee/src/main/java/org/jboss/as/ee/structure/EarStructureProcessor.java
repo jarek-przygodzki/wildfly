@@ -22,6 +22,16 @@
 
 package org.jboss.as.ee.structure;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -43,16 +53,6 @@ import org.jboss.vfs.VirtualFile;
 import org.jboss.vfs.VisitorAttributes;
 import org.jboss.vfs.util.SuffixMatchFilter;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * Deployment processor responsible for detecting EAR deployments and putting setting up the basic structure.
  *
@@ -66,13 +66,6 @@ public class EarStructureProcessor implements DeploymentUnitProcessor {
     private static final String SAR_EXTENSION = ".sar";
     private static final String RAR_EXTENSION = ".rar";
     private static final List<String> CHILD_ARCHIVE_EXTENSIONS = new ArrayList<String>();
-    private static final SuffixMatchFilter CHILD_ARCHIVE_FILTER = new SuffixMatchFilter(CHILD_ARCHIVE_EXTENSIONS, new VisitorAttributes() {
-
-        public boolean isLeavesOnly() {
-            return false;
-        }
-    });
-    private static final String DEFAULT_LIB_DIR = "lib";
 
     static {
         CHILD_ARCHIVE_EXTENSIONS.add(JAR_EXTENSION);
@@ -81,10 +74,15 @@ public class EarStructureProcessor implements DeploymentUnitProcessor {
         CHILD_ARCHIVE_EXTENSIONS.add(RAR_EXTENSION);
     }
 
-    private static Closeable mount(VirtualFile moduleFile, boolean explode) throws IOException {
-        return explode ? VFS.mountZipExpanded(moduleFile, moduleFile, TempFileProviderService.provider())
-                : VFS.mountZip(moduleFile, moduleFile, TempFileProviderService.provider());
-    }
+    private static final SuffixMatchFilter CHILD_ARCHIVE_FILTER = new SuffixMatchFilter(CHILD_ARCHIVE_EXTENSIONS, new VisitorAttributes() {
+
+        public boolean isLeavesOnly() {
+            return false;
+        }
+    });
+
+    private static final String DEFAULT_LIB_DIR = "lib";
+
 
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
@@ -126,7 +124,7 @@ public class EarStructureProcessor implements DeploymentUnitProcessor {
                         String relativeName = child.getPathNameRelativeTo(deploymentRoot.getRoot());
                         MountedDeploymentOverlay overlay = overlays.get(relativeName);
                         final MountHandle mountHandle;
-                        if (overlay != null) {
+                        if(overlay != null) {
                             overlay.remountAsZip(false);
                             mountHandle = new MountHandle(null);
                         } else {
@@ -179,7 +177,7 @@ public class EarStructureProcessor implements DeploymentUnitProcessor {
                 // otherwise read from application.xml
                 for (final ModuleMetaData module : earMetaData.getModules()) {
 
-                    if (module.getFileName().endsWith(".xml")) {
+                    if(module.getFileName().endsWith(".xml")) {
                         throw EeLogger.ROOT_LOGGER.unsupportedModuleType(module.getFileName());
                     }
 
@@ -248,6 +246,11 @@ public class EarStructureProcessor implements DeploymentUnitProcessor {
         } catch (IOException e) {
             throw EeLogger.ROOT_LOGGER.failedToProcessChild(e, virtualFile);
         }
+    }
+
+    private static Closeable mount(VirtualFile moduleFile, boolean explode) throws IOException {
+        return explode ? VFS.mountZipExpanded(moduleFile, moduleFile, TempFileProviderService.provider())
+                : VFS.mountZip(moduleFile, moduleFile, TempFileProviderService.provider());
     }
 
     /**

@@ -22,6 +22,11 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.BasicComponent;
 import org.jboss.as.ee.component.BasicComponentCreateService;
@@ -41,7 +46,6 @@ import org.jboss.as.ee.component.InjectionSource;
 import org.jboss.as.ee.component.InterceptorDescription;
 import org.jboss.as.ee.component.ViewConfiguration;
 import org.jboss.as.ee.component.ViewService;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.metadata.MetadataCompleteMarker;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.naming.ServiceBasedNamingStore;
@@ -64,13 +68,9 @@ import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.ServiceTarget;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 import static org.jboss.as.ee.component.Attachments.COMPONENT_REGISTRY;
 import static org.jboss.as.ee.component.Attachments.EE_MODULE_CONFIGURATION;
-import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 import static org.jboss.as.server.deployment.Attachments.MODULE;
 
 /**
@@ -111,7 +111,7 @@ public final class ComponentInstallProcessor implements DeploymentUnitProcessor 
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void deployComponent(final DeploymentPhaseContext phaseContext, final ComponentConfiguration configuration, final List<ServiceName> jndiDependencies, final ServiceName bindingDependencyService) throws DeploymentUnitProcessingException {
 
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
@@ -178,7 +178,7 @@ public final class ComponentInstallProcessor implements DeploymentUnitProcessor 
             final ServiceBuilder<ComponentView> componentViewServiceBuilder = serviceTarget.addService(serviceName, viewService);
             componentViewServiceBuilder
                     .addDependency(createServiceName, Component.class, viewService.getComponentInjector());
-            for (final DependencyConfigurator<ViewService> depConfig : viewConfiguration.getDependencies()) {
+            for(final DependencyConfigurator<ViewService> depConfig : viewConfiguration.getDependencies()) {
                 depConfig.configureDependency(componentViewServiceBuilder, viewService);
             }
             componentViewServiceBuilder.install();

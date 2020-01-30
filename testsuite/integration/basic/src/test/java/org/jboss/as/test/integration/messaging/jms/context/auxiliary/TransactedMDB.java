@@ -22,6 +22,10 @@
 
 package org.jboss.as.test.integration.messaging.jms.context.auxiliary;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionManagementType.CONTAINER;
+import static org.jboss.as.test.integration.messaging.jms.context.InjectedJMSContextTestCase.QUEUE_NAME;
+
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -36,9 +40,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-import static javax.ejb.TransactionManagementType.CONTAINER;
-import static org.jboss.as.test.integration.messaging.jms.context.InjectedJMSContextTestCase.QUEUE_NAME;
+import org.jboss.as.test.integration.messaging.jms.context.InjectedJMSContextTestCase;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
@@ -51,8 +53,8 @@ import static org.jboss.as.test.integration.messaging.jms.context.InjectedJMSCon
 @MessageDriven(
         name = "TransactedMDB",
         activationConfig = {
-                @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-                @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = QUEUE_NAME)
+            @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+            @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = QUEUE_NAME)
         }
 )
 @TransactionManagement(value = CONTAINER)
@@ -65,22 +67,23 @@ public class TransactedMDB implements MessageListener {
     @Resource
     private MessageDrivenContext mdbContext;
 
-    public void onMessage(final Message m) {
-        //System.out.println("TransactedMDB.onMessage");
+    public void onMessage(final Message m)
+    {
+       //System.out.println("TransactedMDB.onMessage");
         try {
             // ignore redelivered message
             if (m.getJMSRedelivered()) {
                 return;
             }
 
-            TextMessage message = (TextMessage) m;
+            TextMessage message = (TextMessage)m;
             Destination replyTo = m.getJMSReplyTo();
 
             //System.out.println("got message " + message.getText());
             //System.out.println("replying to " + replyTo);
             context.createProducer()
-                    .setJMSCorrelationID(message.getJMSMessageID())
-                    .send(replyTo, message.getText());
+                   .setJMSCorrelationID(message.getJMSMessageID())
+                   .send(replyTo, message.getText());
             //System.out.println("sent reply");
             if (m.getBooleanProperty("rollback")) {
                 mdbContext.setRollbackOnly();

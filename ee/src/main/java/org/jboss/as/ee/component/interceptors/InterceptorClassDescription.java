@@ -113,33 +113,6 @@ public class InterceptorClassDescription {
         return new Builder(base);
     }
 
-    public MethodIdentifier getAroundInvoke() {
-        return aroundInvoke;
-    }
-
-    public MethodIdentifier getAroundTimeout() {
-        return aroundTimeout;
-    }
-
-    public MethodIdentifier getPostConstruct() {
-        return postConstruct;
-    }
-
-    public MethodIdentifier getPreDestroy() {
-        return preDestroy;
-    }
-
-    public MethodIdentifier getPrePassivate() {
-        return prePassivate;
-    }
-
-    public MethodIdentifier getPostActivate() {
-        return postActivate;
-    }
-
-    public MethodIdentifier getAroundConstruct() {
-        return aroundConstruct;
-    }
 
     public static class Builder {
 
@@ -225,5 +198,33 @@ public class InterceptorClassDescription {
         public void setAroundConstruct(final MethodIdentifier aroundConstruct) {
             this.aroundConstruct = aroundConstruct;
         }
+    }
+
+    public MethodIdentifier getAroundInvoke() {
+        return aroundInvoke;
+    }
+
+    public MethodIdentifier getAroundTimeout() {
+        return aroundTimeout;
+    }
+
+    public MethodIdentifier getPostConstruct() {
+        return postConstruct;
+    }
+
+    public MethodIdentifier getPreDestroy() {
+        return preDestroy;
+    }
+
+    public MethodIdentifier getPrePassivate() {
+        return prePassivate;
+    }
+
+    public MethodIdentifier getPostActivate() {
+        return postActivate;
+    }
+
+    public MethodIdentifier getAroundConstruct() {
+        return aroundConstruct;
     }
 }

@@ -29,6 +29,7 @@ import javax.ejb.Stateless;
  * An EJB that "asks" for the forbidden static field injection.
  *
  * @author Eduardo Martins
+ *
  */
 @Stateless
 public class FieldTestEJB {

@@ -24,6 +24,7 @@ package org.jboss.as.test.integration.ee.injection.resource.enventry;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.as.ee.component.EnvEntryInjectionSource;
 import org.jboss.as.test.integration.common.HttpRequest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
@@ -47,7 +48,7 @@ public class DuplicateGlobalBindingInjectionTestCase {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "dep1.war");
         war.addClasses(
                 EnvEntryInjectionServlet.class,
-                EnvEntryManagedBean.class,
+                EnvEntryManagedBean.class, 
                 DuplicateGlobalBindingInjectionTestCase.class);
         war.addAsWebInfResource(getWebXml(), "web.xml");
         return war;
@@ -60,11 +61,26 @@ public class DuplicateGlobalBindingInjectionTestCase {
         // war.addPackage(DuplicateGlobalBindingInjectionTestCase.class.getPackage());
         war.addClasses(
                 EnvEntryInjectionServlet.class,
-                EnvEntryManagedBean.class,
+                EnvEntryManagedBean.class, 
                 DuplicateGlobalBindingInjectionTestCase.class);
         war.addAsWebInfResource(getWebXml(), "web.xml");
         return war;
     }
+
+    @Test
+    @OperateOnDeployment("dep1")
+    public void testGlobalBound1() throws Exception {
+        final String globalValue = (String) new InitialContext().lookup("java:global/foo");
+        Assert.assertEquals("injection!", globalValue);
+    }
+
+    @Test
+    @OperateOnDeployment("dep2")
+    public void testGlobalBound2() throws Exception {
+        final String globalValue = (String) new InitialContext().lookup("java:global/foo");
+        Assert.assertEquals("injection!", globalValue);
+    }
+
 
     private static StringAsset getWebXml() {
         return new StringAsset("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -91,19 +107,5 @@ public class DuplicateGlobalBindingInjectionTestCase {
                 "    </env-entry>\n" +
                 "\n" +
                 "</web-app>");
-    }
-
-    @Test
-    @OperateOnDeployment("dep1")
-    public void testGlobalBound1() throws Exception {
-        final String globalValue = (String) new InitialContext().lookup("java:global/foo");
-        Assert.assertEquals("injection!", globalValue);
-    }
-
-    @Test
-    @OperateOnDeployment("dep2")
-    public void testGlobalBound2() throws Exception {
-        final String globalValue = (String) new InitialContext().lookup("java:global/foo");
-        Assert.assertEquals("injection!", globalValue);
     }
 }

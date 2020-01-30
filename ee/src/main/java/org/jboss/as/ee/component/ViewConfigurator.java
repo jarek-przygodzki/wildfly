@@ -35,10 +35,10 @@ public interface ViewConfigurator {
     /**
      * Apply this configurator to the given configuration.
      *
-     * @param context                the deployment phase context
+     * @param context the deployment phase context
      * @param componentConfiguration the completed component configuration
-     * @param description            the completed view description
-     * @param configuration          the view configuration to build on to
+     * @param description the completed view description
+     * @param configuration the view configuration to build on to
      * @throws DeploymentUnitProcessingException if configuration fails
      */
     void configure(DeploymentPhaseContext context, ComponentConfiguration componentConfiguration, ViewDescription description, ViewConfiguration configuration) throws DeploymentUnitProcessingException;

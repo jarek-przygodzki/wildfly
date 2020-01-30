@@ -21,6 +21,9 @@
  */
 package org.jboss.as.ee.metadata;
 
+import java.util.List;
+import java.util.Map;
+
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.EEModuleClassDescription;
 import org.jboss.as.ee.component.EEModuleDescription;
@@ -31,9 +34,6 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.annotation.CompositeIndex;
 import org.jboss.metadata.property.PropertyReplacer;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Superclass for EE annotation processors that attach their information to the EEClassDescription via {@link ClassAnnotationInformation}
@@ -66,14 +66,14 @@ public abstract class AbstractEEAnnotationProcessor implements DeploymentUnitPro
 
     /**
      * Method that can be overridden to do any additional processing
-     *
-     * @param phaseContext   The phase context
+     * @param phaseContext The phase context
      * @param deploymentUnit The deployment unit
      */
     protected void afterAnnotationsProcessed(final DeploymentPhaseContext phaseContext, final DeploymentUnit deploymentUnit) {
     }
 
     /**
+     *
      * @return The annotation information factories
      */
     protected abstract List<ClassAnnotationInformationFactory> annotationInformationFactories();

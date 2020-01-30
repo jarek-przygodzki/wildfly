@@ -23,6 +23,8 @@
 package org.jboss.as.test.integration.messaging.jms.context.transactionscoped.auxiliary;
 
 
+import static org.jboss.as.test.integration.messaging.jms.context.transactionscoped.TransactionScopedJMSContextTestCase.QUEUE_NAME;
+
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,8 +32,6 @@ import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.Queue;
 import javax.transaction.Transactional;
-
-import static org.jboss.as.test.integration.messaging.jms.context.transactionscoped.TransactionScopedJMSContextTestCase.QUEUE_NAME;
 
 
 @ApplicationScoped

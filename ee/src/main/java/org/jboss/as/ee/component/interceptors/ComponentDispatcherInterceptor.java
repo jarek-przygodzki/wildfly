@@ -22,16 +22,16 @@
 
 package org.jboss.as.ee.component.interceptors;
 
-import org.jboss.as.ee.component.ComponentInstance;
+import java.lang.reflect.Method;
+
 import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.ComponentInstance;
 import org.jboss.invocation.Interceptor;
 import org.jboss.invocation.InterceptorContext;
 
-import java.lang.reflect.Method;
-
 /**
- * @author Stuart Douglas
- */
+* @author Stuart Douglas
+*/
 public class ComponentDispatcherInterceptor implements Interceptor {
 
     private final Method componentMethod;

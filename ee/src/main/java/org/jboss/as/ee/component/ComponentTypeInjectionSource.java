@@ -22,6 +22,9 @@
 
 package org.jboss.as.ee.component;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -30,9 +33,6 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.msc.inject.Injector;
 import org.jboss.msc.service.ServiceBuilder;
-
-import java.util.Iterator;
-import java.util.Set;
 
 import static org.jboss.as.ee.component.Attachments.EE_APPLICATION_DESCRIPTION;
 

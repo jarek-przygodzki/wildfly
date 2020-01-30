@@ -21,33 +21,35 @@
  */
 package org.jboss.as.test.integration.ee.injection.support;
 
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.as.test.integration.common.HttpRequest;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.as.test.integration.common.HttpRequest;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+
 /**
+ *
  * @author Martin Kouba
  */
 public abstract class InjectionSupportTestCase {
-
-    public static final Class<?>[] constructTestsHelperClasses = new Class<?>[]{AroundConstructInterceptor.class,
-            AroundConstructBinding.class, StringProducer.class, ProducedString.class};
-    @ArquillianResource
-    protected URL contextPath;
 
     protected static WebArchive createTestArchiveBase() {
         return ShrinkWrap.create(WebArchive.class)
                 .addClasses(Alpha.class, Bravo.class, Charlie.class, ComponentInterceptorBinding.class, ComponentInterceptor.class, InjectionSupportTestCase.class)
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
+
+    public static final Class<?>[] constructTestsHelperClasses = new Class<?>[] { AroundConstructInterceptor.class,
+            AroundConstructBinding.class, StringProducer.class, ProducedString.class };
+
+    @ArquillianResource
+    protected URL contextPath;
 
     protected String doGetRequest(String path) throws IOException, ExecutionException, TimeoutException {
         return HttpRequest.get(contextPath + path, 10, TimeUnit.SECONDS);

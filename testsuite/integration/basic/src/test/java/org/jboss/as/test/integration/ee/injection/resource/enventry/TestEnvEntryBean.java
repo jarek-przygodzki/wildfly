@@ -33,12 +33,15 @@ import javax.ejb.Stateless;
 @Stateless(name = "TestEnvEntry")
 @Remote(TestEnvEntry.class)
 public class TestEnvEntryBean extends TestEnvEntryBeanBase implements TestEnvEntry {
-    @Resource
-    SessionContext sessionCtx;
     @Resource(name = "maxExceptions")
     private int maxExceptions = 4;
+
     @Resource
     private int numExceptions = 3;
+
+    @Resource
+    SessionContext sessionCtx;
+
     private int minExceptions = 1;
 
     public int getMaxExceptions() {

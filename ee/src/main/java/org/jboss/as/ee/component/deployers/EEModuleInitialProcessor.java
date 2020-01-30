@@ -53,7 +53,7 @@ public final class EEModuleInitialProcessor implements DeploymentUnitProcessor {
         final String earApplicationName = deploymentUnit.getAttachment(Attachments.EAR_APPLICATION_NAME);
         //the ear application name takes into account the name set in application.xml
         //if this is non-null this is always the one we want to use
-        if (earApplicationName != null) {
+        if(earApplicationName != null) {
             appName = earApplicationName;
         } else {
             //an appname of null means use the module name

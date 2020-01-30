@@ -22,8 +22,13 @@
 
 package org.jboss.as.ee.structure;
 
-import org.jboss.as.ee.component.DeploymentDescriptorEnvironment;
+import java.io.InputStream;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+
 import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.DeploymentDescriptorEnvironment;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -38,10 +43,6 @@ import org.jboss.metadata.parser.util.NoopXMLResolver;
 import org.jboss.metadata.property.PropertyReplacer;
 import org.jboss.vfs.VFSUtils;
 import org.jboss.vfs.VirtualFile;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-import java.io.InputStream;
 
 /**
  * Deployment processor responsible for parsing the application.xml file of an ear.

@@ -48,25 +48,25 @@ public class DefaultBindingsConfigurationProcessor implements DeploymentUnitProc
         // store subsystem config in module description
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
         final EEModuleDescription eeModuleDescription = deploymentUnit.getAttachment(Attachments.EE_MODULE_DESCRIPTION);
-        if (eeModuleDescription != null) {
+        if(eeModuleDescription != null) {
             // set names only if these are not set yet
             final EEDefaultResourceJndiNames defaultResourceJndiNames = eeModuleDescription.getDefaultResourceJndiNames();
-            if (defaultResourceJndiNames.getContextService() == null) {
+            if(defaultResourceJndiNames.getContextService() == null) {
                 defaultResourceJndiNames.setContextService(contextService);
             }
-            if (defaultResourceJndiNames.getDataSource() == null) {
+            if(defaultResourceJndiNames.getDataSource() == null) {
                 defaultResourceJndiNames.setDataSource(dataSource);
             }
-            if (defaultResourceJndiNames.getJmsConnectionFactory() == null) {
+            if(defaultResourceJndiNames.getJmsConnectionFactory() == null) {
                 defaultResourceJndiNames.setJmsConnectionFactory(jmsConnectionFactory);
             }
-            if (defaultResourceJndiNames.getManagedExecutorService() == null) {
+            if(defaultResourceJndiNames.getManagedExecutorService() == null) {
                 defaultResourceJndiNames.setManagedExecutorService(managedExecutorService);
             }
-            if (defaultResourceJndiNames.getManagedScheduledExecutorService() == null) {
+            if(defaultResourceJndiNames.getManagedScheduledExecutorService() == null) {
                 defaultResourceJndiNames.setManagedScheduledExecutorService(managedScheduledExecutorService);
             }
-            if (defaultResourceJndiNames.getManagedThreadFactory() == null) {
+            if(defaultResourceJndiNames.getManagedThreadFactory() == null) {
                 defaultResourceJndiNames.setManagedThreadFactory(managedThreadFactory);
             }
         }

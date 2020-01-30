@@ -31,7 +31,6 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -43,7 +42,6 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore
 public class JspTagTestCase {
 
     private static final String RESULT = "This is a header\n" +

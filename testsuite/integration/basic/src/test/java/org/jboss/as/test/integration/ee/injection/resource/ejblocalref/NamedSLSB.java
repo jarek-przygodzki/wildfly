@@ -27,7 +27,7 @@ import javax.ejb.Stateless;
  * @author Stuart Douglas
  */
 @Stateless(name = "namedBean")
-public class NamedSLSB implements Hello {
+public class NamedSLSB implements Hello{
 
 
     @Override

@@ -21,8 +21,6 @@
  */
 package org.jboss.as.ee.utils;
 
-import org.jboss.as.ee.logging.EeLogger;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,6 +28,8 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.jboss.as.ee.logging.EeLogger;
 
 /**
  * Utility class for working with method descriptors
@@ -67,9 +67,9 @@ public class DescriptorUtils {
 
     public static String makeDescriptor(Class<?> c) {
         String primitive = primitives.get(c);
-        if (primitive != null) {
+        if(primitive != null) {
             return primitive;
-        } else if (c.isArray()) {
+        }else if (c.isArray()) {
             return c.getName().replace(".", "/");
         } else {
             return makeDescriptor(c.getName());
@@ -193,7 +193,7 @@ public class DescriptorUtils {
             } else if (descriptor.startsWith("[")) {
 
             } else {
-                throw EeLogger.ROOT_LOGGER.invalidDescriptor(descriptor);
+                    throw EeLogger.ROOT_LOGGER.invalidDescriptor(descriptor);
             }
         } else {
             char type = descriptor.charAt(0);

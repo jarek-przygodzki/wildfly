@@ -20,6 +20,21 @@ public enum EJBClientDescriptorXMLAttribute {
     // default unknown attribute
     UNKNOWN(null);
 
+    private final String name;
+
+    private EJBClientDescriptorXMLAttribute(final String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get the local name of this attribute.
+     *
+     * @return the local name
+     */
+    public String getLocalName() {
+        return name;
+    }
+
     private static final Map<String, EJBClientDescriptorXMLAttribute> MAP;
 
     static {
@@ -32,24 +47,9 @@ public enum EJBClientDescriptorXMLAttribute {
         MAP = map;
     }
 
-    private final String name;
-
-    private EJBClientDescriptorXMLAttribute(final String name) {
-        this.name = name;
-    }
-
     public static EJBClientDescriptorXMLAttribute forName(String localName) {
         final EJBClientDescriptorXMLAttribute element = MAP.get(localName);
         return element == null ? UNKNOWN : element;
-    }
-
-    /**
-     * Get the local name of this attribute.
-     *
-     * @return the local name
-     */
-    public String getLocalName() {
-        return name;
     }
 
     @Override

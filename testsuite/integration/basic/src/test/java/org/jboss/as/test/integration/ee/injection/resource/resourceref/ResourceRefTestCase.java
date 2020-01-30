@@ -22,6 +22,12 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.resourceref;
 
+import java.net.URL;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ServerSetup;
@@ -36,17 +42,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.net.URL;
 
 
 /**
  * Tests that @Resource bindings on interceptors that are applied to multiple
  * components without their own naming context work properly, and do not try
  * and create two duplicate bindings in the same namespace.
- * <p>
+ *
  * Migration test from EJB Testsuite (ejbthree-1823, ejbthree-1858) to AS7 [JIRA JBQA-5483].
  * - ResourceHandler when resource-ref type is not specified.
  * - EJBContext is configured through ejb-jar.xml as a resource-env-ref.
@@ -63,13 +65,13 @@ public class ResourceRefTestCase {
         EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "resourcerref.ear");
 
         WebArchive war = ShrinkWrap.create(WebArchive.class, "managed-bean.war");
-        war.addAsWebInfResource(ResourceRefTestCase.class.getPackage(), "web.xml", "web.xml");
+        war.addAsWebInfResource(ResourceRefTestCase.class.getPackage(),"web.xml", "web.xml");
         war.addClasses(ResourceRefTestCase.class, DatasourceManagedBean.class, CreateQueueSetupTask.class);
 
         JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "resource-ref-test.jar");
         jar.addClasses(ResourceRefBean.class, ResourceRefRemote.class, StatelessBean.class, StatelessBeanRemote.class, ResUrlChecker.class, ResUrlCheckerBean.class);
-        jar.addAsManifestResource(ResourceRefTestCase.class.getPackage(), "jboss-ejb3.xml", "jboss-ejb3.xml");
-        jar.addAsManifestResource(ResourceRefTestCase.class.getPackage(), "ejb-jar.xml", "ejb-jar.xml");
+        jar.addAsManifestResource(ResourceRefTestCase.class.getPackage(),"jboss-ejb3.xml", "jboss-ejb3.xml");
+        jar.addAsManifestResource(ResourceRefTestCase.class.getPackage(),"ejb-jar.xml", "ejb-jar.xml");
 
         ear.addAsModule(jar);
         ear.addAsModule(war);
@@ -88,7 +90,7 @@ public class ResourceRefTestCase {
     @Test
     public void testInjection() throws NamingException {
         InitialContext context = new InitialContext();
-        DatasourceManagedBean bean = (DatasourceManagedBean) context.lookup("java:module/datasourceManagedBean");
+        DatasourceManagedBean bean = (DatasourceManagedBean)context.lookup("java:module/datasourceManagedBean");
         Assert.assertNotNull(bean.getDataSource());
     }
 
@@ -117,17 +119,18 @@ public class ResourceRefTestCase {
      * @throws Exception
      */
     @Test
-    public void testResourceEnvRefWithoutInjectionTarget() throws Exception {
+    public void testResourceEnvRefWithoutInjectionTarget() throws Exception
+    {
         InitialContext context = new InitialContext();
-        StatelessBeanRemote bean = (StatelessBeanRemote) context.lookup("java:app/resource-ref-test/" + StatelessBean.class.getSimpleName() + "!" + StatelessBeanRemote.class.getName());
-        // check EJBContext through resource-env-ref was handled
-        Assert.assertTrue("resource-env-ref did not handle EJBContext", bean.isEJBContextAvailableThroughResourceEnvRef());
-        // check UserTransaction through resource-env-ref was handled
-        Assert.assertTrue("resource-env-ref did not handle UserTransaction", bean
-                .isUserTransactionAvailableThroughResourceEnvRef());
-        // check some other resource through resource-env-ref was handled
-        Assert.assertTrue("resource-env-ref did not setup the other resource in java:comp/env of the bean", bean
-                .isOtherResourceAvailableThroughResourceEnvRef());
+       StatelessBeanRemote bean = (StatelessBeanRemote) context.lookup("java:app/resource-ref-test/"+StatelessBean.class.getSimpleName() + "!" + StatelessBeanRemote.class.getName());
+       // check EJBContext through resource-env-ref was handled
+       Assert.assertTrue("resource-env-ref did not handle EJBContext", bean.isEJBContextAvailableThroughResourceEnvRef());
+       // check UserTransaction through resource-env-ref was handled
+       Assert.assertTrue("resource-env-ref did not handle UserTransaction", bean
+             .isUserTransactionAvailableThroughResourceEnvRef());
+       // check some other resource through resource-env-ref was handled
+       Assert.assertTrue("resource-env-ref did not setup the other resource in java:comp/env of the bean", bean
+             .isOtherResourceAvailableThroughResourceEnvRef());
     }
 
     @Test

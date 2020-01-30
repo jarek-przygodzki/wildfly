@@ -21,6 +21,8 @@
  */
 package org.jboss.as.ee.structure;
 
+import java.util.List;
+
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -30,8 +32,6 @@ import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.modules.Module;
 import org.jboss.modules.filter.PathFilters;
-
-import java.util.List;
 
 import static org.jboss.as.ee.subsystem.GlobalModulesDefinition.GlobalModule;
 
@@ -55,20 +55,20 @@ public class GlobalModuleDependencyProcessor implements DeploymentUnitProcessor 
 
         final List<GlobalModule> globalMods = this.globalModules;
 
-        for (final GlobalModule module : globalMods) {
-            final ModuleDependency dependency = new ModuleDependency(Module.getBootModuleLoader(), module.getModuleIdentifier(), false, false, module.isServices(), false);
+            for (final GlobalModule module : globalMods) {
+                final ModuleDependency dependency = new ModuleDependency(Module.getBootModuleLoader(), module.getModuleIdentifier(), false, false, module.isServices(), false);
 
-            if (module.isMetaInf()) {
-                dependency.addImportFilter(PathFilters.getMetaInfSubdirectoriesFilter(), true);
-                dependency.addImportFilter(PathFilters.getMetaInfFilter(), true);
+                if (module.isMetaInf()) {
+                    dependency.addImportFilter(PathFilters.getMetaInfSubdirectoriesFilter(), true);
+                    dependency.addImportFilter(PathFilters.getMetaInfFilter(), true);
+                }
+
+                if(module.isAnnotations()) {
+                    deploymentUnit.addToAttachmentList(Attachments.ADDITIONAL_ANNOTATION_INDEXES, module.getModuleIdentifier());
+                }
+
+                moduleSpecification.addSystemDependency(dependency);
             }
-
-            if (module.isAnnotations()) {
-                deploymentUnit.addToAttachmentList(Attachments.ADDITIONAL_ANNOTATION_INDEXES, module.getModuleIdentifier());
-            }
-
-            moduleSpecification.addSystemDependency(dependency);
-        }
     }
 
     @Override
@@ -78,7 +78,6 @@ public class GlobalModuleDependencyProcessor implements DeploymentUnitProcessor 
 
     /**
      * Set the global modules configuration for the container.
-     *
      * @param globalModules a fully resolved (i.e. with expressions resolved and default values set) global modules configuration
      */
     public void setGlobalModules(final List<GlobalModule> globalModules) {

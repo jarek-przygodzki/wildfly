@@ -22,6 +22,9 @@
 
 package org.jboss.as.test.integration.messaging.jms.definitions;
 
+import static javax.jms.JMSContext.AUTO_ACKNOWLEDGE;
+import static org.junit.Assert.assertNotNull;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.ConnectionFactory;
@@ -36,35 +39,32 @@ import javax.jms.QueueConnectionFactory;
 import javax.jms.Topic;
 import javax.jms.TopicConnectionFactory;
 
-import static javax.jms.JMSContext.AUTO_ACKNOWLEDGE;
-import static org.junit.Assert.assertNotNull;
-
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2013 Red Hat inc.
  */
 @JMSDestinationDefinition(
-        name = "java:comp/env/myQueue4",
-        interfaceName = "javax.jms.Queue"
+        name="java:comp/env/myQueue4",
+        interfaceName="javax.jms.Queue"
 )
 @JMSDestinationDefinitions(
-        value = {
+        value =  {
                 @JMSDestinationDefinition(
-                        name = "java:module/env/myQueue1",
-                        interfaceName = "javax.jms.Queue",
-                        destinationName = "myQueue1"
+                        name="java:module/env/myQueue1",
+                        interfaceName="javax.jms.Queue",
+                        destinationName="myQueue1"
                 ),
                 @JMSDestinationDefinition(
-                        name = "java:module/env/myTopic1",
-                        interfaceName = "javax.jms.Topic",
-                        destinationName = "myTopic1"
+                        name="java:module/env/myTopic1",
+                        interfaceName="javax.jms.Topic",
+                        destinationName="myTopic1"
                 ),
                 @JMSDestinationDefinition(
                         // explicitly mention a resourceAdapter corresponding to a pooled-connection-factory resource
                         resourceAdapter = "activemq-ra",
-                        name = "java:global/env/myQueue2",
-                        interfaceName = "javax.jms.Queue",
-                        destinationName = "myQueue2",
+                        name="java:global/env/myQueue2",
+                        interfaceName="javax.jms.Queue",
+                        destinationName="myQueue2",
                         properties = {
                                 "durable=false",
                                 "selector=color = 'red'"
@@ -75,7 +75,7 @@ import static org.junit.Assert.assertNotNull;
 @JMSConnectionFactoryDefinitions(
         value = {
                 @JMSConnectionFactoryDefinition(
-                        name = "java:module/myFactory1",
+                        name="java:module/myFactory1",
                         properties = {
                                 "connector=http-connector",
                                 "initial-connect-attempts=3"
@@ -87,10 +87,10 @@ import static org.junit.Assert.assertNotNull;
                         minPoolSize = 1
                 ),
                 @JMSConnectionFactoryDefinition(
-                        name = "java:comp/env/myFactory2"
+                        name="java:comp/env/myFactory2"
                 ),
                 @JMSConnectionFactoryDefinition(
-                        name = "java:comp/env/myFactory5",
+                        name="java:comp/env/myFactory5",
                         interfaceName = "javax.jms.QueueConnectionFactory",
                         user = "${VAULT::messaging::userName::1}",
                         password = "${VAULT::messaging::password::1}"
@@ -100,7 +100,7 @@ import static org.junit.Assert.assertNotNull;
 @JMSConnectionFactoryDefinition(
         // explicitly mention a resourceAdapter corresponding to a pooled-connection-factory resource
         resourceAdapter = "activemq-ra",
-        name = "java:global/myFactory3",
+        name="java:global/myFactory3",
         interfaceName = "javax.jms.QueueConnectionFactory",
         properties = {
                 "connector=http-connector",

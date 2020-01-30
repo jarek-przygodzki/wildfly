@@ -21,10 +21,10 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.managedbean;
 
-import org.jboss.as.test.integration.ee.injection.support.ProducedString;
-
 import javax.annotation.ManagedBean;
 import javax.inject.Inject;
+
+import org.jboss.as.test.integration.ee.injection.support.ProducedString;
 
 @ManagedBean("ManagedBeanWithInject")
 public class ManagedBeanWithInject {

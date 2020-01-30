@@ -22,16 +22,17 @@
 
 package org.jboss.as.ee.structure;
 
-import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
-import org.jboss.metadata.property.PropertyReplacer;
-import org.jboss.staxmapper.XMLExtendedStreamReader;
+import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import javax.xml.stream.XMLStreamException;
+
+import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
+import org.jboss.metadata.property.PropertyReplacer;
+import org.jboss.staxmapper.XMLExtendedStreamReader;
 
 /**
  * Parser for urn:jboss:ejb-client:1.3:jboss-ejb-client
@@ -49,12 +50,12 @@ class EJBClientDescriptor13Parser extends EJBClientDescriptor12Parser {
     }
 
     protected void parseClientContext(final XMLExtendedStreamReader reader,
-                                      final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
+            final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
         final int count = reader.getAttributeCount();
         for (int i = 0; i < count; i++) {
             final EJBClientDescriptorXMLAttribute attribute = EJBClientDescriptorXMLAttribute.forName(reader
                     .getAttributeLocalName(i));
-            final String value = readResolveValue(reader, i);
+            final String value =  readResolveValue(reader, i);
             switch (attribute) {
                 case INVOCATION_TIMEOUT:
                     final Long invocationTimeout = Long.parseLong(value);
@@ -105,7 +106,7 @@ class EJBClientDescriptor13Parser extends EJBClientDescriptor12Parser {
     }
 
     protected void parseProfile(final XMLExtendedStreamReader reader,
-                                final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
+            final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
         final Set<EJBClientDescriptorXMLAttribute> required = EnumSet.of(EJBClientDescriptorXMLAttribute.NAME);
         final int count = reader.getAttributeCount();
         String profileName = null;
@@ -113,7 +114,7 @@ class EJBClientDescriptor13Parser extends EJBClientDescriptor12Parser {
             final EJBClientDescriptorXMLAttribute attribute = EJBClientDescriptorXMLAttribute.forName(reader
                     .getAttributeLocalName(i));
             required.remove(attribute);
-            final String value = readResolveValue(reader, i);
+            final String value =  readResolveValue(reader, i);
             switch (attribute) {
                 case NAME:
                     profileName = value;

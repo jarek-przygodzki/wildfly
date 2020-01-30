@@ -21,13 +21,14 @@
  */
 package org.jboss.as.test.integration.ee.injection.support;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Priority(Interceptor.Priority.APPLICATION + 10)
 @Interceptor
@@ -36,18 +37,18 @@ public class ComponentInterceptor {
 
     private static final List<Interception> interceptions = Collections.synchronizedList(new ArrayList<Interception>());
 
+    @AroundInvoke
+    public Object alwaysReturnThis(InvocationContext ctx) throws Exception {
+        interceptions.add(new Interception(ctx.getMethod().getName(), ctx.getTarget().getClass().getName()));
+        return ctx.proceed();
+    }
+
     public static void resetInterceptions() {
         interceptions.clear();
     }
 
     public static List<Interception> getInterceptions() {
         return interceptions;
-    }
-
-    @AroundInvoke
-    public Object alwaysReturnThis(InvocationContext ctx) throws Exception {
-        interceptions.add(new Interception(ctx.getMethod().getName(), ctx.getTarget().getClass().getName()));
-        return ctx.proceed();
     }
 
     public static class Interception {

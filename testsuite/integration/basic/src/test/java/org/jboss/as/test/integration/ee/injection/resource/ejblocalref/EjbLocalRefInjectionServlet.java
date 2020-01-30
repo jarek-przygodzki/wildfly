@@ -21,17 +21,18 @@
  */
 package org.jboss.as.test.integration.ee.injection.resource.ejblocalref;
 
+import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author Stuart Douglas
  */
-@WebServlet(name = "ejbLocalRef", urlPatterns = {"/ejbLocalRef"})
+@WebServlet(name="ejbLocalRef",urlPatterns = {"/ejbLocalRef"})
 public class EjbLocalRefInjectionServlet extends HttpServlet {
 
     private Hello named;
@@ -44,7 +45,7 @@ public class EjbLocalRefInjectionServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("type").equals("named")) {
+        if(req.getParameter("type").equals("named")) {
             resp.getWriter().append(named.sayHello()).flush();
         } else {
             resp.getWriter().append(simpleHelloBean.sayHello());

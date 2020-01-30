@@ -22,17 +22,18 @@
 
 package org.jboss.as.ee.structure;
 
-import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
-import org.jboss.metadata.property.PropertyReplacer;
-import org.jboss.staxmapper.XMLExtendedStreamReader;
+import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.EnumSet;
 import java.util.Properties;
 import java.util.Set;
 
-import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import javax.xml.stream.XMLStreamException;
+
+import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
+import org.jboss.metadata.property.PropertyReplacer;
+import org.jboss.staxmapper.XMLExtendedStreamReader;
 
 /**
  * Parser for urn:jboss:ejb-client:1.1:jboss-ejb-client
@@ -47,12 +48,6 @@ class EJBClientDescriptor11Parser extends EJBClientDescriptor10Parser {
 
     protected EJBClientDescriptor11Parser(final PropertyReplacer propertyReplacer) {
         super(propertyReplacer);
-    }
-
-    protected static void requireNoContent(final XMLExtendedStreamReader reader) throws XMLStreamException {
-        if (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
-            unexpectedElement(reader);
-        }
     }
 
     protected void parseClientContext(final XMLExtendedStreamReader reader, final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
@@ -344,5 +339,11 @@ class EJBClientDescriptor11Parser extends EJBClientDescriptor10Parser {
         final Properties property = new Properties();
         property.put(name, value);
         return property;
+    }
+
+    protected static void requireNoContent(final XMLExtendedStreamReader reader) throws XMLStreamException {
+        if (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
+            unexpectedElement(reader);
+        }
     }
 }

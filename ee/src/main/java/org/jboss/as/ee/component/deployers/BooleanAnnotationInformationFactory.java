@@ -22,11 +22,11 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import java.lang.annotation.Annotation;
+
 import org.jboss.as.ee.metadata.ClassAnnotationInformationFactory;
 import org.jboss.jandex.AnnotationInstance;
 import org.jboss.metadata.property.PropertyReplacer;
-
-import java.lang.annotation.Annotation;
 
 /**
  * An annotation information factory that simply returns true if the annotation is present

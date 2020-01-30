@@ -22,8 +22,8 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.enventry.shared;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.EJB;
 
 /**
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>

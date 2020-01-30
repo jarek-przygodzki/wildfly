@@ -31,10 +31,6 @@ import org.jboss.metadata.property.PropertyReplacers;
  */
 public class JBossDescriptorPropertyReplacement {
 
-    private JBossDescriptorPropertyReplacement() {
-
-    }
-
     public static PropertyReplacer propertyReplacer(final DeploymentUnit deploymentUnit) {
         Boolean replacement = deploymentUnit.getAttachment(Attachments.JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT);
         if (replacement == null || replacement) {
@@ -44,5 +40,9 @@ public class JBossDescriptorPropertyReplacement {
         } else {
             return PropertyReplacers.noop();
         }
+    }
+
+    private JBossDescriptorPropertyReplacement() {
+
     }
 }

@@ -52,17 +52,17 @@ public class ComponentRegistry {
     private final ServiceRegistry serviceRegistry;
     private final InjectedValue<EEClassIntrospector> classIntrospectorInjectedValue = new InjectedValue<>();
 
-    public ComponentRegistry(final ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
-
     public static ServiceName serviceName(final DeploymentUnit deploymentUnit) {
         return deploymentUnit.getServiceName().append(SERVICE_NAME);
     }
 
+    public ComponentRegistry(final ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
+
     public void addComponent(final ComponentConfiguration componentConfiguration) {
-        if (componentConfiguration.getViews().size() < 2) {
-            if (componentConfiguration.getViews().size() == 0) {
+        if(componentConfiguration.getViews().size() < 2) {
+            if(componentConfiguration.getViews().size() == 0) {
                 componentsByClass.put(componentConfiguration.getComponentClass(), new ComponentManagedReferenceFactory(componentConfiguration.getComponentDescription().getStartServiceName(), null));
             } else {
                 componentsByClass.put(componentConfiguration.getComponentClass(), new ComponentManagedReferenceFactory(componentConfiguration.getComponentDescription().getStartServiceName(), componentConfiguration.getViews().get(0).getViewServiceName()));
@@ -145,7 +145,7 @@ public class ComponentRegistry {
             if (component == null) {
                 return null;
             }
-            if (view == null) {
+            if(view == null) {
                 return new ComponentManagedReference(component.getValue().createInstance());
             } else {
                 try {

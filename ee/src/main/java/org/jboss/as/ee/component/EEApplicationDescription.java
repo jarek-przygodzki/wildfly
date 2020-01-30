@@ -22,8 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.vfs.VirtualFile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.jboss.vfs.VirtualFile;
 
 /**
  * @author John Bailey
@@ -100,7 +100,7 @@ public class EEApplicationDescription {
             }
             ret.add(i.viewDescription);
         }
-        if (!currentDep.isEmpty()) {
+        if(!currentDep.isEmpty()) {
             return currentDep;
         }
         return ret;

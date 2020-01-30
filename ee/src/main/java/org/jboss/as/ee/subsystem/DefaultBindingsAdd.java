@@ -46,27 +46,27 @@ public class DefaultBindingsAdd extends AbstractBoottimeAddStepHandler {
     @Override
     protected void performBoottime(OperationContext context, ModelNode operation, Resource resource) throws OperationFailedException {
         ModelNode model = resource.getModel();
-        if (model.hasDefined(DefaultBindingsResourceDefinition.CONTEXT_SERVICE)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.CONTEXT_SERVICE)) {
             final String contextService = DefaultBindingsResourceDefinition.CONTEXT_SERVICE_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setContextService(contextService);
         }
-        if (model.hasDefined(DefaultBindingsResourceDefinition.DATASOURCE)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.DATASOURCE)) {
             final String dataSource = DefaultBindingsResourceDefinition.DATASOURCE_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setDataSource(dataSource);
         }
-        if (model.hasDefined(DefaultBindingsResourceDefinition.JMS_CONNECTION_FACTORY)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.JMS_CONNECTION_FACTORY)) {
             final String jmsConnectionFactory = DefaultBindingsResourceDefinition.JMS_CONNECTION_FACTORY_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setJmsConnectionFactory(jmsConnectionFactory);
         }
-        if (model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_EXECUTOR_SERVICE)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_EXECUTOR_SERVICE)) {
             final String managedExecutorService = DefaultBindingsResourceDefinition.MANAGED_EXECUTOR_SERVICE_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setManagedExecutorService(managedExecutorService);
         }
-        if (model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_SCHEDULED_EXECUTOR_SERVICE)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_SCHEDULED_EXECUTOR_SERVICE)) {
             final String managedScheduledExecutorService = DefaultBindingsResourceDefinition.MANAGED_SCHEDULED_EXECUTOR_SERVICE_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setManagedScheduledExecutorService(managedScheduledExecutorService);
         }
-        if (model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_THREAD_FACTORY)) {
+        if(model.hasDefined(DefaultBindingsResourceDefinition.MANAGED_THREAD_FACTORY)) {
             final String managedThreadFactory = DefaultBindingsResourceDefinition.MANAGED_THREAD_FACTORY_AD.resolveModelAttribute(context, model).asString();
             defaultBindingsConfigurationProcessor.setManagedThreadFactory(managedThreadFactory);
         }

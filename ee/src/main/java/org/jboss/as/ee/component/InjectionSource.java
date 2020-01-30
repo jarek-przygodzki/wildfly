@@ -40,9 +40,9 @@ public abstract class InjectionSource {
      * dependencies for this binding (i.e. the source for the binding's value).
      *
      * @param resolutionContext the resolution context to use
-     * @param serviceBuilder    the builder for the binder service
-     * @param phaseContext      the deployment phase context
-     * @param injector          the injector into which the value should be placed
+     * @param serviceBuilder the builder for the binder service
+     * @param phaseContext the deployment phase context
+     * @param injector the injector into which the value should be placed
      * @throws DeploymentUnitProcessingException if an error occurs
      */
     public abstract void getResourceValue(ResolutionContext resolutionContext, ServiceBuilder<?> serviceBuilder, DeploymentPhaseContext phaseContext, Injector<ManagedReferenceFactory> injector) throws DeploymentUnitProcessingException;

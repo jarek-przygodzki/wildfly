@@ -22,11 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.interceptors.OrderedItemContainer;
-import org.jboss.invocation.InterceptorFactory;
-import org.jboss.invocation.proxy.ProxyFactory;
-import org.jboss.msc.service.ServiceName;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +31,11 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.jboss.as.ee.component.interceptors.OrderedItemContainer;
+import org.jboss.invocation.InterceptorFactory;
+import org.jboss.invocation.proxy.ProxyFactory;
+import org.jboss.msc.service.ServiceName;
 
 /**
  * A configuration of a component view.
@@ -251,7 +251,6 @@ public class ViewConfiguration {
 
     /**
      * Gets all async methods for the view
-     *
      * @return The async methods
      */
     public Set<Method> getAsyncMethods() {
@@ -272,6 +271,7 @@ public class ViewConfiguration {
     }
 
     /**
+     *
      * @param viewInstanceFactory The instance factory that is used to create the view instances
      */
     public void setViewInstanceFactory(final ViewInstanceFactory viewInstanceFactory) {
@@ -284,7 +284,7 @@ public class ViewConfiguration {
      * @param type The type of data
      * @param data The data
      */
-    public <T> void putPrivateData(final Class<T> type, T data) {
+    public <T> void putPrivateData(final Class<T> type, T data ) {
         privateData.put(type, data);
     }
 

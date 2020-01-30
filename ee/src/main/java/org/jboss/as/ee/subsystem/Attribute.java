@@ -56,7 +56,23 @@ enum Attribute {
     JMS_CONNECTION_FACTORY(DefaultBindingsResourceDefinition.JMS_CONNECTION_FACTORY),
     MANAGED_EXECUTOR_SERVICE(DefaultBindingsResourceDefinition.MANAGED_EXECUTOR_SERVICE),
     MANAGED_SCHEDULED_EXECUTOR_SERVICE(DefaultBindingsResourceDefinition.MANAGED_SCHEDULED_EXECUTOR_SERVICE),
-    MANAGED_THREAD_FACTORY(DefaultBindingsResourceDefinition.MANAGED_THREAD_FACTORY);
+    MANAGED_THREAD_FACTORY(DefaultBindingsResourceDefinition.MANAGED_THREAD_FACTORY)
+    ;
+
+    private final String name;
+
+    Attribute(final String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get the local name of this attribute.
+     *
+     * @return the local name
+     */
+    public String getLocalName() {
+        return name;
+    }
 
     private static final Map<String, Attribute> MAP;
 
@@ -69,24 +85,9 @@ enum Attribute {
         MAP = map;
     }
 
-    private final String name;
-
-    Attribute(final String name) {
-        this.name = name;
-    }
-
     public static Attribute forName(String localName) {
         final Attribute element = MAP.get(localName);
         return element == null ? UNKNOWN : element;
-    }
-
-    /**
-     * Get the local name of this attribute.
-     *
-     * @return the local name
-     */
-    public String getLocalName() {
-        return name;
     }
 
     public String toString() {

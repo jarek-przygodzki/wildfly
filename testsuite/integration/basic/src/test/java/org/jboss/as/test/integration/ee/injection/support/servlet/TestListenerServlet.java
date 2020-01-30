@@ -21,27 +21,24 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
-import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
 
 @SuppressWarnings("serial")
 @WebServlet("/TestListenerServlet")
 public class TestListenerServlet extends HttpServlet {
-
-    private static String getNameFromRequest(HttpServletRequest req) {
-        return req.getAttribute("name").toString();
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -73,5 +70,9 @@ public class TestListenerServlet extends HttpServlet {
         } else {
             resp.setStatus(404);
         }
+    }
+
+    private static String getNameFromRequest(HttpServletRequest req) {
+        return req.getAttribute("name").toString();
     }
 }

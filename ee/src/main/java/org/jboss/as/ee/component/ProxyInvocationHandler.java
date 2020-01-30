@@ -22,13 +22,13 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.invocation.Interceptor;
-import org.jboss.invocation.InterceptorContext;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jboss.invocation.Interceptor;
+import org.jboss.invocation.InterceptorContext;
 
 /**
  * An invocation handler for a component proxy.
@@ -44,8 +44,8 @@ public final class ProxyInvocationHandler implements InvocationHandler {
     /**
      * Construct a new instance.
      *
-     * @param interceptors  the interceptors map to use
-     * @param instance      The view instane data
+     * @param interceptors the interceptors map to use
+     * @param instance The view instane data
      * @param componentView The component view
      */
     public ProxyInvocationHandler(final Map<Method, Interceptor> interceptors, ComponentClientInstance instance, ComponentView componentView) {
@@ -54,9 +54,7 @@ public final class ProxyInvocationHandler implements InvocationHandler {
         this.componentView = componentView;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         final Interceptor interceptor = interceptors.get(method);
         if (interceptor == null) {

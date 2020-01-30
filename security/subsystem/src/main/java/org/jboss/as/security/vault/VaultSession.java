@@ -134,7 +134,7 @@ public final class VaultSession {
             throw new Exception("Encryption directory has to be specified.");
         }
         if (!encryptionDirectory.endsWith("/") || encryptionDirectory.endsWith("\\")) {
-            encryptionDirectory = encryptionDirectory + ("/");
+            encryptionDirectory = encryptionDirectory + (System.getProperty("file.separator", "/"));
         }
         File d = new File(encryptionDirectory);
         if (!d.exists()) {
@@ -171,11 +171,11 @@ public final class VaultSession {
         SecretKeyFactory factory = SecretKeyFactory.getInstance(VAULT_ENC_ALGORITHM);
 
         char[] password = "somearbitrarycrazystringthatdoesnotmatter".toCharArray();
-        PBEParameterSpec cipherSpec = new PBEParameterSpec(salt.getBytes(CHARSET), iterationCount);
+        PBEParameterSpec cipherSpec = new PBEParameterSpec(salt.getBytes(), iterationCount);
         PBEKeySpec keySpec = new PBEKeySpec(password);
         SecretKey cipherKey = factory.generateSecret(keySpec);
 
-        String maskedPass = PBEUtils.encode64(keystorePassword.getBytes(CHARSET), VAULT_ENC_ALGORITHM, cipherKey, cipherSpec);
+        String maskedPass = PBEUtils.encode64(keystorePassword.getBytes(), VAULT_ENC_ALGORITHM, cipherKey, cipherSpec);
 
         return PicketBoxSecurityVault.PASS_MASK_PREFIX + maskedPass;
     }
@@ -326,14 +326,12 @@ public final class VaultSession {
      * Display info about vault itself in form of AS7 configuration file.
      */
     public void vaultConfigurationDisplay() {
-        final String configuration = vaultConfiguration();
         System.out.println(SecurityLogger.ROOT_LOGGER.vaultConfigurationTitle());
         System.out.println("********************************************");
-        System.out.println("For standalone mode:");
-        System.out.println(configuration);
-        System.out.println("********************************************");
-        System.out.println("For domain mode:");
-        System.out.println("/host=the_host" + configuration);
+        System.out.println("...");
+        System.out.println("</extensions>");
+        System.out.print(vaultConfiguration());
+        System.out.println("<management> ...");
         System.out.println("********************************************");
     }
 
@@ -343,14 +341,14 @@ public final class VaultSession {
      */
     public String vaultConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append("/core-service=vault:add(vault-options=[");
-        sb.append("(\"KEYSTORE_URL\" => \"").append(keystoreURL).append("\")").append(",");
-        sb.append("(\"KEYSTORE_PASSWORD\" => \"").append(keystoreMaskedPassword).append("\")").append(",");
-        sb.append("(\"KEYSTORE_ALIAS\" => \"").append(vaultAlias).append("\")").append(",");
-        sb.append("(\"SALT\" => \"").append(salt).append("\")").append(",");
-        sb.append("(\"ITERATION_COUNT\" => \"").append(iterationCount).append("\")").append(",");
-        sb.append("(\"ENC_FILE_DIR\" => \"").append(encryptionDirectory).append("\")");
-        sb.append("])");
+        sb.append("<vault>").append("\n");
+        sb.append("  <vault-option name=\"KEYSTORE_URL\" value=\"" + keystoreURL + "\"/>").append("\n");
+        sb.append("  <vault-option name=\"KEYSTORE_PASSWORD\" value=\"" + keystoreMaskedPassword + "\"/>").append("\n");
+        sb.append("  <vault-option name=\"KEYSTORE_ALIAS\" value=\"" + vaultAlias + "\"/>").append("\n");
+        sb.append("  <vault-option name=\"SALT\" value=\"" + salt + "\"/>").append("\n");
+        sb.append("  <vault-option name=\"ITERATION_COUNT\" value=\"" + iterationCount + "\"/>").append("\n");
+        sb.append("  <vault-option name=\"ENC_FILE_DIR\" value=\"" + encryptionDirectory + "\"/>").append("\n");
+        sb.append("</vault>");
         return sb.toString();
     }
 

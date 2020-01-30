@@ -21,6 +21,11 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.jaxrs;
 
+import static org.junit.Assert.assertEquals;
+
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -39,17 +44,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-
 @RunWith(Arquillian.class)
 @RunAsClient
 public class JaxRsCdiInterceptionTestCase {
-
-    @ArquillianResource
-    private URL url;
 
     @Deployment(testable = false)
     public static Archive<?> deploy() {
@@ -63,6 +60,10 @@ public class JaxRsCdiInterceptionTestCase {
                 + "        <url-pattern>/rest/*</url-pattern>\n" + "    </servlet-mapping>\n" + "\n"), "web.xml");
         return war;
     }
+
+    @ArquillianResource
+    private URL url;
+
 
     private String performCall(String urlPattern) throws Exception {
         return HttpRequest.get(url + urlPattern, 10, TimeUnit.SECONDS);

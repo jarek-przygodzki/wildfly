@@ -21,6 +21,13 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.websocket;
 
+import java.net.SocketPermission;
+import java.net.URI;
+import java.util.PropertyPermission;
+
+import javax.websocket.ContainerProvider;
+import javax.websocket.WebSocketContainer;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.ee.injection.support.Alpha;
@@ -36,12 +43,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.websocket.ContainerProvider;
-import javax.websocket.WebSocketContainer;
-import java.net.SocketPermission;
-import java.net.URI;
-import java.util.PropertyPermission;
 
 import static org.jboss.as.test.shared.integration.ejb.security.PermissionUtils.createPermissionsXmlAsset;
 

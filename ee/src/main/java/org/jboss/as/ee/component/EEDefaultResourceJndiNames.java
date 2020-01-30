@@ -23,7 +23,6 @@ package org.jboss.as.ee.component;
 
 /**
  * The jndi names for the default EE bindings.
- *
  * @author Eduardo Martins
  */
 public class EEDefaultResourceJndiNames {

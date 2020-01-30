@@ -36,7 +36,7 @@ public class VaultPropertyResolver implements PropertyResolver {
     }
 
     public String resolve(String propertyName) {
-        if (vaultReader.isVaultFormat(propertyName)) {
+        if(vaultReader.isVaultFormat(propertyName)) {
             return vaultReader.retrieveFromVault(propertyName);
         }
         return null;

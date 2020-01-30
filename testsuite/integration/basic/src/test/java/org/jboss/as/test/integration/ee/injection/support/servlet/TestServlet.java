@@ -21,13 +21,11 @@
  */
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
-import org.jboss.as.test.integration.ee.injection.support.Alpha;
-import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
-import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.Bravo;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
-import org.jboss.as.test.integration.ee.injection.support.ProducedString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -35,11 +33,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.jboss.as.test.integration.ee.injection.support.Alpha;
+import org.jboss.as.test.integration.ee.injection.support.AroundConstructBinding;
+import org.jboss.as.test.integration.ee.injection.support.AroundConstructInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.Bravo;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptor;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
+import org.jboss.as.test.integration.ee.injection.support.ProducedString;
 
 @SuppressWarnings("serial")
 @AroundConstructBinding
@@ -55,13 +56,13 @@ public class TestServlet extends HttpServlet {
     private String name;
 
     @Inject
-    public TestServlet(@ProducedString String name) {
-        this.name = name + "#TestServlet";
+    public void setBravo(Bravo bravo) {
+        this.bravo = bravo;
     }
 
     @Inject
-    public void setBravo(Bravo bravo) {
-        this.bravo = bravo;
+    public TestServlet(@ProducedString String name) {
+        this.name = name + "#TestServlet";
     }
 
     @Override
@@ -84,11 +85,11 @@ public class TestServlet extends HttpServlet {
             // Reset the interceptions - it will be incremented at the end of the service() method invocation
             ComponentInterceptor.resetInterceptions();
             assertEquals(0, ComponentInterceptor.getInterceptions().size());
-            resp.getWriter().append("" + ComponentInterceptor.getInterceptions().size());
+            resp.getWriter().append(""+ComponentInterceptor.getInterceptions().size());
         } else if ("aroundInvokeVerify".equals(mode)) {
             assertEquals("Servlet invocation not intercepted", 1, ComponentInterceptor.getInterceptions().size());
             assertEquals("service", ComponentInterceptor.getInterceptions().get(0).getMethodName());
-            resp.getWriter().append("" + ComponentInterceptor.getInterceptions().size());
+            resp.getWriter().append(""+ComponentInterceptor.getInterceptions().size());
         } else if ("aroundConstructVerify".equals(mode)) {
             assertTrue("AroundConstruct interceptor method not invoked", AroundConstructInterceptor.aroundConstructCalled);
             assertNotNull(name);

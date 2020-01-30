@@ -22,8 +22,18 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -34,16 +44,6 @@ import org.jboss.modules.ModuleLoader;
 import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.value.InjectedValue;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * A description of a generic Java EE component.  The description is pre-classloading so it references everything by name.
@@ -57,31 +57,41 @@ public class ComponentDescription implements ResourceInjectionTarget {
     private static final DefaultComponentViewConfigurator DEFAULT_COMPONENT_VIEW_CONFIGURATOR = new DefaultComponentViewConfigurator();
 
     private final ServiceName serviceName;
+    private ServiceName contextServiceName;
     private final String componentName;
     private final String componentClassName;
     private final EEModuleDescription moduleDescription;
     private final Set<ViewDescription> views = new HashSet<ViewDescription>();
+
     /**
      * Interceptors methods that have been defined by the deployment descriptor
      */
     private final Map<String, InterceptorClassDescription> interceptorClassOverrides = new HashMap<String, InterceptorClassDescription>();
+
+    private List<InterceptorDescription> classInterceptors = new ArrayList<InterceptorDescription>();
+    private List<InterceptorDescription> defaultInterceptors = new ArrayList<InterceptorDescription>();
     private final Map<MethodIdentifier, List<InterceptorDescription>> methodInterceptors = new HashMap<MethodIdentifier, List<InterceptorDescription>>();
     private final Set<MethodIdentifier> methodExcludeDefaultInterceptors = new HashSet<MethodIdentifier>();
     private final Set<MethodIdentifier> methodExcludeClassInterceptors = new HashSet<MethodIdentifier>();
+    private Set<InterceptorDescription> allInterceptors;
+    private boolean excludeDefaultInterceptors = false;
+    private boolean ignoreLifecycleInterceptors = false;
+
     private final Map<ServiceName, ServiceBuilder.DependencyType> dependencies = new HashMap<ServiceName, ServiceBuilder.DependencyType>();
+
+    private ComponentNamingMode namingMode = ComponentNamingMode.USE_MODULE;
+
+    private DeploymentDescriptorEnvironment deploymentDescriptorEnvironment;
+
+
     // Bindings
     private final List<BindingConfiguration> bindingConfigurations = new ArrayList<BindingConfiguration>();
     //injections that have been set in the components deployment descriptor
     private final Map<String, Map<InjectionTarget, ResourceInjectionConfiguration>> resourceInjections = new HashMap<String, Map<InjectionTarget, ResourceInjectionConfiguration>>();
+
     private final Deque<ComponentConfigurator> configurators = new ArrayDeque<ComponentConfigurator>();
-    private ServiceName contextServiceName;
-    private List<InterceptorDescription> classInterceptors = new ArrayList<InterceptorDescription>();
-    private List<InterceptorDescription> defaultInterceptors = new ArrayList<InterceptorDescription>();
-    private Set<InterceptorDescription> allInterceptors;
-    private boolean excludeDefaultInterceptors = false;
-    private boolean ignoreLifecycleInterceptors = false;
-    private ComponentNamingMode namingMode = ComponentNamingMode.USE_MODULE;
-    private DeploymentDescriptorEnvironment deploymentDescriptorEnvironment;
+
+
     /**
      * If this component is deployed in a bean deployment archive this stores the id of the BDA
      */
@@ -117,16 +127,6 @@ public class ComponentDescription implements ResourceInjectionTarget {
         configurators.addLast(DEFAULT_COMPONENT_VIEW_CONFIGURATOR);
     }
 
-    public static InterceptorClassDescription mergeInterceptorConfig(final Class<?> clazz, final EEModuleClassDescription classDescription, final ComponentDescription description, final boolean metadataComplete) {
-        final InterceptorClassDescription interceptorConfig;
-        if (classDescription != null && !metadataComplete) {
-            interceptorConfig = InterceptorClassDescription.merge(classDescription.getInterceptorClassDescription(), description.interceptorClassOverrides.get(clazz.getName()));
-        } else {
-            interceptorConfig = InterceptorClassDescription.merge(null, description.interceptorClassOverrides.get(clazz.getName()));
-        }
-        return interceptorConfig;
-    }
-
     public ComponentConfiguration createConfiguration(final ClassReflectionIndex classIndex, final ClassLoader moduleClassLoader, final ModuleLoader moduleLoader) {
         return new ComponentConfiguration(this, classIndex, moduleClassLoader, moduleLoader);
     }
@@ -138,6 +138,15 @@ public class ComponentDescription implements ResourceInjectionTarget {
      */
     public String getComponentName() {
         return componentName;
+    }
+
+    /**
+     * Set context service name.
+     *
+     * @param contextServiceName
+     */
+    public void setContextServiceName(final ServiceName contextServiceName) {
+        this.contextServiceName = contextServiceName;
     }
 
     /**
@@ -154,15 +163,6 @@ public class ComponentDescription implements ResourceInjectionTarget {
         } else {
             throw new IllegalStateException();
         }
-    }
-
-    /**
-     * Set context service name.
-     *
-     * @param contextServiceName
-     */
-    public void setContextServiceName(final ServiceName contextServiceName) {
-        this.contextServiceName = contextServiceName;
     }
 
     /**
@@ -288,6 +288,7 @@ public class ComponentDescription implements ResourceInjectionTarget {
     /**
      * If this component should ignore lifecycle interceptors. This should generally only be set when they are going
      * to be handled by an external framework such as Weld.
+     *
      */
     public void setIgnoreLifecycleInterceptors(boolean ignoreLifecycleInterceptors) {
         this.ignoreLifecycleInterceptors = ignoreLifecycleInterceptors;
@@ -462,6 +463,7 @@ public class ComponentDescription implements ResourceInjectionTarget {
         this.deploymentDescriptorEnvironment = deploymentDescriptorEnvironment;
     }
 
+
     /**
      * Get the binding configurations for this component.  This list contains bindings which are specific to the
      * component.
@@ -482,6 +484,8 @@ public class ComponentDescription implements ResourceInjectionTarget {
     }
 
     /**
+     *
+     *
      * @return true If this component type is eligible for a timer service
      */
     public boolean isTimerServiceApplicable() {
@@ -489,6 +493,7 @@ public class ComponentDescription implements ResourceInjectionTarget {
     }
 
     /**
+     *
      * @return <code>true</code> if this component has timeout methods and is eligible for a 'real' timer service
      */
     public boolean isTimerServiceRequired() {
@@ -496,6 +501,7 @@ public class ComponentDescription implements ResourceInjectionTarget {
     }
 
     /**
+     *
      * @return The set of all method identifiers for the timeout methods
      */
     public Set<MethodIdentifier> getTimerMethods() {
@@ -524,6 +530,32 @@ public class ComponentDescription implements ResourceInjectionTarget {
      */
     public boolean isOptional() {
         return false;
+    }
+
+    static class InjectedConfigurator implements DependencyConfigurator<ComponentStartService> {
+
+        private final ResourceInjectionConfiguration injectionConfiguration;
+        private final ComponentConfiguration configuration;
+        private final DeploymentPhaseContext context;
+        private final InjectedValue<ManagedReferenceFactory> managedReferenceFactoryValue;
+
+        InjectedConfigurator(final ResourceInjectionConfiguration injectionConfiguration, final ComponentConfiguration configuration, final DeploymentPhaseContext context, final InjectedValue<ManagedReferenceFactory> managedReferenceFactoryValue) {
+            this.injectionConfiguration = injectionConfiguration;
+            this.configuration = configuration;
+            this.context = context;
+            this.managedReferenceFactoryValue = managedReferenceFactoryValue;
+        }
+
+        public void configureDependency(final ServiceBuilder<?> serviceBuilder, ComponentStartService service) throws DeploymentUnitProcessingException {
+            InjectionSource.ResolutionContext resolutionContext = new InjectionSource.ResolutionContext(
+                    configuration.getComponentDescription().getNamingMode() == ComponentNamingMode.USE_MODULE,
+                    configuration.getComponentName(),
+                    configuration.getModuleName(),
+                    configuration.getApplicationName()
+            );
+            injectionConfiguration.getSource().getResourceValue(resolutionContext, serviceBuilder, context, managedReferenceFactoryValue);
+        }
+
     }
 
     public String getBeanDeploymentArchiveId() {
@@ -555,40 +587,25 @@ public class ComponentDescription implements ResourceInjectionTarget {
     /**
      * If this method returns true then Weld will directly create the component instance,
      * which will apply interceptors and decorators via sub classing.
-     * <p>
+     *
      * For most components this is not necessary.
-     * <p>
+     *
      * Also not that even though EJB's are intercepted, their interceptor is done through
      * a different method that integrates with the existing EJB interceptor chain
+     *
      */
     public boolean isCDIInterceptorEnabled() {
         return false;
     }
 
-    static class InjectedConfigurator implements DependencyConfigurator<ComponentStartService> {
-
-        private final ResourceInjectionConfiguration injectionConfiguration;
-        private final ComponentConfiguration configuration;
-        private final DeploymentPhaseContext context;
-        private final InjectedValue<ManagedReferenceFactory> managedReferenceFactoryValue;
-
-        InjectedConfigurator(final ResourceInjectionConfiguration injectionConfiguration, final ComponentConfiguration configuration, final DeploymentPhaseContext context, final InjectedValue<ManagedReferenceFactory> managedReferenceFactoryValue) {
-            this.injectionConfiguration = injectionConfiguration;
-            this.configuration = configuration;
-            this.context = context;
-            this.managedReferenceFactoryValue = managedReferenceFactoryValue;
+    public static InterceptorClassDescription mergeInterceptorConfig(final Class<?> clazz, final EEModuleClassDescription classDescription, final ComponentDescription description, final boolean metadataComplete) {
+        final InterceptorClassDescription interceptorConfig;
+        if (classDescription != null && !metadataComplete) {
+            interceptorConfig = InterceptorClassDescription.merge(classDescription.getInterceptorClassDescription(), description.interceptorClassOverrides.get(clazz.getName()));
+        } else {
+            interceptorConfig = InterceptorClassDescription.merge(null, description.interceptorClassOverrides.get(clazz.getName()));
         }
-
-        public void configureDependency(final ServiceBuilder<?> serviceBuilder, ComponentStartService service) throws DeploymentUnitProcessingException {
-            InjectionSource.ResolutionContext resolutionContext = new InjectionSource.ResolutionContext(
-                    configuration.getComponentDescription().getNamingMode() == ComponentNamingMode.USE_MODULE,
-                    configuration.getComponentName(),
-                    configuration.getModuleName(),
-                    configuration.getApplicationName()
-            );
-            injectionConfiguration.getSource().getResourceValue(resolutionContext, serviceBuilder, context, managedReferenceFactoryValue);
-        }
-
+        return interceptorConfig;
     }
 
 }

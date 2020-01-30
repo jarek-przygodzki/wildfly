@@ -31,8 +31,7 @@ import javax.inject.Inject;
 @ManagedBean
 public class SimpleManagedBean {
 
-    @Inject
-    String driverName;
+    @Inject String driverName;
 
     public String getDriverName() {
         return driverName;

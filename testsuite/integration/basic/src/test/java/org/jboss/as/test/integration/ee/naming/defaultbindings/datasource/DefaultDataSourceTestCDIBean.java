@@ -33,11 +33,12 @@ public class DefaultDataSourceTestCDIBean {
     private DataSource injectedResource;
 
     /**
+     *
      * @throws Throwable
      */
     public void test() throws Throwable {
         // check injected resource
-        if (injectedResource == null) {
+        if(injectedResource == null) {
             throw new NullPointerException("injected resource");
         }
     }

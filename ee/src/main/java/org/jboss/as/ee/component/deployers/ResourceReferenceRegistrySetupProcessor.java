@@ -43,14 +43,14 @@ public class ResourceReferenceRegistrySetupProcessor implements DeploymentUnitPr
     @Override
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-        if (deploymentUnit.getParent() == null) {
+        if(deploymentUnit.getParent() == null) {
             final EEResourceReferenceProcessorRegistry registry = new EEResourceReferenceProcessorRegistry();
             registry.registerResourceReferenceProcessor(ContextServiceResourceReferenceProcessor.INSTANCE);
             registry.registerResourceReferenceProcessor(ManagedExecutorServiceResourceReferenceProcessor.INSTANCE);
             registry.registerResourceReferenceProcessor(ManagedScheduledExecutorServiceResourceReferenceProcessor.INSTANCE);
             registry.registerResourceReferenceProcessor(ManagedThreadFactoryResourceReferenceProcessor.INSTANCE);
             deploymentUnit.putAttachment(Attachments.RESOURCE_REFERENCE_PROCESSOR_REGISTRY, registry);
-        } else {
+        } else{
             deploymentUnit.putAttachment(Attachments.RESOURCE_REFERENCE_PROCESSOR_REGISTRY, deploymentUnit.getParent().getAttachment(Attachments.RESOURCE_REFERENCE_PROCESSOR_REGISTRY));
         }
     }

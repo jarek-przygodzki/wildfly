@@ -1,7 +1,11 @@
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.serialization.WriteReplaceInterface;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.serialization.WriteReplaceInterface;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -11,10 +15,6 @@ import org.jboss.invocation.proxy.ProxyFactory;
 import org.jboss.modules.Module;
 import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
-
-import java.io.Serializable;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Stuart Douglas

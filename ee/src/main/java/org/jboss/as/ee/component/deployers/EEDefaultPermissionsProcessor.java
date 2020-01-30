@@ -22,6 +22,15 @@
 
 package org.jboss.as.ee.component.deployers;
 
+import java.io.File;
+import java.io.FilePermission;
+import java.io.IOException;
+import java.security.Permission;
+import java.security.Permissions;
+import java.util.Enumeration;
+import java.util.List;
+
+import org.wildfly.naming.java.permission.JndiPermission;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -31,15 +40,6 @@ import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.modules.security.ImmediatePermissionFactory;
 import org.jboss.modules.security.PermissionFactory;
-import org.wildfly.naming.java.permission.JndiPermission;
-
-import java.io.File;
-import java.io.FilePermission;
-import java.io.IOException;
-import java.security.Permission;
-import java.security.Permissions;
-import java.util.Enumeration;
-import java.util.List;
 
 /**
  * A processor which sets up the default Java EE permission set.
@@ -82,7 +82,7 @@ public final class EEDefaultPermissionsProcessor implements DeploymentUnitProces
         ResourceRoot root = deploymentUnit.getAttachment(Attachments.DEPLOYMENT_ROOT);
         try {
             File file = root.getRoot().getPhysicalFile();
-            if (file != null && file.isDirectory()) {
+            if(file != null && file.isDirectory()) {
                 FilePermission permission = new FilePermission(file.getAbsolutePath() + File.separatorChar + "-", "read");
                 permissions.add(new ImmediatePermissionFactory(permission));
             }

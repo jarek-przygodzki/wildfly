@@ -22,18 +22,6 @@
 
 package org.jboss.as.ee.structure;
 
-import org.jboss.as.ee.logging.EeLogger;
-import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
-import org.jboss.metadata.property.PropertyReplacer;
-import org.jboss.staxmapper.XMLElementReader;
-import org.jboss.staxmapper.XMLExtendedStreamReader;
-
-import javax.xml.stream.Location;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.util.EnumSet;
-import java.util.Set;
-
 import static javax.xml.stream.XMLStreamConstants.ATTRIBUTE;
 import static javax.xml.stream.XMLStreamConstants.CDATA;
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
@@ -49,6 +37,19 @@ import static javax.xml.stream.XMLStreamConstants.PROCESSING_INSTRUCTION;
 import static javax.xml.stream.XMLStreamConstants.SPACE;
 import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+
+import java.util.EnumSet;
+import java.util.Set;
+
+import javax.xml.stream.Location;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
+import org.jboss.metadata.property.PropertyReplacer;
+import org.jboss.staxmapper.XMLElementReader;
+import org.jboss.staxmapper.XMLExtendedStreamReader;
 
 /**
  * Parser for urn:jboss:ejb-client:1.0:jboss-ejb-client
@@ -67,89 +68,6 @@ class EJBClientDescriptor10Parser implements XMLElementReader<EJBClientDescripto
         this.propertyReplacer = propertyReplacer;
     }
 
-    protected static void unexpectedEndOfDocument(final Location location) throws XMLStreamException {
-        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor("Unexpected end of document", location);
-    }
-
-    protected static void missingAttributes(final Location location, final Set<EJBClientDescriptorXMLAttribute> required) throws XMLStreamException {
-        final StringBuilder b = new StringBuilder("Missing one or more required attributes:");
-        for (EJBClientDescriptorXMLAttribute attribute : required) {
-            b.append(' ').append(attribute);
-        }
-        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor(b.toString(), location);
-    }
-
-    /**
-     * Throws a XMLStreamException for the unexpected element that was encountered during the parse
-     *
-     * @param reader the stream reader
-     * @throws XMLStreamException
-     */
-    protected static void unexpectedElement(final XMLExtendedStreamReader reader) throws XMLStreamException {
-        throw EeLogger.ROOT_LOGGER.unexpectedElement(reader.getName(), reader.getLocation());
-    }
-
-    protected static void unexpectedContent(final XMLStreamReader reader) throws XMLStreamException {
-        final String kind;
-        switch (reader.getEventType()) {
-            case ATTRIBUTE:
-                kind = "attribute";
-                break;
-            case CDATA:
-                kind = "cdata";
-                break;
-            case CHARACTERS:
-                kind = "characters";
-                break;
-            case COMMENT:
-                kind = "comment";
-                break;
-            case DTD:
-                kind = "dtd";
-                break;
-            case END_DOCUMENT:
-                kind = "document end";
-                break;
-            case END_ELEMENT:
-                kind = "element end";
-                break;
-            case ENTITY_DECLARATION:
-                kind = "entity declaration";
-                break;
-            case ENTITY_REFERENCE:
-                kind = "entity ref";
-                break;
-            case NAMESPACE:
-                kind = "namespace";
-                break;
-            case NOTATION_DECLARATION:
-                kind = "notation declaration";
-                break;
-            case PROCESSING_INSTRUCTION:
-                kind = "processing instruction";
-                break;
-            case SPACE:
-                kind = "whitespace";
-                break;
-            case START_DOCUMENT:
-                kind = "document start";
-                break;
-            case START_ELEMENT:
-                kind = "element start";
-                break;
-            default:
-                kind = "unknown";
-                break;
-        }
-        final StringBuilder b = new StringBuilder("Unexpected content of type '").append(kind).append('\'');
-        if (reader.hasName()) {
-            b.append(" named '").append(reader.getName()).append('\'');
-        }
-        if (reader.hasText()) {
-            b.append(", text is: '").append(reader.getText()).append('\'');
-        }
-        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor(b.toString(), reader.getLocation());
-    }
 
     @Override
     public void readElement(final XMLExtendedStreamReader reader, final EJBClientDescriptorMetaData ejbClientDescriptorMetaData) throws XMLStreamException {
@@ -279,6 +197,90 @@ class EJBClientDescriptor10Parser implements XMLElementReader<EJBClientDescripto
         if (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
             unexpectedContent(reader);
         }
+    }
+
+    protected static void unexpectedEndOfDocument(final Location location) throws XMLStreamException {
+        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor("Unexpected end of document", location);
+    }
+
+    protected static void missingAttributes(final Location location, final Set<EJBClientDescriptorXMLAttribute> required) throws XMLStreamException {
+        final StringBuilder b = new StringBuilder("Missing one or more required attributes:");
+        for (EJBClientDescriptorXMLAttribute attribute : required) {
+            b.append(' ').append(attribute);
+        }
+        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor(b.toString(), location);
+    }
+
+    /**
+     * Throws a XMLStreamException for the unexpected element that was encountered during the parse
+     *
+     * @param reader the stream reader
+     * @throws XMLStreamException
+     */
+    protected static void unexpectedElement(final XMLExtendedStreamReader reader) throws XMLStreamException {
+        throw EeLogger.ROOT_LOGGER.unexpectedElement(reader.getName(), reader.getLocation());
+    }
+
+    protected static void unexpectedContent(final XMLStreamReader reader) throws XMLStreamException {
+        final String kind;
+        switch (reader.getEventType()) {
+            case ATTRIBUTE:
+                kind = "attribute";
+                break;
+            case CDATA:
+                kind = "cdata";
+                break;
+            case CHARACTERS:
+                kind = "characters";
+                break;
+            case COMMENT:
+                kind = "comment";
+                break;
+            case DTD:
+                kind = "dtd";
+                break;
+            case END_DOCUMENT:
+                kind = "document end";
+                break;
+            case END_ELEMENT:
+                kind = "element end";
+                break;
+            case ENTITY_DECLARATION:
+                kind = "entity declaration";
+                break;
+            case ENTITY_REFERENCE:
+                kind = "entity ref";
+                break;
+            case NAMESPACE:
+                kind = "namespace";
+                break;
+            case NOTATION_DECLARATION:
+                kind = "notation declaration";
+                break;
+            case PROCESSING_INSTRUCTION:
+                kind = "processing instruction";
+                break;
+            case SPACE:
+                kind = "whitespace";
+                break;
+            case START_DOCUMENT:
+                kind = "document start";
+                break;
+            case START_ELEMENT:
+                kind = "element start";
+                break;
+            default:
+                kind = "unknown";
+                break;
+        }
+        final StringBuilder b = new StringBuilder("Unexpected content of type '").append(kind).append('\'');
+        if (reader.hasName()) {
+            b.append(" named '").append(reader.getName()).append('\'');
+        }
+        if (reader.hasText()) {
+            b.append(", text is: '").append(reader.getText()).append('\'');
+        }
+        throw EeLogger.ROOT_LOGGER.errorParsingEJBClientDescriptor(b.toString(), reader.getLocation());
     }
 
     protected String readResolveValue(final XMLExtendedStreamReader reader, final int index) {

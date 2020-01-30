@@ -63,7 +63,7 @@ public class ComponentCreateException extends Exception {
     /**
      * Constructs a {@code ComponentCreateException} with the specified detail message and cause.
      *
-     * @param msg   the detail message
+     * @param msg the detail message
      * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method)
      */
     public ComponentCreateException(final String msg, final Throwable cause) {

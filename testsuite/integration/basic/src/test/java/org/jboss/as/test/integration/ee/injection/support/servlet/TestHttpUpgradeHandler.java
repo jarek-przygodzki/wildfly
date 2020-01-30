@@ -22,15 +22,16 @@
 
 package org.jboss.as.test.integration.ee.injection.support.servlet;
 
-import org.jboss.as.test.integration.ee.injection.support.Alpha;
-import org.jboss.as.test.integration.ee.injection.support.Charlie;
-import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
+import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpUpgradeHandler;
 import javax.servlet.http.WebConnection;
-import java.io.IOException;
+
+import org.jboss.as.test.integration.ee.injection.support.Alpha;
+import org.jboss.as.test.integration.ee.injection.support.Charlie;
+import org.jboss.as.test.integration.ee.injection.support.ComponentInterceptorBinding;
 
 /**
  * {@link #init(WebConnection)} method should be intercepted.

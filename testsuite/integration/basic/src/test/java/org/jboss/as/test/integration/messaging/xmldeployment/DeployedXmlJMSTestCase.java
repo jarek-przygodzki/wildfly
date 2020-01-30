@@ -22,6 +22,13 @@
 
 package org.jboss.as.test.integration.messaging.xmldeployment;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import javax.jms.Queue;
+import javax.jms.Topic;
+import javax.naming.InitialContext;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -42,12 +49,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.jms.Queue;
-import javax.jms.Topic;
-import javax.naming.InitialContext;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Test deployment of -jms.xml files
@@ -60,27 +61,6 @@ public class DeployedXmlJMSTestCase {
 
     private static final String TEST_HORNETQ_JMS_XML = "test-hornetq-jms.xml";
     private static final String TEST_ACTIVEMQ_JMS_XML = "test-activemq-jms.xml";
-    @ArquillianResource
-    private InitialContext initialContext;
-
-    @Deployment
-    public static Archive<?> deploy() {
-        return ShrinkWrap.create(JavaArchive.class, "testDsXmlDeployment.jar")
-                .addClass(DeployedXmlJMSTestCase.class)
-                .addAsManifestResource(DeployedXmlDataSourceTestCase.class.getPackage(), "MANIFEST.MF", "MANIFEST.MF");
-    }
-
-    @Test
-    public void testDeployedQueue() throws Throwable {
-        final Queue queue = (Queue) initialContext.lookup("java:/queue1");
-        Assert.assertNotNull(queue);
-    }
-
-    @Test
-    public void testDeployedTopic() throws Throwable {
-        final Topic topic = (Topic) initialContext.lookup("java:/topic1");
-        Assert.assertNotNull(topic);
-    }
 
     static class DeployedXmlJMSTestCaseSetup implements ServerSetupTask {
 
@@ -112,6 +92,28 @@ public class DeployedXmlJMSTestCase {
             final DeploymentPlan undeployPlan = manager.newDeploymentPlan().undeploy(xmlFile).andRemoveUndeployed().build();
             manager.execute(undeployPlan).get();
         }
+    }
+
+    @Deployment
+    public static Archive<?> deploy() {
+        return ShrinkWrap.create(JavaArchive.class, "testDsXmlDeployment.jar")
+                .addClass(DeployedXmlJMSTestCase.class)
+                .addAsManifestResource(DeployedXmlDataSourceTestCase.class.getPackage(), "MANIFEST.MF", "MANIFEST.MF");
+    }
+
+    @ArquillianResource
+    private InitialContext initialContext;
+
+    @Test
+    public void testDeployedQueue() throws Throwable {
+        final Queue queue = (Queue) initialContext.lookup("java:/queue1");
+        Assert.assertNotNull(queue);
+    }
+
+    @Test
+    public void testDeployedTopic() throws Throwable {
+        final Topic topic = (Topic) initialContext.lookup("java:/topic1");
+        Assert.assertNotNull(topic);
     }
 
 

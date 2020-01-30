@@ -21,6 +21,9 @@
  */
 package org.jboss.as.ee.structure;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jboss.as.server.deployment.DeploymentCompleteServiceProcessor;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -32,9 +35,6 @@ import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.metadata.ear.spec.EarMetaData;
 import org.jboss.metadata.ear.spec.ModuleMetaData;
 import org.jboss.msc.service.ServiceName;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Sets up dependencies for the next phase if initialize in order is set.

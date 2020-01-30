@@ -1,5 +1,13 @@
 package org.jboss.as.ee.component;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -12,14 +20,6 @@ import org.jboss.invocation.InterceptorFactoryContext;
 import org.jboss.invocation.Interceptors;
 import org.jboss.msc.value.InjectedValue;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import static org.jboss.as.ee.logging.EeLogger.ROOT_LOGGER;
 
 /**
@@ -29,13 +29,12 @@ public class AbstractComponentConfigurator {
 
     /**
      * The weaved interceptor factory results in a lot of runtime allocations, and should not be used
-     *
      * @param interceptorFactories The interceptor factories
      * @return
      */
     @Deprecated
     protected static InterceptorFactory weaved(final Collection<InterceptorFactory> interceptorFactories) {
-        if (interceptorFactories == null) {
+        if(interceptorFactories == null) {
             return null;
         }
         return new InterceptorFactory() {
@@ -67,6 +66,7 @@ public class AbstractComponentConfigurator {
      * @param instanceKey       The key that identifies the instance to inject in the interceptor context
      * @param uninjectors       The list of uninjections for the current component
      * @throws org.jboss.as.server.deployment.DeploymentUnitProcessingException
+     *
      */
     protected void mergeInjectionsForClass(final Class<?> clazz, final Class<?> actualClass, final EEModuleClassDescription classDescription, final EEModuleDescription moduleDescription, final DeploymentReflectionIndex deploymentReflectionIndex, final ComponentDescription description, final ComponentConfiguration configuration, final DeploymentPhaseContext context, final Deque<InterceptorFactory> injectors, final Object instanceKey, final Deque<InterceptorFactory> uninjectors, boolean metadataComplete) throws DeploymentUnitProcessingException {
         final Map<InjectionTarget, ResourceInjectionConfiguration> mergedInjections = new HashMap<InjectionTarget, ResourceInjectionConfiguration>();
@@ -77,15 +77,15 @@ public class AbstractComponentConfigurator {
         mergedInjections.putAll(description.getResourceInjections(clazz.getName()));
 
         for (final ResourceInjectionConfiguration injectionConfiguration : mergedInjections.values()) {
-            if (!moduleDescription.isAppClient() && injectionConfiguration.getTarget().isStatic(context.getDeploymentUnit())) {
-                ROOT_LOGGER.debugf("Injection for a member with static modifier is only acceptable on application clients, ignoring injection for target %s", injectionConfiguration.getTarget());
+            if(!moduleDescription.isAppClient() && injectionConfiguration.getTarget().isStatic(context.getDeploymentUnit())) {
+                ROOT_LOGGER.debugf("Injection for a member with static modifier is only acceptable on application clients, ignoring injection for target %s",injectionConfiguration.getTarget());
                 continue;
             }
-            if (injectionConfiguration.getTarget() instanceof MethodInjectionTarget) {
+            if(injectionConfiguration.getTarget() instanceof MethodInjectionTarget) {
                 //we need to make sure that if this is a method injection it has not been overriden
-                final MethodInjectionTarget mt = (MethodInjectionTarget) injectionConfiguration.getTarget();
+                final MethodInjectionTarget mt = (MethodInjectionTarget)injectionConfiguration.getTarget();
                 Method method = mt.getMethod(deploymentReflectionIndex, clazz);
-                if (!isNotOverriden(clazz, method, actualClass, deploymentReflectionIndex)) {
+                if(!isNotOverriden(clazz, method, actualClass, deploymentReflectionIndex)) {
                     continue;
                 }
             }

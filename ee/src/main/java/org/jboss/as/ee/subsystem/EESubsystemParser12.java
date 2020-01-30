@@ -54,6 +54,67 @@ class EESubsystemParser12 implements XMLStreamConstants, XMLElementReader<List<M
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void readElement(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
+        // EE subsystem doesn't have any attributes, so make sure that the xml doesn't have any
+        requireNoAttributes(reader);
+
+        final ModelNode eeSubSystem = Util.createAddOperation(PathAddress.pathAddress(EeExtension.PATH_SUBSYSTEM));
+        // add the subsystem to the ModelNode(s)
+        list.add(eeSubSystem);
+
+        // elements
+        final EnumSet<Element> encountered = EnumSet.noneOf(Element.class);
+        while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
+            switch (Namespace.forUri(reader.getNamespaceURI())) {
+                case EE_1_2: {
+                    final Element element = Element.forName(reader.getLocalName());
+                    if (!encountered.add(element)) {
+                        throw unexpectedElement(reader);
+                    }
+                    switch (element) {
+                        case GLOBAL_MODULES: {
+                            final ModelNode model = parseGlobalModules(reader);
+                            eeSubSystem.get(GlobalModulesDefinition.GLOBAL_MODULES).set(model);
+                            break;
+                        }
+                        case EAR_SUBDEPLOYMENTS_ISOLATED: {
+                            final String earSubDeploymentsIsolated = parseEarSubDeploymentsIsolatedElement(reader);
+                            // set the ear subdeployment isolation on the subsystem operation
+                            EeSubsystemRootResource.EAR_SUBDEPLOYMENTS_ISOLATED.parseAndSetParameter(earSubDeploymentsIsolated, eeSubSystem, reader);
+                            break;
+                        }
+                        case SPEC_DESCRIPTOR_PROPERTY_REPLACEMENT: {
+                            final String enabled = parseSpecDescriptorPropertyReplacement(reader);
+                            EeSubsystemRootResource.SPEC_DESCRIPTOR_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
+                            break;
+                        }
+                        case JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT: {
+                            final String enabled = parseJBossDescriptorPropertyReplacement(reader);
+                            EeSubsystemRootResource.JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
+                            break;
+                        }
+                        case ANNOTATION_PROPERTY_REPLACEMENT: {
+                            final String enabled = parseEJBAnnotationPropertyReplacement(reader);
+                            EeSubsystemRootResource.ANNOTATION_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
+                            break;
+                        }
+                        default: {
+                            throw unexpectedElement(reader);
+                        }
+                    }
+                    break;
+                }
+                default: {
+                    throw unexpectedElement(reader);
+                }
+            }
+        }
+    }
+
     static String parseEJBAnnotationPropertyReplacement(XMLExtendedStreamReader reader) throws XMLStreamException {
         // we don't expect any attributes for this element.
         requireNoAttributes(reader);
@@ -154,6 +215,7 @@ class EESubsystemParser12 implements XMLStreamConstants, XMLElementReader<List<M
         return value.trim();
     }
 
+
     static String parseSpecDescriptorPropertyReplacement(XMLExtendedStreamReader reader) throws XMLStreamException {
 
         // we don't expect any attributes for this element.
@@ -166,6 +228,7 @@ class EESubsystemParser12 implements XMLStreamConstants, XMLElementReader<List<M
         return value.trim();
     }
 
+
     static String parseJBossDescriptorPropertyReplacement(XMLExtendedStreamReader reader) throws XMLStreamException {
 
         // we don't expect any attributes for this element.
@@ -176,66 +239,5 @@ class EESubsystemParser12 implements XMLStreamConstants, XMLElementReader<List<M
             throw EeLogger.ROOT_LOGGER.invalidValue(value, Element.JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT.getLocalName(), reader.getLocation());
         }
         return value.trim();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void readElement(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
-        // EE subsystem doesn't have any attributes, so make sure that the xml doesn't have any
-        requireNoAttributes(reader);
-
-        final ModelNode eeSubSystem = Util.createAddOperation(PathAddress.pathAddress(EeExtension.PATH_SUBSYSTEM));
-        // add the subsystem to the ModelNode(s)
-        list.add(eeSubSystem);
-
-        // elements
-        final EnumSet<Element> encountered = EnumSet.noneOf(Element.class);
-        while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
-            switch (Namespace.forUri(reader.getNamespaceURI())) {
-                case EE_1_2: {
-                    final Element element = Element.forName(reader.getLocalName());
-                    if (!encountered.add(element)) {
-                        throw unexpectedElement(reader);
-                    }
-                    switch (element) {
-                        case GLOBAL_MODULES: {
-                            final ModelNode model = parseGlobalModules(reader);
-                            eeSubSystem.get(GlobalModulesDefinition.GLOBAL_MODULES).set(model);
-                            break;
-                        }
-                        case EAR_SUBDEPLOYMENTS_ISOLATED: {
-                            final String earSubDeploymentsIsolated = parseEarSubDeploymentsIsolatedElement(reader);
-                            // set the ear subdeployment isolation on the subsystem operation
-                            EeSubsystemRootResource.EAR_SUBDEPLOYMENTS_ISOLATED.parseAndSetParameter(earSubDeploymentsIsolated, eeSubSystem, reader);
-                            break;
-                        }
-                        case SPEC_DESCRIPTOR_PROPERTY_REPLACEMENT: {
-                            final String enabled = parseSpecDescriptorPropertyReplacement(reader);
-                            EeSubsystemRootResource.SPEC_DESCRIPTOR_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
-                            break;
-                        }
-                        case JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT: {
-                            final String enabled = parseJBossDescriptorPropertyReplacement(reader);
-                            EeSubsystemRootResource.JBOSS_DESCRIPTOR_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
-                            break;
-                        }
-                        case ANNOTATION_PROPERTY_REPLACEMENT: {
-                            final String enabled = parseEJBAnnotationPropertyReplacement(reader);
-                            EeSubsystemRootResource.ANNOTATION_PROPERTY_REPLACEMENT.parseAndSetParameter(enabled, eeSubSystem, reader);
-                            break;
-                        }
-                        default: {
-                            throw unexpectedElement(reader);
-                        }
-                    }
-                    break;
-                }
-                default: {
-                    throw unexpectedElement(reader);
-                }
-            }
-        }
     }
 }

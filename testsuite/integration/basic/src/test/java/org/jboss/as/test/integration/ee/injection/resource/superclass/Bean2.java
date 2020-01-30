@@ -30,11 +30,11 @@ import javax.annotation.Resource;
 @ManagedBean("bean2")
 public class Bean2 extends SuperBean {
 
-    int setCount = 0;
-
     public SimpleManagedBean getBean() {
         return simpleManagedBean;
     }
+
+    int setCount = 0;
 
     @Resource(lookup = "java:module/string2")
     public void setSimpleString(final String simpleString) {

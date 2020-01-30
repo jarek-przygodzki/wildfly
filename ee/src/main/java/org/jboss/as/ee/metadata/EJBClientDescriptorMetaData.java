@@ -147,6 +147,7 @@ public class EJBClientDescriptorMetaData {
     }
 
 
+
     public class ClusterConfig extends CommonConnectionConfig {
 
         private final String clusterName;
@@ -181,12 +182,12 @@ public class EJBClientDescriptorMetaData {
             this.maxAllowedConnectedNodes = maxAllowedConnectedNodes;
         }
 
-        public String getNodeSelector() {
-            return this.nodeSelector;
-        }
-
         public void setNodeSelector(final String nodeSelector) {
             this.nodeSelector = nodeSelector;
+        }
+
+        public String getNodeSelector() {
+            return this.nodeSelector;
         }
 
         @Override
@@ -244,6 +245,14 @@ public class EJBClientDescriptorMetaData {
         private String userName;
         private String securityRealm;
 
+        public void setConnectionOptions(final Properties connectionOptions) {
+            this.connectionOptions = connectionOptions;
+        }
+
+        public void setChannelCreationOptions(final Properties channelCreationOptions) {
+            this.channelCreationOptions = channelCreationOptions;
+        }
+
         public long getConnectTimeout() {
             return this.connectTimeout;
         }
@@ -256,32 +265,24 @@ public class EJBClientDescriptorMetaData {
             return this.connectionOptions;
         }
 
-        public void setConnectionOptions(final Properties connectionOptions) {
-            this.connectionOptions = connectionOptions;
-        }
-
         public Properties getChannelCreationOptions() {
             return this.channelCreationOptions;
-        }
-
-        public void setChannelCreationOptions(final Properties channelCreationOptions) {
-            this.channelCreationOptions = channelCreationOptions;
-        }
-
-        public String getUserName() {
-            return this.userName;
         }
 
         public void setUserName(final String userName) {
             this.userName = userName;
         }
 
-        public String getSecurityRealm() {
-            return this.securityRealm;
+        public String getUserName() {
+            return this.userName;
         }
 
         public void setSecurityRealm(final String realm) {
             this.securityRealm = realm;
+        }
+
+        public String getSecurityRealm() {
+            return this.securityRealm;
         }
     }
 
@@ -295,10 +296,6 @@ public class EJBClientDescriptorMetaData {
             this.outboundConnectionRef = outboundConnectionRef;
         }
 
-        public Properties getChannelCreationOptions() {
-            return this.channelCreationOptions;
-        }
-
         /**
          * Sets the channel creation options for this remoting receiver configuration
          *
@@ -308,12 +305,16 @@ public class EJBClientDescriptorMetaData {
             this.channelCreationOptions = channelCreationOpts;
         }
 
-        public long getConnectionTimeout() {
-            return this.connectionTimeout;
+        public Properties getChannelCreationOptions() {
+            return this.channelCreationOptions;
         }
 
         public void setConnectionTimeout(final long timeout) {
             this.connectionTimeout = timeout;
+        }
+
+        public long getConnectionTimeout() {
+            return this.connectionTimeout;
         }
 
         public String getOutboundConnectionRef() {

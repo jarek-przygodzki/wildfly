@@ -25,9 +25,9 @@ package org.jboss.as.ee.subsystem;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.registry.Resource;
+import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.ee.component.EEModuleDescription;
-import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.structure.DeploymentType;
 import org.jboss.as.ee.structure.DeploymentTypeMarker;
 import org.jboss.as.naming.NamingContext;
@@ -106,13 +106,13 @@ public class EEJndiViewExtension implements JndiViewExtension, Service<Void> {
 
                 if (DeploymentTypeMarker.isType(DeploymentType.EAR, deploymentUnit)) {
                     final List<ResourceRoot> roots = deploymentUnit.getAttachmentList(org.jboss.as.server.deployment.Attachments.RESOURCE_ROOTS);
-                    if (roots != null) for (ResourceRoot root : roots) {
-                        if (SubDeploymentMarker.isSubDeployment(root)) {
+                    if(roots != null) for(ResourceRoot root : roots) {
+                        if(SubDeploymentMarker.isSubDeployment(root)) {
                             final ResourceRoot parentRoot = deploymentUnit.getAttachment(org.jboss.as.server.deployment.Attachments.DEPLOYMENT_ROOT);
                             final String relativePath = root.getRoot().getPathNameRelativeTo(parentRoot.getRoot());
                             final ServiceName subDeploymentServiceName = Services.deploymentUnitName(deploymentUnit.getName(), relativePath);
                             final ServiceController<?> subDeploymentController = serviceRegistry.getService(subDeploymentServiceName);
-                            if (subDeploymentController != null) {
+                            if(subDeploymentController != null) {
                                 final DeploymentUnit subDeploymentUnit = DeploymentUnit.class.cast(subDeploymentController.getValue());
                                 handleModule(context, subDeploymentUnit, deploymentNode.get("modules"), serviceRegistry);
                             }

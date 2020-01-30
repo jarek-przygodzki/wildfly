@@ -22,8 +22,15 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.interceptors.InvocationType;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.interceptors.InvocationType;
 import org.jboss.as.naming.ImmediateManagedReference;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.as.naming.context.NamespaceContextSelector;
@@ -33,13 +40,6 @@ import org.jboss.invocation.InterceptorFactory;
 import org.jboss.invocation.InterceptorFactoryContext;
 import org.jboss.invocation.SimpleInterceptorFactoryContext;
 import org.jboss.msc.service.ServiceName;
-
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A basic component implementation.
@@ -56,8 +56,11 @@ public class BasicComponent implements Component {
     private final Map<Method, InterceptorFactory> interceptorFactoryMap;
     private final NamespaceContextSelector namespaceContextSelector;
     private final ServiceName createServiceName;
-    private final AtomicBoolean stopping = new AtomicBoolean();
+
     private volatile boolean gate;
+    private final AtomicBoolean stopping = new AtomicBoolean();
+
+
     private Interceptor postConstructInterceptor;
     private Interceptor preDestroyInterceptor;
     private Map<Method, Interceptor> interceptorInstanceMap;
@@ -76,10 +79,6 @@ public class BasicComponent implements Component {
         interceptorFactoryMap = createService.getComponentInterceptors();
         namespaceContextSelector = createService.getNamespaceContextSelector();
         createServiceName = createService.getServiceName();
-    }
-
-    public static ServiceName serviceNameOf(final ServiceName deploymentUnitServiceName, final String componentName) {
-        return deploymentUnitServiceName.append("component").append(componentName);
     }
 
     /**
@@ -123,10 +122,10 @@ public class BasicComponent implements Component {
             EeLogger.ROOT_LOGGER.tracef("Finished waiting for component %s (%s)", componentName, componentClass);
         }
     }
-
     /**
      * Construct the component instance.  Upon return, the object instance should have injections and lifecycle
      * invocations completed already.
+     *
      *
      * @param instance An instance to be wrapped, or null if a new instance should be created
      * @return the component instance
@@ -139,6 +138,7 @@ public class BasicComponent implements Component {
      * Construct the component instance.  Upon return, the object instance should have injections and lifecycle
      * invocations completed already.
      *
+     *
      * @param instance An instance to be wrapped, or null if a new instance should be created
      * @return the component instance
      */
@@ -146,7 +146,7 @@ public class BasicComponent implements Component {
         waitForComponentStart();
         // create the component instance
         final BasicComponentInstance basicComponentInstance = this.instantiateComponentInstance(preDestroyInterceptor, interceptorInstanceMap, context);
-        if (instance != null) {
+        if(instance != null) {
             basicComponentInstance.setInstanceData(BasicComponentInstance.INSTANCE_KEY, instance);
         }
         if (invokePostConstruct) {
@@ -172,10 +172,12 @@ public class BasicComponent implements Component {
      * Method that can be overridden to perform setup on the instance after it has been created
      *
      * @param basicComponentInstance The component instance
+     *
      */
     protected void componentInstanceCreated(final BasicComponentInstance basicComponentInstance) {
 
     }
+
 
     /**
      * Responsible for instantiating the {@link BasicComponentInstance}. This method is *not* responsible for
@@ -285,5 +287,9 @@ public class BasicComponent implements Component {
     @Override
     public NamespaceContextSelector getNamespaceContextSelector() {
         return namespaceContextSelector;
+    }
+
+    public static ServiceName serviceNameOf(final ServiceName deploymentUnitServiceName, final String componentName) {
+        return deploymentUnitServiceName.append("component").append(componentName);
     }
 }

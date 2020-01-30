@@ -29,7 +29,7 @@ public class OnMessageClientInterceptor {
     @AroundInvoke
     public Object intercept(InvocationContext ctx) throws Exception {
         String s = (String) ctx.getParameters()[0];
-        ctx.setParameters(new String[]{s + " World"});
+        ctx.setParameters(new String[] { s + " World" });
         return ctx.proceed();
     }
 }

@@ -22,10 +22,10 @@
 
 package org.jboss.as.ee.component.deployers;
 
-import org.jboss.as.ee.logging.EeLogger;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.jboss.as.ee.logging.EeLogger;
 
 /**
  * User: jpai

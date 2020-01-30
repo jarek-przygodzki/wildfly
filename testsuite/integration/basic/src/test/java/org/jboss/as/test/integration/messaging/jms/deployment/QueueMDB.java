@@ -22,6 +22,8 @@
 
 package org.jboss.as.test.integration.messaging.jms.deployment;
 
+import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.QUEUE_LOOKUP;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -30,8 +32,6 @@ import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-
-import static org.jboss.as.test.integration.messaging.jms.deployment.DependentMessagingDeploymentTestCase.QUEUE_LOOKUP;
 
 /**
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2014 Red Hat inc.
@@ -46,9 +46,10 @@ public class QueueMDB implements MessageListener {
     @Inject
     private JMSContext context;
 
-    public void onMessage(final Message m) {
+    public void onMessage(final Message m)
+    {
         try {
-            TextMessage message = (TextMessage) m;
+            TextMessage message = (TextMessage)m;
             Destination replyTo = m.getJMSReplyTo();
 
             context.createProducer()

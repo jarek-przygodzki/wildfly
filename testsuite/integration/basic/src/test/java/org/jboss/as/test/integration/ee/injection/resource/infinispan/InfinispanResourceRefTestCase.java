@@ -22,6 +22,9 @@
 
 package org.jboss.as.test.integration.ee.injection.resource.infinispan;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -33,9 +36,6 @@ import org.jboss.shrinkwrap.descriptor.api.spec.se.manifest.ManifestDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  * @author Paul Ferraro
@@ -54,6 +54,16 @@ public class InfinispanResourceRefTestCase {
         return war;
     }
 
+    @Test
+    public void test() throws NamingException {
+        InitialContext context = new InitialContext();
+        Object result = context.lookup("java:module/infinispan");
+        Assert.assertTrue(result instanceof InfinispanBean);
+        InfinispanBean bean = (InfinispanBean) result;
+
+        bean.test();
+    }
+
     private static StringAsset getWebXml() {
         return new StringAsset("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<web-app version=\"3.0\" metadata-complete=\"false\" xmlns=\"http://java.sun.com/xml/ns/javaee\"\n"
@@ -68,15 +78,5 @@ public class InfinispanResourceRefTestCase {
                 + "        </injection-target>\n"
                 + "    </resource-ref>\n"
                 + "</web-app>");
-    }
-
-    @Test
-    public void test() throws NamingException {
-        InitialContext context = new InitialContext();
-        Object result = context.lookup("java:module/infinispan");
-        Assert.assertTrue(result instanceof InfinispanBean);
-        InfinispanBean bean = (InfinispanBean) result;
-
-        bean.test();
     }
 }

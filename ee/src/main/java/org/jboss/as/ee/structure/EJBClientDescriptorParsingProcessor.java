@@ -22,6 +22,18 @@
 
 package org.jboss.as.ee.structure;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.jboss.as.ee.logging.EeLogger;
 import org.jboss.as.ee.metadata.EJBClientDescriptorMetaData;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -34,17 +46,6 @@ import org.jboss.metadata.property.PropertyReplacer;
 import org.jboss.staxmapper.XMLMapper;
 import org.jboss.vfs.VirtualFile;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
  * A deployment unit processor which parses jboss-ejb-client.xml in top level deployments.
  * If a jboss-ejb-client.xml is found in the top level deployment, then this processor creates a {@link EJBClientDescriptorMetaData}
@@ -56,8 +57,8 @@ import java.io.InputStream;
  */
 public class EJBClientDescriptorParsingProcessor implements DeploymentUnitProcessor {
 
-    public static final String[] EJB_CLIENT_DESCRIPTOR_LOCATIONS = {"META-INF/jboss-ejb-client.xml",
-            "WEB-INF/jboss-ejb-client.xml"};
+    public static final String[] EJB_CLIENT_DESCRIPTOR_LOCATIONS = { "META-INF/jboss-ejb-client.xml",
+            "WEB-INF/jboss-ejb-client.xml" };
 
     private static final QName ROOT_1_0 = new QName(EJBClientDescriptor10Parser.NAMESPACE_1_0, "jboss-ejb-client");
     private static final QName ROOT_1_1 = new QName(EJBClientDescriptor11Parser.NAMESPACE_1_1, "jboss-ejb-client");
@@ -66,24 +67,6 @@ public class EJBClientDescriptorParsingProcessor implements DeploymentUnitProces
     private static final QName ROOT_NO_NAMESPACE = new QName("jboss-ejb-client");
 
     private static final XMLInputFactory INPUT_FACTORY = XMLInputFactory.newInstance();
-
-    private static void safeClose(final Closeable closeable) {
-        if (closeable != null)
-            try {
-                closeable.close();
-            } catch (IOException e) {
-                // ignore
-            }
-    }
-
-    private static void safeClose(final XMLStreamReader streamReader) {
-        if (streamReader != null)
-            try {
-                streamReader.close();
-            } catch (XMLStreamException e) {
-                // ignore
-            }
-    }
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
@@ -180,5 +163,23 @@ public class EJBClientDescriptorParsingProcessor implements DeploymentUnitProces
         if (inputFactory.isPropertySupported(property)) {
             inputFactory.setProperty(property, value);
         }
+    }
+
+    private static void safeClose(final Closeable closeable) {
+        if (closeable != null)
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                // ignore
+            }
+    }
+
+    private static void safeClose(final XMLStreamReader streamReader) {
+        if (streamReader != null)
+            try {
+                streamReader.close();
+            } catch (XMLStreamException e) {
+                // ignore
+            }
     }
 }

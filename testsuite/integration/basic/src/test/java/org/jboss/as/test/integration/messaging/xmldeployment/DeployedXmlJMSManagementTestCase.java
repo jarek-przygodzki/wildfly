@@ -22,6 +22,10 @@
 
 package org.jboss.as.test.integration.messaging.xmldeployment;
 
+import java.io.IOException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,10 +49,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
@@ -66,20 +66,54 @@ public class DeployedXmlJMSManagementTestCase {
 
     private static final String TEST_HORNETQ_JMS_XML = "test-hornetq-jms.xml";
     private static final String TEST_ACTIVEMQ_JMS_XML = "test-activemq-jms.xml";
+
+    static class DeployedXmlJMSManagementTestCaseSetup extends AbstractMgmtServerSetupTask {
+
+        @Override
+        protected void doSetup(final ManagementClient managementClient) throws Exception {
+            final ServerDeploymentManager manager = ServerDeploymentManager.Factory.create(managementClient.getControllerClient());
+            final String packageName = DeployedXmlJMSManagementTestCase.class.getPackage().getName().replace(".", "/");
+
+            JMSOperations jmsOperations = JMSOperationsProvider.getInstance(managementClient);
+            String xmlFile = (jmsOperations.getProviderName().equals("hornetq")) ? TEST_HORNETQ_JMS_XML : TEST_ACTIVEMQ_JMS_XML;
+
+            final DeploymentPlan plan = manager.newDeploymentPlan().add(DeployedXmlJMSManagementTestCase.class.getResource("/" + packageName + "/" + xmlFile)).andDeploy().build();
+            final Future<ServerDeploymentPlanResult> future = manager.execute(plan);
+            final ServerDeploymentPlanResult result = future.get(20, TimeUnit.SECONDS);
+            final ServerDeploymentActionResult actionResult = result.getDeploymentActionResult(plan.getId());
+            if (actionResult != null) {
+                if (actionResult.getDeploymentException() != null) {
+                    throw new RuntimeException(actionResult.getDeploymentException());
+                }
+            }
+        }
+
+        @Override
+        public void tearDown(final ManagementClient managementClient, final String containerId) throws Exception {
+            JMSOperations jmsOperations = JMSOperationsProvider.getInstance(managementClient);
+            String xmlFile = (jmsOperations.getProviderName().equals("hornetq")) ? TEST_HORNETQ_JMS_XML : TEST_ACTIVEMQ_JMS_XML;
+
+            final ServerDeploymentManager manager = ServerDeploymentManager.Factory.create(managementClient.getControllerClient());
+            final DeploymentPlan undeployPlan = manager.newDeploymentPlan().undeploy(xmlFile).andRemoveUndeployed().build();
+            manager.execute(undeployPlan).get();
+        }
+    }
+
     @ContainerResource
     private ManagementClient managementClient;
+
     private JMSOperations jmsOperations;
+
+    @Before
+    public void setUp() {
+        jmsOperations = JMSOperationsProvider.getInstance(managementClient);
+    }
 
     @Deployment
     public static Archive<?> deploy() {
         return ShrinkWrap.create(JavaArchive.class, "testJMSXmlDeployment.jar")
                 .addClass(DeployedXmlJMSManagementTestCase.class)
                 .addAsManifestResource(DeployedXmlJMSManagementTestCase.class.getPackage(), "MANIFEST.MF", "MANIFEST.MF");
-    }
-
-    @Before
-    public void setUp() {
-        jmsOperations = JMSOperationsProvider.getInstance(managementClient);
     }
 
     @Test
@@ -121,37 +155,5 @@ public class DeployedXmlJMSManagementTestCase {
         }
         address.add(type, name);
         return address;
-    }
-
-    static class DeployedXmlJMSManagementTestCaseSetup extends AbstractMgmtServerSetupTask {
-
-        @Override
-        protected void doSetup(final ManagementClient managementClient) throws Exception {
-            final ServerDeploymentManager manager = ServerDeploymentManager.Factory.create(managementClient.getControllerClient());
-            final String packageName = DeployedXmlJMSManagementTestCase.class.getPackage().getName().replace(".", "/");
-
-            JMSOperations jmsOperations = JMSOperationsProvider.getInstance(managementClient);
-            String xmlFile = (jmsOperations.getProviderName().equals("hornetq")) ? TEST_HORNETQ_JMS_XML : TEST_ACTIVEMQ_JMS_XML;
-
-            final DeploymentPlan plan = manager.newDeploymentPlan().add(DeployedXmlJMSManagementTestCase.class.getResource("/" + packageName + "/" + xmlFile)).andDeploy().build();
-            final Future<ServerDeploymentPlanResult> future = manager.execute(plan);
-            final ServerDeploymentPlanResult result = future.get(20, TimeUnit.SECONDS);
-            final ServerDeploymentActionResult actionResult = result.getDeploymentActionResult(plan.getId());
-            if (actionResult != null) {
-                if (actionResult.getDeploymentException() != null) {
-                    throw new RuntimeException(actionResult.getDeploymentException());
-                }
-            }
-        }
-
-        @Override
-        public void tearDown(final ManagementClient managementClient, final String containerId) throws Exception {
-            JMSOperations jmsOperations = JMSOperationsProvider.getInstance(managementClient);
-            String xmlFile = (jmsOperations.getProviderName().equals("hornetq")) ? TEST_HORNETQ_JMS_XML : TEST_ACTIVEMQ_JMS_XML;
-
-            final ServerDeploymentManager manager = ServerDeploymentManager.Factory.create(managementClient.getControllerClient());
-            final DeploymentPlan undeployPlan = manager.newDeploymentPlan().undeploy(xmlFile).andRemoveUndeployed().build();
-            manager.execute(undeployPlan).get();
-        }
     }
 }

@@ -42,6 +42,19 @@ import org.jboss.metadata.javaee.spec.RemoteEnvironment;
  * @author Stuart Douglas
  */
 public class DescriptorEnvironmentLifecycleMethodProcessor implements DeploymentUnitProcessor {
+    @Override
+    public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+
+        final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
+        final EEModuleDescription eeModuleDescription = deploymentUnit.getAttachment(org.jboss.as.ee.component.Attachments.EE_MODULE_DESCRIPTION);
+        final DeploymentDescriptorEnvironment environment = deploymentUnit.getAttachment(Attachments.MODULE_DEPLOYMENT_DESCRIPTOR_ENVIRONMENT);
+
+        if (environment != null) {
+            handleMethods(environment, eeModuleDescription, null);
+        }
+    }
+
+
     public static void handleMethods(DeploymentDescriptorEnvironment env, EEModuleDescription eeModuleDescription, String defaultClassName) throws DeploymentUnitProcessingException {
 
         final RemoteEnvironment environment = env.getEnvironment();
@@ -84,18 +97,6 @@ public class DescriptorEnvironmentLifecycleMethodProcessor implements Deployment
                 builder.setPreDestroy(methodIdentifier);
                 eeModuleDescription.addInterceptorMethodOverride(className, builder.build());
             }
-        }
-    }
-
-    @Override
-    public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
-
-        final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-        final EEModuleDescription eeModuleDescription = deploymentUnit.getAttachment(org.jboss.as.ee.component.Attachments.EE_MODULE_DESCRIPTION);
-        final DeploymentDescriptorEnvironment environment = deploymentUnit.getAttachment(Attachments.MODULE_DEPLOYMENT_DESCRIPTOR_ENVIRONMENT);
-
-        if (environment != null) {
-            handleMethods(environment, eeModuleDescription, null);
         }
     }
 

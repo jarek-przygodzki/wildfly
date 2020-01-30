@@ -1,9 +1,9 @@
 package org.jboss.as.test.integration.ee.appclient.basic;
 
-import org.jboss.logging.Logger;
-
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+
+import org.jboss.logging.Logger;
 
 /**
  * @author Stuart Douglas
@@ -20,7 +20,7 @@ public class AppClientMain {
     public static void main(final String[] params) {
         logger.info("Main method invoked");
 
-        if (!appclient) {
+        if(!appclient) {
             logger.error("InAppClientContainer was not true");
             throw new RuntimeException("InAppClientContainer was not true");
         }

@@ -30,6 +30,14 @@ package org.jboss.as.ee.component;
 public interface ComponentCreateServiceFactory {
 
     /**
+     * Construct a new component creation service from the given configuration.
+     *
+     * @param configuration the configuration
+     * @return the create service
+     */
+    BasicComponentCreateService constructService(ComponentConfiguration configuration);
+
+    /**
      * The default, basic component create service factory.
      */
     ComponentCreateServiceFactory BASIC = new ComponentCreateServiceFactory() {
@@ -37,12 +45,4 @@ public interface ComponentCreateServiceFactory {
             return new BasicComponentCreateService(configuration);
         }
     };
-
-    /**
-     * Construct a new component creation service from the given configuration.
-     *
-     * @param configuration the configuration
-     * @return the create service
-     */
-    BasicComponentCreateService constructService(ComponentConfiguration configuration);
 }

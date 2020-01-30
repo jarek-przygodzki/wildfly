@@ -21,8 +21,6 @@
  */
 package org.jboss.as.ee.component.interceptors;
 
-import org.jboss.as.ee.logging.EeLogger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +29,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static java.lang.Integer.toHexString;
+
+import org.jboss.as.ee.logging.EeLogger;
 
 /**
  * Container for an ordered list of object. Objects are added to the container, and can be sorted and
@@ -48,10 +48,10 @@ public class OrderedItemContainer<T> {
     private volatile List<T> sortedItems;
 
     public void add(final T item, int priority) {
-        if (sortedItems != null) {
+        if(sortedItems != null) {
             throw EeLogger.ROOT_LOGGER.cannotAddMoreItems();
         }
-        if (item == null) {
+        if(item == null) {
             throw EeLogger.ROOT_LOGGER.nullVar("item");
         }
         final T current = items.get(priority);
@@ -62,7 +62,7 @@ public class OrderedItemContainer<T> {
     }
 
     public List<T> getSortedItems() {
-        if (sortedItems == null) {
+        if(sortedItems == null) {
             final SortedMap<Integer, T> sortedMap = new TreeMap<Integer, T>(items);
             sortedItems = new ArrayList<T>(sortedMap.values());
         }

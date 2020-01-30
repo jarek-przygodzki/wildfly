@@ -22,10 +22,6 @@
 
 package org.jboss.as.ee.component;
 
-import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
-import org.jboss.as.ee.logging.EeLogger;
-import org.jboss.as.ee.metadata.ClassAnnotationInformation;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,9 +29,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.as.ee.logging.EeLogger;
+import org.jboss.as.ee.component.interceptors.InterceptorClassDescription;
+import org.jboss.as.ee.metadata.ClassAnnotationInformation;
+
 /**
  * The description of a (possibly annotated) class in an EE module.
- * <p>
+ *
  * This class must be thread safe as it may be used by sub deployments at the same time
  *
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
@@ -44,12 +44,13 @@ public final class EEModuleClassDescription {
 
 
     private final String className;
-    private final Map<Class<? extends Annotation>, ClassAnnotationInformation<?, ?>> annotationInformation = Collections.synchronizedMap(new HashMap<Class<? extends Annotation>, ClassAnnotationInformation<?, ?>>());
-    private final List<BindingConfiguration> bindingConfigurations = new ArrayList<BindingConfiguration>();
-    private final Map<InjectionTarget, ResourceInjectionConfiguration> injectionConfigurations = new HashMap<InjectionTarget, ResourceInjectionConfiguration>();
     private boolean invalid;
     private StringBuilder invalidMessageBuilder;
+    private final Map<Class<? extends Annotation>, ClassAnnotationInformation<?,?>> annotationInformation = Collections.synchronizedMap(new HashMap<Class<? extends Annotation>, ClassAnnotationInformation<?, ?>>());
     private InterceptorClassDescription interceptorClassDescription = InterceptorClassDescription.EMPTY_INSTANCE;
+
+    private final List<BindingConfiguration> bindingConfigurations = new ArrayList<BindingConfiguration>();
+    private final Map<InjectionTarget, ResourceInjectionConfiguration> injectionConfigurations = new HashMap<InjectionTarget, ResourceInjectionConfiguration>();
 
     public EEModuleClassDescription(final String className) {
         this.className = className;
@@ -69,7 +70,7 @@ public final class EEModuleClassDescription {
     }
 
     public void setInterceptorClassDescription(final InterceptorClassDescription interceptorClassDescription) {
-        if (interceptorClassDescription == null) {
+        if(interceptorClassDescription == null) {
             throw EeLogger.ROOT_LOGGER.nullVar("interceptorClassDescription");
         }
         this.interceptorClassDescription = interceptorClassDescription;
@@ -106,12 +107,8 @@ public final class EEModuleClassDescription {
         return (ClassAnnotationInformation<A, T>) this.annotationInformation.get(annotationType);
     }
 
-    public boolean isInvalid() {
-        return invalid;
-    }
-
     public synchronized void setInvalid(String message) {
-        if (!invalid) {
+        if(!invalid) {
             invalid = true;
             invalidMessageBuilder = new StringBuilder();
         } else {
@@ -120,8 +117,12 @@ public final class EEModuleClassDescription {
         invalidMessageBuilder.append(message);
     }
 
+    public boolean isInvalid() {
+        return invalid;
+    }
+
     public String getInvalidMessage() {
-        if (invalidMessageBuilder == null) {
+        if(invalidMessageBuilder == null) {
             return "";
         }
         return invalidMessageBuilder.toString();

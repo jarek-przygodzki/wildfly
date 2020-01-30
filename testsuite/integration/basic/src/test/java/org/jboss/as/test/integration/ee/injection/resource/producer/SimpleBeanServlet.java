@@ -21,17 +21,18 @@
  */
 package org.jboss.as.test.integration.ee.injection.resource.producer;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.annotation.Resource;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
 
 
 @SuppressWarnings("serial")
-@WebServlet(name = "SimpleBeanServlet", urlPatterns = {"/simple"})
+@WebServlet(name = "SimpleBeanServlet", urlPatterns = { "/simple" })
 public class SimpleBeanServlet extends HttpServlet {
 
     @Resource

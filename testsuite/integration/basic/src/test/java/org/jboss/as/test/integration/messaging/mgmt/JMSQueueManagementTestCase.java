@@ -22,6 +22,24 @@
 
 package org.jboss.as.test.integration.messaging.mgmt;
 
+import static javax.jms.Session.AUTO_ACKNOWLEDGE;
+import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.naming.Context;
+
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.arquillian.api.ContainerResource;
@@ -35,23 +53,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.naming.Context;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import static javax.jms.Session.AUTO_ACKNOWLEDGE;
-import static org.jboss.as.controller.operations.common.Util.getEmptyOperation;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 /**
  * Tests the management API for JMS queues.
@@ -203,7 +204,7 @@ public class JMSQueueManagementTestCase {
         Assert.assertFalse(result.asBoolean());
     }
 
-    //    @org.junit.Ignore("AS7-2480")
+//    @org.junit.Ignore("AS7-2480")
     @Test
     public void testMessageRemoval() throws Exception {
 
@@ -234,7 +235,7 @@ public class JMSQueueManagementTestCase {
 
     }
 
-    //    @org.junit.Ignore("AS7-2480")
+//    @org.junit.Ignore("AS7-2480")
     @Test
     public void testMessageMovement() throws Exception {
 

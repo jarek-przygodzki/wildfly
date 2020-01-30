@@ -21,10 +21,10 @@
  */
 package org.jboss.as.ee.component;
 
-import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 
 /**
  * throwaway utility class for traversing a class configuration from most general superclass down
@@ -50,7 +50,7 @@ public abstract class ClassDescriptionTraversal {
         }
         for (int i = queue.size() - 1; i >= 0; --i) {
             final EEModuleClassDescription config = queue.get(i);
-            if (config != null) {
+            if(config != null) {
                 handle(classQueue.get(i), config);
             } else {
                 handle(classQueue.get(i), null);
