@@ -168,5 +168,71 @@
         <vulnerabilityName>CVE-2019-16335</vulnerabilityName>
         <vulnerabilityName>CVE-2019-17267</vulnerabilityName>
     </suppress>
+	
+	<!-- Vulnerabilities do not apply to xjc plugins -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-xjc-dv-3.2.3.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-dv@.*$</packageUrl>
+	   <cve>CVE-2019-12406</cve>
+	   <cve>CVE-2019-12419</cve>
+	   <cve>CVE-2019-12423</cve>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
+	
+	<!-- Vulnerabilities do not apply to xjc plugins -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-xjc-ts-3.2.3.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-ts@.*$</packageUrl>
+	   <cve>CVE-2019-12406</cve>
+	   <cve>CVE-2019-12419</cve>
+	   <cve>CVE-2019-12423</cve>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
+	
+	<!-- Vulnerabilities do not apply to xjc plugins -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-xjc-bug986-3.2.3.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-bug986@.*$</packageUrl>
+	   <cve>CVE-2019-12406</cve>
+	   <cve>CVE-2019-12419</cve>
+	   <cve>CVE-2019-12423</cve>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
+	
+	<!-- Vulnerabilities do not apply to xjc plugins -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-xjc-boolean-3.2.3.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf\.xjcplugins/cxf\-xjc\-boolean@.*$</packageUrl>
+	   <cve>CVE-2019-12406</cve>
+	   <cve>CVE-2019-12419</cve>
+	   <cve>CVE-2019-12423</cve>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
+
+	<!-- This vulnerability affects all versions of Apache CXF prior to 3.3.5 and 3.2.12. -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-rt-databinding-aegis-3.2.12.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf/cxf\-rt\-databinding\-aegis@.*$</packageUrl>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
+
+	<!-- This vulnerability affects all versions of Apache CXF prior to 3.3.5 and 3.2.12. -->
+	<suppress>
+	   <notes><![CDATA[
+	   file name: cxf-core-3.2.12.jar
+	   ]]></notes>
+	   <packageUrl regex="true">^pkg:maven/org\.apache\.cxf/cxf\-core@.*$</packageUrl>
+	   <cve>CVE-2019-17573</cve>
+	</suppress>
 
 </suppressions>
