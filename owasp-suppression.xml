@@ -10,6 +10,8 @@
         <cve>CVE-2015-7528</cve>
         <cve>CVE-2018-1002105</cve>
         <cve>CVE-2019-1002100</cve>
+		<cve>CVE-2019-11246</cve>
+		<cve>CVE-2019-11248</cve>
     </suppress>
     <!-- [wildfly] The vulnerability applies to container networking interface used in Kubernetes system, not to JGroups discovery protocol for Kubernetes  -->
     <suppress>
@@ -112,6 +114,8 @@
         <cve>CVE-2018-1067</cve>
         <cve>CVE-2019-10184</cve>
         <cve>CVE-2019-3888</cve>
+		<cve>CVE-2019-10212</cve>
+		<cve>CVE-2019-14888</cve>
     </suppress>
 
     <!-- [wildfly-core] Not applicable, this is EAP vulnerability regarding system image, not Wildfly server itself (more: http://jira-bld-com.psi.de:8080/browse/COM_WILDFLY-152)  -->
