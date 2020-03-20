@@ -197,4 +197,12 @@
         <packageUrl regex="true">^pkg:maven/dom4j/dom4j@.*$</packageUrl>
         <cve>CVE-2018-1000632</cve>
      </suppress>
+     <!--  This issue was fixed in this commit https://github.com/picketlink/picketlink/commit/8c78668e4f08cf3c4ed14d8a36d402dcf02cb057#diff-424514e417d84d8d07c9ff3197048739, and PicketLink 2.5.5.SP12-redhat-00005 has this patch. -->
+     <suppress>
+        <notes><![CDATA[
+        file name: picketlink-common-2.5.5.SP12-redhat-00005.jar
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.picketlink/picketlink\-common@.*$</packageUrl>
+        <vulnerabilityName>CVE-2014-3530</vulnerabilityName>
+     </suppress>
 </suppressions>
