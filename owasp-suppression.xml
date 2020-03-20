@@ -205,4 +205,28 @@
         <packageUrl regex="true">^pkg:maven/org\.picketlink/picketlink\-common@.*$</packageUrl>
         <vulnerabilityName>CVE-2014-3530</vulnerabilityName>
      </suppress>
+    <!-- According to https://bugzilla.redhat.com/show_bug.cgi?id=1503610 CVE-2017-15089 was fixed in Infinispan 8.2.9.Final -->
+     <suppress>
+        <notes><![CDATA[
+        file name: hibernate-infinispan-4.2.13.Final.jar
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.hibernate/hibernate\-infinispan@.*$</packageUrl>
+        <cve>CVE-2017-15089</cve>
+     </suppress>
+     <suppress>
+        <packageUrl regex="true">^pkg:maven/org\.infinispan/infinispan\-.*@.*$</packageUrl>
+        <cve>CVE-2017-15089</cve>
+     </suppress>
+    <!-- According to https://bugzilla.redhat.com/show_bug.cgi?id=1300443 and https://issues.redhat.com/browse/ISPN-7781 CVE-2016-0750 was fixed in Infinispan 8.2.9.Final -->
+     <suppress>
+        <notes><![CDATA[
+        file name: hibernate-infinispan-4.3.10.Final.jar
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.hibernate/hibernate\-infinispan@.*$</packageUrl>
+        <cve>CVE-2016-0750</cve>
+     </suppress>
+     <suppress>
+        <packageUrl regex="true">^pkg:maven/org\.infinispan/infinispan\-.*@.*$</packageUrl>
+        <cve>CVE-2016-0750</cve>
+     </suppress>
 </suppressions>
